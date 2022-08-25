@@ -1,6 +1,11 @@
+import { LinksFunction } from "@remix-run/node"
+import styles from "~/styles/app.css"
+
+export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }]
+
 export default function Index() {
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
+    <div>
       <h1>Welcome to Remix</h1>
       <ul>
         <li>
@@ -28,5 +33,5 @@ export default function Index() {
         </li>
       </ul>
     </div>
-  );
+  )
 }
