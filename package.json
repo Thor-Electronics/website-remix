@@ -17,6 +17,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@csstools/postcss-sass": "^5.0.1",
     "@remix-run/dev": "^1.6.8",
     "@remix-run/eslint-config": "^1.6.8",
     "@types/react": "^18.0.15",
