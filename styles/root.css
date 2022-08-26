@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.NavigatingScreen {
+  @apply fixed top-0 left-0 bottom-0 right-0 
+    text-white text-2xl bg-emerald-400 flex 
+    flex-col items-center justify-center font-bold italic; //pointer-events-none
+  /* display: none; */
+  /* opacity: 0; */
+  animation-duration: 200ms;
+  /* animation-name: slideInUp; // fadeIn */
+  animation-name: fadeIn;
+  animation-timing-function: ease-out;
+
+  /* &.show {
+    display: flex;
+  } */
+
+  &.hide {
+    /* animation-name: slideOutUp; // fadeOut */
+    animation-name: fadeOut;
+    /* animation-direction: reverse; */
+    animation-duration: 250ms;
+  }
+}
+
+/* ========== KeyFrames ========== */
+
+@keyframes fadeIn {
+  /* 0% {diplay: block; opacity: 0;} 1% {opacity:.01;} */
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+  /* 99% {
+    opacity: 0;
+  }
+  100% {
+    display: none;
+  } */
+}
+
+@keyframes slideInUp {
+  /* box shadow */
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  99% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOutUp {
+  /* box shadow */
+  0% {
+    /* opacity: 1; */
+    transform: translateY(0);
+  }
+  95%,
+  100% {
+    transform: translateY(-100%);
+    /* opacity: 0; */
+  }
+}

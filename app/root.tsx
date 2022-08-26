@@ -1,4 +1,4 @@
-import type { MetaFunction } from "@remix-run/node";
+import type { LinksFunction, MetaFunction } from "@remix-run/node"
 import {
   Links,
   LiveReload,
@@ -6,13 +6,17 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-} from "@remix-run/react";
+} from "@remix-run/react"
+import NavigatingScreen from "./components/NavigatingScreen"
+import styles from "~/styles/root.css"
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
   title: "Caspian",
   viewport: "width=device-width,initial-scale=1",
-});
+})
+
+export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }]
 
 export default function App() {
   return (
@@ -22,11 +26,13 @@ export default function App() {
         <Links />
       </head>
       <body>
+        <NavigatingScreen />
+        {/* FIXME: by adding this component here, the page keeps refereshing! */}
         <Outlet />
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
       </body>
     </html>
-  );
+  )
 }
