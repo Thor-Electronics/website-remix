@@ -25,7 +25,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="bg-slate-200 dark:bg-slate-900 text-slate-800 dark:text-slate-200">
         <NavigatingScreen />
         {/* FIXME: by adding this component here, the page keeps refereshing! */}
         <Outlet />
