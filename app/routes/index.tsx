@@ -16,13 +16,15 @@ export const links: LinksFunction = () => [
 export default function Index() {
   return (
     <main className="h-screen flex flex-col justify-center items-center gap-4">
-      <h1 className="font-bold text-4xl">Welcome to IoT Cloud Service</h1>
+      <h1 className="font-bold text-4xl text-center">
+        Welcome to IoT Cloud Service
+      </h1>
       <div className="buttons flex gap-2">
-        <Link to="/signup">
-          <Button className="bg-primary">Signup</Button>
+        <Link to="/signup" prefetch="render">
+          <Button className="!bg-primary">Signup</Button>
         </Link>
-        <Link to="login">
-          <Button className="bg-white !text-slate-700 dark:bg-slate-800 dark:text-white">
+        <Link to="login" prefetch="render">
+          <Button className="!bg-white !text-slate-700 dark:bg-slate-800 dark:text-white">
             Login
           </Button>
         </Link>
