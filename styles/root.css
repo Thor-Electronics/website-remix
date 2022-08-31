@@ -12,6 +12,7 @@ html {
 }
 
 a {
+  @apply hover:underline;
   color: var(--links-color);
 }
 
@@ -22,6 +23,23 @@ a {
 @media (prefers-color-scheme: dark) {
   .dark\:highlight-white\/5 {
     box-shadow: inset 0 1px 1px 0 rgb(255 255 255/0.07) !important;
+  }
+}
+
+.label {
+  // @apply mb-2;
+}
+
+input {
+  @apply w-full border border-slate-400 rounded-md py-1 px-2 shadow;
+}
+
+label {
+  .error {
+    @apply text-rose-500;
+  }
+  input {
+    @apply mt-2;
   }
 }
 
