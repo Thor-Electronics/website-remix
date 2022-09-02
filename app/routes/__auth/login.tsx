@@ -18,14 +18,6 @@ export const Signup = () => {
             placeholder="Enter your password"
           />
         </label>
-        {/* <label className="label">
-          Re-Password:
-          <input
-            type="password"
-            name="re_password"
-            placeholder="Re-enter your password"
-          />
-        </label> */}
       </div>
       <div className="buttons">
         <Button className="w-full !bg-primary">Login</Button>
