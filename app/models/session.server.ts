@@ -97,9 +97,12 @@ export const requireUserId = async (
   return userId
 }
 
-export const logout = async (request: Request) =>
-  redirect("/login", {
+export const logout = async (request: Request) => {
+  const session = await getUserSession(request)
+  await db.session.delete({ where: { ID: session.get("id") } })
+  return redirect("/login", {
     headers: {
-      "Set-Cookie": await storage.destroySession(await getUserSession(request)),
+      "Set-Cookie": await storage.destroySession(session),
     },
   })
+}
