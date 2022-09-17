@@ -16,6 +16,12 @@ a {
   color: var(--links-color);
 }
 
+.btn {
+  &:disabled {
+    filter: blur(0.75px) grayscale(60%);
+  }
+}
+
 .card {
   @apply bg-white p-3 rounded-lg shadow-lg;
 }
@@ -36,7 +42,7 @@ input {
 
 label {
   .error {
-    @apply text-rose-500;
+    @apply text-red-600 italic font-bold;
   }
   input {
     @apply mt-2;

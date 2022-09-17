@@ -7,6 +7,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Session {
+  ID        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userID    String // @unique? how about multiple devices?
+  token     String   @unique // the jwt token of the user
+  IP        String // could also save os & user-agent and stuff like that
+  // region    String // France, IRAN, ...
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// model User {
+//   id    String  @id @default(auto()) @map("_id") @db.ObjectId
+//   email String  @unique
+//   name  String?
+//   // posts Post[]
+// }
+
 // model Post {
 //   id       String    @id @default(auto()) @map("_id") @db.ObjectId
 //   slug     String    @unique
@@ -24,11 +41,4 @@ datasource db {
 //   post    Post   @relation(fields: [postId], references: [id])
 //   postId  String @db.ObjectId
 //   comment String
-// }
-
-// model User {
-//   id    String  @id @default(auto()) @map("_id") @db.ObjectId
-//   email String  @unique
-//   name  String?
-//   posts Post[]
 // }

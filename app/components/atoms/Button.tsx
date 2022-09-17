@@ -2,7 +2,7 @@
 
 import { ButtonHTMLAttributes, DetailedHTMLProps } from "react"
 
-interface Props
+export interface Props
   extends DetailedHTMLProps<
     ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement

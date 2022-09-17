@@ -14,8 +14,10 @@
     "@remix-run/node": "^1.6.8",
     "@remix-run/react": "^1.6.8",
     "@remix-run/serve": "^1.6.8",
+    "axios": "^0.27.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "remix-utils": "^3.3.0"
   },
   "devDependencies": {
     "@csstools/postcss-sass": "^5.0.1",
