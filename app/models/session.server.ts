@@ -72,6 +72,9 @@ export async function getSessionData(request: Request) {
   }
 }
 
+export const getSessionToken = async (request: Request) =>
+  (await getSessionData(request)).token
+
 /** Get user info from core service based on token saved in session(cookie) */
 export const getOptionalUser = async (request: Request) =>
   await api
@@ -99,7 +102,11 @@ export const requireUserId = async (
 
 export const logout = async (request: Request) => {
   const session = await getUserSession(request)
-  await db.session.delete({ where: { ID: session.get("id") } })
+  try {
+    await db.session.delete({ where: { ID: session.get("id") } })
+  } catch {
+    console.warn("Session doesn't exist")
+  }
   return redirect("/login", {
     headers: {
       "Set-Cookie": await storage.destroySession(session),

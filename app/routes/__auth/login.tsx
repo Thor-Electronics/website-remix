@@ -1,6 +1,6 @@
 import { ActionFunction, json, LoaderFunction, redirect } from "@remix-run/node"
 import { Form, Link, useActionData, useTransition } from "@remix-run/react"
-import Button from "~/components/atoms/Button"
+import Button, { TextButton } from "~/components/atoms/Button"
 import { createSession, getUserId } from "~/models/session.server"
 import api from "~/utils/core.server"
 
@@ -38,7 +38,7 @@ export const action: ActionFunction = async ({ request }) => {
       return redirect
     })
     .catch(err => {
-      console.error("ERROR: ", err.response?.data)
+      console.error("ERROR Logging in: ", err.response?.data, err.response, err)
       return json<ActionData>(
         { errors: { email: err.response?.data?.message } },
         err.response?.status
@@ -82,12 +82,12 @@ export const Login = () => {
         </label>
       </div>
       <div className="buttons">
-        <Button
+        <TextButton
           className="w-full !bg-primary"
           disabled={transition.state === "submitting"}
         >
           {transition.state === "submitting" ? "Logging In ..." : "Login"}
-        </Button>
+        </TextButton>
       </div>
       <p className="switch text-sm text-center">
         Don't have an account?{" "}

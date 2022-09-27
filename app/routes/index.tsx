@@ -1,6 +1,6 @@
 import { json, LinksFunction, LoaderFunction } from "@remix-run/node"
 import { Link, useLoaderData } from "@remix-run/react"
-import Button from "~/components/atoms/Button"
+import Button, { TextButton } from "~/components/atoms/Button"
 import styles from "~/styles/index.css"
 import darkStyles from "~/styles/dark.css"
 import {
@@ -46,19 +46,19 @@ export default function Index() {
         {user ? (
           <>
             <Link to="/dashboard" prefetch="render">
-              <Button className="!bg-primary">Dashboard</Button>
+              <TextButton className="!bg-primary">Dashboard</TextButton>
             </Link>
             <LogoutButton />
           </>
         ) : (
           <>
             <Link to="/signup" prefetch="render">
-              <Button className="!bg-primary">Signup</Button>
+              <TextButton className="!bg-primary">Signup</TextButton>
             </Link>
             <Link to="login" prefetch="render">
-              <Button className="!bg-white !text-slate-700 dark:bg-slate-800 dark:text-white">
+              <TextButton className="!bg-white !text-slate-700 dark:bg-slate-800 dark:text-white">
                 Login
-              </Button>
+              </TextButton>
             </Link>
           </>
         )}

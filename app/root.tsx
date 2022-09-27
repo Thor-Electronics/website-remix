@@ -18,21 +18,59 @@ export const meta: MetaFunction = () => ({
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }]
 
-export default function App() {
+function Document({
+  children,
+  title = `IoT Network`,
+}: {
+  children: React.ReactNode
+  title?: string
+}) {
   return (
     <html lang="en">
       <head>
         <Meta />
+        <title>{title}</title>
         <Links />
       </head>
       <body className="bg-slate-200 dark:bg-slate-900 text-slate-800 dark:text-slate-200">
         {/* <NavigatingScreen /> */}
-        {/* FIXME: by adding this component here, the page keeps refereshing! */}
-        <Outlet />
+        {children}
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
       </body>
     </html>
+  )
+}
+
+export default function App() {
+  return (
+    <Document>
+      <Outlet />
+    </Document>
+    // <html lang="en">
+    //   <head>
+    //     <Meta />
+    //     <Links />
+    //   </head>
+    //   <body className="bg-slate-200 dark:bg-slate-900 text-slate-800 dark:text-slate-200">
+    //     {/* <NavigatingScreen /> */}
+    //     <Outlet />
+    //     <ScrollRestoration />
+    //     <Scripts />
+    //     <LiveReload />
+    //   </body>
+    // </html>
+  )
+}
+
+export function ErrorBoundary({ error }: { error: Error }) {
+  return (
+    <Document title="Uh-oh!">
+      <div className="error-container">
+        <h1>App Error</h1>
+        <pre>{error.message}</pre>
+      </div>
+    </Document>
   )
 }

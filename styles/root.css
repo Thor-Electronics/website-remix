@@ -12,8 +12,11 @@ html {
 }
 
 a {
-  @apply hover:underline;
   color: var(--links-color);
+
+  &.link {
+    @apply hover:underline;
+  }
 }
 
 .btn {
@@ -70,6 +73,15 @@ label {
     /* animation-direction: reverse; */
     animation-duration: 250ms;
   }
+}
+
+.Copyright {
+  @apply text-center text-xs opacity-50;
+  /* font-family: ; */
+}
+
+.Logo {
+  @apply text-center text-xl font-black font-serif italic text-primary;
 }
 
 /* ========== KeyFrames ========== */

@@ -13,7 +13,7 @@ import {
   useTransition,
 } from "@remix-run/react"
 // import { getClientIPAddress } from "remix-utils"
-import Button from "~/components/atoms/Button"
+import Button, { TextButton } from "~/components/atoms/Button"
 import {
   createSession,
   getSessionData,
@@ -58,7 +58,7 @@ export const action: ActionFunction = async ({ request }) => {
       return redirect
     })
     .catch(err => {
-      console.error("ERROR: ", err.response?.data)
+      console.error("ERROR signing up: ", err.response?.data, err.response, err)
       return json<ActionData>(
         { errors: { email: err.response?.data?.message } },
         err.response?.status
@@ -121,12 +121,12 @@ export const Signup = () => {
         </label> */}
       </div>
       <div className="buttons">
-        <Button
+        <TextButton
           className="w-full !bg-primary"
           disabled={transition.state === "submitting"}
         >
           {transition.state === "submitting" ? "Signing Up ..." : "Signup"}
-        </Button>
+        </TextButton>
       </div>
       <p className="switch text-sm text-center">
         Already have an account?{" "}
