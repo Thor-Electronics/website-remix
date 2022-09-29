@@ -12,7 +12,7 @@ export interface Props
 
 export const Button = ({ children, className, ...props }: Props) => (
   <button
-    className={`btn bg-slate-400 text-white shadow-md rounded-md //dark:highlight-white/5 flex flex-row items-center justify-center gap-1 ${className}`}
+    className={`btn bg-slate-400 text-white transition-all shadow-md rounded-md //dark:highlight-white/5 flex flex-row items-center justify-center gap-1 ${className}`}
     {...props}
   >
     {children}
