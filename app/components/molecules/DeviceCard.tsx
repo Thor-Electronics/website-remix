@@ -61,7 +61,7 @@ export const DeviceCard = ({ data, link = data.id, ...props }: Props) => {
           </div>
         ))}
       </div>
-    </Li>
+    </Link>
   )
 }
 
