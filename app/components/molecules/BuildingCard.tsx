@@ -43,7 +43,9 @@ export const BuildingCard = ({
           <HomeModernIcon className="w-6 h-6" />
         </div>
       )}
-      <div className="name font-medium flex flex-row items-center justify-start gap-1">
+      <div
+        className={`name font-semibold flex flex-row items-center justify-start gap-1 text-lg`}
+      >
         {data.name}
         {size > 0 && (
           <div className="plan-badge rounded-full shadow bg-primary text-white text-xs px-1.5">
@@ -81,28 +83,26 @@ export const BuildingCard = ({
               {data.plugins?.length || 0} Plugins
             </div>
           )}
+          {size > 2 && (
+            <div className="options flex flex-row gap-2 justify-end items-center text-base">
+              <TextButton className="bg-blue-500 shadow-blue-200">
+                <PencilIcon className="w-4 h-4" />
+                Edit Building
+              </TextButton>
+
+              <TextButton className="bg-red-500 shadow-red-200">
+                <TrashIcon className="w-4 h-4" />
+                Disable Building
+              </TextButton>
+            </div>
+          )}
           {size > 3 && data.devices && (
             <div className="devices">
               {data.devices?.map(d => (
-                <Link to={`devices/${d.id}`} key={d.id}>
-                  <DeviceCard key={d.id} data={d} />
-                </Link>
+                <DeviceCard key={d.id} data={d} link={`devices/${d.id}`} />
               ))}
             </div>
           )}
-        </div>
-      )}
-      {size > 2 && (
-        <div className="options flex flex-row gap-2 justify-end items-center">
-          <TextButton className="bg-blue-500">
-            <PencilIcon className="w-4 h-4" />
-            Edit Building
-          </TextButton>
-
-          <TextButton className="bg-red-500">
-            <TrashIcon className="w-4 h-4" />
-            Disable Building
-          </TextButton>
         </div>
       )}
     </Link>
