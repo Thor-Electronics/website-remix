@@ -25,7 +25,7 @@ export type DeviceAction = {
 export const commonActions: { [key: string]: DeviceAction } = {
   powerAction: {
     title: "Power",
-    className: "bg-slate-700 hover:bg-slate-800",
+    className: "!bg-slate-700 hover:bg-slate-800",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -44,7 +44,7 @@ export const commonActions: { [key: string]: DeviceAction } = {
   },
   restartAction: {
     title: "Restart",
-    className: "bg-sky-400 hover:bg-sky-500 shadow-sky-200",
+    className: "!bg-sky-400 hover:bg-sky-500 shadow-sky-200",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
