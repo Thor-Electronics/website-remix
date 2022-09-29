@@ -4,24 +4,29 @@ import {
   HashtagIcon,
   WifiIcon,
 } from "@heroicons/react/24/solid"
+import { Link } from "@remix-run/react"
 import { Device, deviceActions } from "~/types/Device"
 import { IconButton } from "../atoms/Button"
 
 type Props = {
   data: Device
+  link?: string
 }
 
-export const DeviceCard = ({ data, ...props }: Props) => {
+export const DeviceCard = ({ data, link = data.id, ...props }: Props) => {
   return (
-    <div className="DeviceCard" {...props}>
+    <Link to={link} className="DeviceCard card" {...props}>
       <div className="device-iocn">
-        <BoltIcon className="w-6 h-6" />
+        <BoltIcon className="w-12 h-12" />
       </div>
-      <div className="device-name row" title={`Name: ${data.name}`}>
+      <div
+        className="device-name row font-medium gap-1 text-base"
+        title={`Name: ${data.name}`}
+      >
         {data.name}
       </div>
-      <div className="device-body">
-        <div className="device-id row" title="Device ID">
+      <div className="device-body flex flex-col gap-2 text-xs">
+        <div className="device-id font-mono row" title="Device ID">
           <HashtagIcon className="w-6 h-6" />
           {data.id}
         </div>
@@ -36,7 +41,12 @@ export const DeviceCard = ({ data, ...props }: Props) => {
       </div>
       <div className="device-actions flex flex-col gap-2">
         {deviceActions[data.type].map(action => (
-          <IconButton key={action.title} onClick={action.callback}>
+          <IconButton
+            key={action.title}
+            onClick={action.callback}
+            // TODO: I could define a function that checks if the callback is string, then use one of those built-in funcitons like turn on or off and if it's a callable function, then reutrn itself so that on click calls it otherwise the builting function will be passed to on click and would be handeled by the component because builtin functions are inside the component
+            className={action.className}
+          >
             {action.icon}
           </IconButton>
         ))}
@@ -47,11 +57,11 @@ export const DeviceCard = ({ data, ...props }: Props) => {
             <div className="icon">{getStateIcon(k, v)}</div>
             <div className="key">{k}</div>
             <div className="value">{v}</div>
-            {/* Value needs to be nested so we need a recursive function :) */}
+            {/* TODO: Value needs to be nested so we need a recursive function :) */}
           </div>
         ))}
       </div>
-    </div>
+    </Li>
   )
 }
 
