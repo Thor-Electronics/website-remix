@@ -51,8 +51,10 @@
   }
 
   .DeviceCard {
-    @apply text-slate-600 grid flex-grow;
+    @apply text-slate-600 grid flex-grow gap-2;
     min-width: 250px;
+    width: 33%;
+    max-width: 100%;
     grid-template-columns: 48px auto 36px;
     grid-template-rows: 48px auto;
 
