@@ -1,9 +1,12 @@
 import invariant from "tiny-invariant"
 
 export const getEnv = () => {
-  invariant(process.env.CORE_URL, "CORE_URL must be defined")
+  const production = process.env.NODE_ENV === "production"
+  invariant(process.env.CORE_ADDR, "CORE_ADDR must be defined")
   return {
-    CORE_URL: process.env.CORE_URL,
+    CORE_ADDR: process.env.CORE_ADDR,
+    CORE_URL: `${production ? "https" : "http"}://${process.env.CORE_ADDR}`,
+    CORE_SOCKET: `${production ? "wss" : "ws"}://${process.env.CORE_ADDR}`,
   }
 }
 

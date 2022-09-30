@@ -15,7 +15,8 @@ type Props = {
 
 export const DeviceCard = ({ data, link = data.id, ...props }: Props) => {
   return (
-    <Link to={link} className="DeviceCard card" {...props}>
+    // <Link to={link}>
+    <div className="DeviceCard card" {...props}>
       <div className="device-iocn">
         <BoltIcon className="w-12 h-12" />
       </div>
@@ -61,7 +62,7 @@ export const DeviceCard = ({ data, link = data.id, ...props }: Props) => {
           </div>
         ))}
       </div>
-    </Link>
+    </div>
   )
 }
 

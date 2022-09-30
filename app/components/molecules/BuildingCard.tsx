@@ -21,10 +21,6 @@ export type Props = {
   // sizes => 0: only name, 1: icon, plan, 2: id, address, 3: device count, plugins count, 4: device panel, plugin panel
 }
 
-const styles: CSSProperties = {
-  // gridTemplateColumns: "24px auto",
-}
-
 export const BuildingCard = ({
   data,
   size,
@@ -32,12 +28,7 @@ export const BuildingCard = ({
   ...props
 }: Props) => {
   return (
-    <Link
-      to={link}
-      style={styles}
-      className={`BuildingCard size-${size} card`}
-      {...props}
-    >
+    <Link to={link} className={`BuildingCard size-${size} card`} {...props}>
       {size > 0 && (
         <div className="icon">
           <HomeModernIcon className="w-6 h-6" />

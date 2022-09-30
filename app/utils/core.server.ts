@@ -3,7 +3,7 @@
 import axios from "axios"
 
 export const ax = axios.create({
-  baseURL: process.env.CORE_URL,
+  baseURL: ENV.CORE_URL, // may need https? so we probably need more env vars :)
   // timeout: 10000,
   headers: { "X-Request-From": "Website" },
 })
@@ -29,7 +29,7 @@ export const getBuildingDetails = (id: string, token: string) =>
 
 export const delay = (time: number) => ax.get(`${v1}/dev/delay?time=${time}`)
 export const dly = (t: number) =>
-  fetch(`${process.env.CORE_URL}/api/v1/dev/delay?time=${t}`)
+  fetch(`${process.env.CORE_ADDR}/api/v1/dev/delay?time=${t}`)
 
 const api = {
   healthCheck,
