@@ -1,4 +1,9 @@
-import type { LinksFunction, MetaFunction } from "@remix-run/node"
+import {
+  json,
+  LinksFunction,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/node"
 import {
   Links,
   LiveReload,
@@ -6,9 +11,11 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react"
 import NavigatingScreen from "./components/NavigatingScreen"
 import styles from "~/styles/root.css"
+import { getEnv } from "./env.server"
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -43,10 +50,25 @@ function Document({
   )
 }
 
+type LoaderData = {
+  ENV: ReturnType<typeof getEnv>
+}
+
+export const loader: LoaderFunction = () =>
+  json<LoaderData>({
+    ENV: getEnv(),
+  })
+
 export default function App() {
+  const { ENV } = useLoaderData<LoaderData>()
   return (
     <Document>
       <Outlet />
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `window.ENV = ${JSON.stringify(ENV)}`,
+        }}
+      />
     </Document>
     // <html lang="en">
     //   <head>
