@@ -1,5 +1,4 @@
 import { createContext, ReactNode, useContext } from "react"
-import { WebSocket } from "ws"
 
 type ProviderProps = {
   socket?: WebSocket

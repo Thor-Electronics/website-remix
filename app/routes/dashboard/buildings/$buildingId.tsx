@@ -5,44 +5,43 @@ import invariant from "tiny-invariant"
 import { BuildingCard } from "~/components/molecules/BuildingCard"
 import { getSessionToken } from "~/models/session.server"
 import { Building } from "~/types/Building"
+import { Message } from "~/types/Message"
 import api from "~/utils/core.server"
+import socketClient from "~/utils/socket.client"
 
 type LoaderData = {
   building: Building
+  socketToken: string
 }
 
 export const loader: LoaderFunction = async ({ request, params }) => {
   invariant(params.buildingId, "Building not found")
-  const building = await api.getBuildingDetails(
-    params.buildingId,
-    await getSessionToken(request)
-  )
-  return json<LoaderData>({ building })
+  const token = await getSessionToken(request)
+  const building = await api.getBuildingDetails(params.buildingId, token)
+  return json<LoaderData>({ building, socketToken: token })
 }
 
 export const BuildingDetails = () => {
-  const { building } = useLoaderData<LoaderData>()
+  const { building, socketToken } = useLoaderData<LoaderData>()
   const [socket, setSocket] = useState<WebSocket>()
   if (typeof window !== "undefined") {
     useEffect(() => {
-      console.log("WS: 🔌Initializing connection to", ENV.CORE_ADDR)
-      const socket = new WebSocket(`ws://${ENV.CORE_ADDR}/api/v1/control/echo`)
-      socket.addEventListener("open", e => {
-        console.log("WS: ✅Connected to the server")
-        setSocket(socket)
-        socket.send("ping")
-      })
-      socket.addEventListener("message", e => console.log("🔽", e.data))
-      socket.addEventListener("close", e =>
-        console.log("WS: ⭕Connection closed", e.reason, e.wasClean)
-      ) // socket.addEventListener("error", e => console.warn("❌WS Error: ", e.type)) // return socket.close()
+      socketClient.connect(
+        `ws://${ENV.CORE_ADDR}/api/v1/control/manage/${building.id}`,
+        socketToken,
+        (socket, e) => {
+          console.log("WS: ✅Connected to the server")
+          setSocket(socket)
+        }
+      )
     }, [])
 
     useEffect(() => {
-      socket?.addEventListener("message", e =>
-        console.log("Second listener called")
-      )
-      socket?.send("foo")
+      socket?.addEventListener("message", e => {
+        const message = socketClient.parseMessage(e)
+        // TODO: listen for updates and react to them here ...
+      })
+      // socket?.send(JSON.stringify({ message: "Foo" }))
     }, [socket])
   }
 
