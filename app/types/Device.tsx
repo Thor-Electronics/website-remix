@@ -1,4 +1,5 @@
 import React, { MouseEvent, ReactNode } from "react"
+import { Message } from "./Message"
 
 export interface Device {
   id: string
@@ -6,7 +7,12 @@ export interface Device {
   name: string
   buildingId: string
   type: string
-  state: object
+  state: DeviceState
+}
+
+export type DeviceState = {
+  power: "on" | "off" | boolean | number
+  // [key: string]: object
 }
 
 export enum DeviceTypes {
@@ -19,7 +25,7 @@ export type DeviceAction = {
   title: string
   className?: string
   icon: string | ReactNode
-  callback: (e: MouseEvent) => any // click event or what?
+  callback: () => Pick<Message, "update"> | string | void // generate new state or return action type or do something and return nothing
 }
 
 export const commonActions: { [key: string]: DeviceAction } = {
@@ -40,7 +46,7 @@ export const commonActions: { [key: string]: DeviceAction } = {
         />
       </svg>
     ),
-    callback: () => console.log("Device power state changed"),
+    callback: () => "TOGGLE_POWER",
   },
   restartAction: {
     title: "Restart",

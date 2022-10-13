@@ -1,4 +1,4 @@
-import { Message } from "~/types/Message"
+import type { Message } from "~/types/Message"
 
 export const connect = (
   url: string,
@@ -19,10 +19,11 @@ export const connect = (
 }
 
 export const sendCommand = (
-  socket: WebSocket,
+  socket: WebSocket | undefined,
   newState: object,
   deviceId: string
 ) => {
+  if (!socket) return
   const message: Message = {
     command: newState,
     deviceId,
@@ -31,5 +32,12 @@ export const sendCommand = (
 }
 
 export const parseMessage = (e: MessageEvent): Message => JSON.parse(e.data)
+
+export const handleMessage = (
+  e: MessageEvent,
+  handlers: { signal: string; handler: (e: MessageEvent) => any }[]
+) => {
+  const message = parseMessage(e)
+}
 
 export default { connect, sendCommand, parseMessage }

@@ -18,6 +18,7 @@ export type Props = {
   data: Building
   size: number
   link?: string
+  updateHandler: Function
   // sizes => 0: only name, 1: icon, plan, 2: id, address, 3: device count, plugins count, 4: device panel, plugin panel
 }
 
@@ -25,6 +26,7 @@ export const BuildingCard = ({
   data,
   size,
   link = data.id,
+  updateHandler,
   ...props
 }: Props) => {
   return (
@@ -90,7 +92,12 @@ export const BuildingCard = ({
           {size > 3 && data.devices && (
             <div className="devices">
               {data.devices?.map(d => (
-                <DeviceCard key={d.id} data={d} link={`devices/${d.id}`} />
+                <DeviceCard
+                  key={d.id}
+                  data={d}
+                  link={`devices/${d.id}`}
+                  updateHandler={updateHandler}
+                />
               ))}
             </div>
           )}
