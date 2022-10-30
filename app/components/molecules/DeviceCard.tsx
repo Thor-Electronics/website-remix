@@ -3,10 +3,16 @@ import {
   CpuChipIcon,
   HashtagIcon,
   WifiIcon,
+  CircleStackIcon,
+  PowerIcon,
 } from "@heroicons/react/24/solid"
-import type { Device, DeviceAction } from "~/types/Device"
+import type { MouseEvent } from "react"
+import type {
+  Device,
+  DeviceActionCallbackReturnType,
+  DeviceState,
+} from "~/types/Device"
 import { deviceActions } from "~/types/Device"
-import type { Message } from "~/types/Message"
 import { IconButton } from "../atoms/Button"
 
 type Props = {
@@ -15,22 +21,45 @@ type Props = {
   updateHandler: Function
 }
 
-export const DeviceCard = ({ data, link = data.id, updateHandler, ...props }: Props) => {
-  const handleClick = (callback: string) => {
-    const handlers = {
-      "TOGGLE_POWER": (): Pick<Message, "update"> => ({
-        update: { power: data.state.power === "on" ? "off" : "on" },
-        // FIXME: how about if power is 0 or 1 or true or false, we
-        // need an standard for it I think numbers are really good
-        // to represent the device state because we can also represent
-        // the intensity and sleep states.Like:
-        // power< 0 -> off, power == 0 -> sleep / standby,
-        // power > 0 -> the power level of the device which means it
-        // is on and how much power will this work on.
-      }),
+export const DeviceCard = ({
+  data,
+  link = data.id,
+  updateHandler,
+  ...props
+}: Props) => {
+  // console.log("DEVICE CARD update handler:", updateHandler)
+  console.log("Device state", data.state)
+  const handleClick =
+    (callback: () => DeviceActionCallbackReturnType) => (e: MouseEvent) => {
+      console.log("Handle click was called ...")
+      const handlers = {
+        TOGGLE_POWER: {
+          update: { power: data.state.power === "on" ? "off" : "on" },
+          // FIXME: how about if power is 0 or 1 or true or false, we
+          // need an standard for it I think numbers are really good
+          // to represent the device state because we can also represent
+          // the intensity and sleep states.Like:
+          // power< 0 -> off, power == 0 -> sleep / standby,
+          // power > 0 -> the power level of the device which means it
+          // is on and how much power will this work on.
+        },
+        RESTART: { signal: "RESTART" },
+        BUZZ: { signal: "BUZZ" },
+        VOLUME_UP: { update: { volume: (data.state.volume ?? 0) + 1 } }, // todo: could be signal instead of update
+        VOLUME_DOWN: { update: { volume: (data.state.volume ?? 0) - 1 } }, // todo: could be signal instead of update
+        SET_COLOR: { update: { color: "#ffffff" } },
+      }
+
+      const callbackResult = callback()
+      switch (typeof callbackResult) {
+        case "string":
+          return updateHandler(handlers[callbackResult], data.id)
+        case "object":
+          return updateHandler(callbackResult, data.id)
+        default:
+          break
+      }
     }
-    if (typeof ReturnType<typeof callback> === "string") return updateHandler(handlers[callback], data.id)
-  }
 
   return (
     // <Link to={link}>
@@ -72,23 +101,44 @@ export const DeviceCard = ({ data, link = data.id, updateHandler, ...props }: Pr
       </div>
       <div className="device-state" title="Current State Data">
         {Object.entries(data.state).map(([k, v]) => (
-          <div key={k} className="state-key-value row">
-            <div className="icon">{getStateIcon(k, v)}</div>
-            <div className="key">{k}</div>
-            <div className="value">{v}</div>
-            {/* TODO: Value needs to be nested so we need a recursive function :) */}
-          </div>
+          <DeviceStateUI key={k} k={k} v={v} />
         ))}
       </div>
     </div>
   )
 }
 
+export const DeviceStateUI = ({
+  k,
+  v,
+  ...props
+}: {
+  k: string
+  v: string | number | boolean | object
+}) => (
+  <div className="state-key-value row">
+    <div className="icon">{getStateIcon(k, v)}</div>
+    <div className="key">{k}:</div>
+    <div className="value">
+      {typeof v !== "object"
+        ? v
+        : Object.entries(v).map(([k, v]) => (
+            <DeviceStateUI key={k} k={k} v={v} />
+          ))}
+    </div>
+  </div>
+)
+
 export const getStateIcon = (key: string, value: any) => {
-  let icon = "Default State Icon = Data or something like a db idk"
+  let icon = <CircleStackIcon className="w-6 h-6" />
   switch (key) {
     case "power":
-      icon = value === "on" ? "POWER OFF ICON" : "POWER ON ICON"
+      icon =
+        value === "on" ? (
+          <PowerIcon className="w-6 h-6 text-green-600" />
+        ) : (
+          <PowerIcon className="w-6 h-6 text-slate-600" />
+        )
 
     default:
       break

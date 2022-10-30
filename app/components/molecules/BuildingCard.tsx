@@ -30,7 +30,7 @@ export const BuildingCard = ({
   ...props
 }: Props) => {
   return (
-    <Link to={link} className={`BuildingCard size-${size} card`} {...props}>
+    <div to={link} className={`BuildingCard size-${size} card`} {...props}>
       {size > 0 && (
         <div className="icon">
           <HomeModernIcon className="w-6 h-6" />
@@ -103,6 +103,6 @@ export const BuildingCard = ({
           )}
         </div>
       )}
-    </Link>
+    </div>
   )
 }

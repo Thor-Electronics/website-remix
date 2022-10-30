@@ -27,8 +27,15 @@ export const BuildingDetails = () => {
   const [socket, setSocket] = useState<WebSocket>()
   const [state, setState] = useState<Building>(building)
 
-  const handleUpdate = (newState: object, deviceId: string) =>
-    sendCommand(socket, newState, deviceId)
+  const handleUpdate = (newState: object, deviceId: string) => {
+    console.log(
+      "Sending control command via websocket",
+      newState,
+      newState.update ?? newState,
+      deviceId
+    )
+    return sendCommand(socket, newState.update ?? newState, deviceId)
+  }
 
   if (typeof window !== "undefined") {
     useEffect(() => {
@@ -36,7 +43,7 @@ export const BuildingDetails = () => {
         `ws://${ENV.CORE_ADDR}/api/v1/control/manage/${building.id}`,
         socketToken,
         (socket, e) => {
-          console.log("WS: ✅Connected to the server")
+          console.log("WS: ✅Connected to the server", building.id)
           setSocket(socket)
         }
       )

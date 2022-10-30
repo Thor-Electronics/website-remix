@@ -11,7 +11,9 @@ export interface Device {
 }
 
 export type DeviceState = {
+  [x: string]: string | number | boolean | object
   power: "on" | "off" | boolean | number
+  volume: number
   // [key: string]: object
 }
 
@@ -19,13 +21,20 @@ export enum DeviceTypes {
   KEY = "KEY",
   LOCK = "LOCK",
   BELL = "BELL",
+  TV = "TV",
+  LIGHT = "LIGHT",
 }
+
+export type DeviceActionCallbackReturnType =
+  | Pick<Message, "update">
+  | string
+  | void
 
 export type DeviceAction = {
   title: string
   className?: string
   icon: string | ReactNode
-  callback: () => Pick<Message, "update"> | string | void // generate new state or return action type or do something and return nothing
+  callback: () => DeviceActionCallbackReturnType // generate new state or return action type or do something and return nothing
 }
 
 export const commonActions: { [key: string]: DeviceAction } = {
@@ -46,7 +55,10 @@ export const commonActions: { [key: string]: DeviceAction } = {
         />
       </svg>
     ),
-    callback: () => "TOGGLE_POWER",
+    callback: () => {
+      console.log("Toggling power!")
+      return "TOGGLE_POWER"
+    },
   },
   restartAction: {
     title: "Restart",
@@ -65,7 +77,7 @@ export const commonActions: { [key: string]: DeviceAction } = {
         />
       </svg>
     ),
-    callback: () => console.log("Device restarted"),
+    callback: () => "RESTART",
   },
 }
 
@@ -77,7 +89,30 @@ export const deviceActions: { [key: string]: DeviceAction[] } = {
     {
       title: "Buzz",
       icon: "VIBRATION ICON",
-      callback: () => console.log("Buzz signal sent to bell"),
+      callback: () => "BUZZ",
+    },
+  ],
+  [DeviceTypes.TV]: [
+    commonActions.powerAction,
+    commonActions.restartAction,
+    {
+      title: "Volume Up",
+      icon: "V+",
+      callback: () => "VOLUME_UP",
+    },
+    {
+      title: "Volume Down",
+      icon: "V-",
+      callback: () => "VOLUME_DOWN",
+    },
+  ],
+  [DeviceTypes.LIGHT]: [
+    commonActions.powerAction,
+    commonActions.restartAction,
+    {
+      title: "Set Color",
+      icon: "ß",
+      callback: () => "SET_COLOR",
     },
   ],
 }

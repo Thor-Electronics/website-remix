@@ -86,13 +86,13 @@ export default function App() {
   )
 }
 
-export function ErrorBoundary({ error }: { error: Error }) {
-  return (
-    <Document title="Uh-oh!">
-      <div className="error-container">
-        <h1>App Error</h1>
-        <pre>{error.message}</pre>
-      </div>
-    </Document>
-  )
-}
+// export function ErrorBoundary({ error }: { error: Error }) {
+//   return (
+//     <Document title="Uh-oh!">
+//       <div className="error-container">
+//         <h1>App Error</h1>
+//         <pre>{error.message}</pre>
+//       </div>
+//     </Document>
+//   )
+// }

@@ -57,7 +57,7 @@
     width: 33%;
     max-width: 100%;
     grid-template-columns: 48px auto 36px;
-    grid-template-rows: 48px auto;
+    grid-template-rows: 48px auto auto;
 
     .device-icon {
       grid-area: 1/1/2/2;
@@ -70,6 +70,12 @@
     }
     .device-actions {
       grid-area: 2/3/3/4;
+    }
+
+    .device-state {
+      grid-area: 3/1 / span 1 / span 3;
+      @apply bg-slate-100 rounded shadow-inner p-2 font-mono;
+      /* color: red; */
     }
   }
 }
