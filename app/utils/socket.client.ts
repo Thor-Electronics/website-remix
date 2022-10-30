@@ -26,7 +26,7 @@ export const sendCommand = (
   if (!socket) return
   const message: Message = {
     command: newState,
-    deviceId,
+    id: deviceId,
   }
   socket.send(JSON.stringify(message))
 }

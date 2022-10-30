@@ -5,12 +5,18 @@ import {
   WifiIcon,
   CircleStackIcon,
   PowerIcon,
+  TvIcon,
+  SpeakerWaveIcon,
+  SwatchIcon,
+  InformationCircleIcon,
 } from "@heroicons/react/24/solid"
+import { MdWifi, MdWifiOff } from "react-icons/md"
 import type { MouseEvent } from "react"
-import type {
+import {
   Device,
   DeviceActionCallbackReturnType,
   DeviceState,
+  DeviceTypes,
 } from "~/types/Device"
 import { deviceActions } from "~/types/Device"
 import { IconButton } from "../atoms/Button"
@@ -28,10 +34,10 @@ export const DeviceCard = ({
   ...props
 }: Props) => {
   // console.log("DEVICE CARD update handler:", updateHandler)
-  console.log("Device state", data.state)
+  // console.log("Device state", data.state)
   const handleClick =
     (callback: () => DeviceActionCallbackReturnType) => (e: MouseEvent) => {
-      console.log("Handle click was called ...")
+      // console.log("Handle click was called ...")
       const handlers = {
         TOGGLE_POWER: {
           update: { power: data.state.power === "on" ? "off" : "on" },
@@ -64,14 +70,18 @@ export const DeviceCard = ({
   return (
     // <Link to={link}>
     <div className="DeviceCard card" {...props}>
-      <div className="device-iocn">
-        <BoltIcon className="w-12 h-12" />
+      <div className="device-icon">
+        {getDeviceIcon(
+          data.type,
+          `w-12 h-12 ${data.state?.power === "on" ? "text-emerald-500" : ""}`
+        )}
       </div>
       <div
         className="device-name row font-medium gap-1 text-base"
         title={`Name: ${data.name}`}
       >
         {data.name}
+        {data.isOnline && <OnlineAnimation />}
       </div>
       <div className="device-body flex flex-col gap-2 text-xs">
         <div className="device-id font-mono row" title="Device ID">
@@ -83,8 +93,25 @@ export const DeviceCard = ({
           {data.cpuId}
         </div>
         <div className="device-type row" title="Device Type">
-          <WifiIcon className="w-6 h-6" />
+          <InformationCircleIcon className="w-6 h-6" />
           {data.type}
+        </div>
+        <div className="online row">
+          {data.isOnline ? (
+            <>
+              <MdWifi className="w-6 h-6 text-emerald-500" />
+              <span className="py-0.5 px-2 text-xs font-medium text-white bg-emerald-500 rounded-full">
+                Online
+              </span>
+            </>
+          ) : (
+            <>
+              <MdWifiOff className="w-6 h-6" />
+              <span className="py-0.5 px-2 text-xs font-medium text-white bg-slate-500 rounded-full">
+                Offline
+              </span>
+            </>
+          )}
         </div>
       </div>
       <div className="device-actions flex flex-col gap-2">
@@ -130,6 +157,7 @@ export const DeviceStateUI = ({
 )
 
 export const getStateIcon = (key: string, value: any) => {
+  const cn = "w-6 h-6"
   let icon = <CircleStackIcon className="w-6 h-6" />
   switch (key) {
     case "power":
@@ -139,11 +167,34 @@ export const getStateIcon = (key: string, value: any) => {
         ) : (
           <PowerIcon className="w-6 h-6 text-slate-600" />
         )
-
-    default:
+      break
+    case "volume":
+      icon = <SpeakerWaveIcon className={cn} />
+      break
+    case "color":
+      icon = (
+        <SwatchIcon className={`${cn} drop-shadow`} style={{ color: value }} />
+      )
       break
   }
   return icon
 }
+
+export const getDeviceIcon = (t: DeviceTypes | string, className?: string) => {
+  const cn = `w-6 h-6 ${className}`
+  let icon = <BoltIcon className={cn} />
+  switch (t) {
+    case DeviceTypes.TV:
+      icon = <TvIcon className={cn} />
+  }
+  return icon
+}
+
+export const OnlineAnimation = () => (
+  <div
+    className="Online w-2 h-2 rounded-full bg-emerald-500"
+    title="Online"
+  ></div>
+)
 
 export default DeviceCard

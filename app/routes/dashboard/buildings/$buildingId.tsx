@@ -6,7 +6,7 @@ import invariant from "tiny-invariant"
 import { BuildingCard } from "~/components/molecules/BuildingCard"
 import { getSessionToken } from "~/models/session.server"
 import type { Building } from "~/types/Building"
-import { Message } from "~/types/Message"
+import { Signals } from "~/types/Message"
 import api from "~/utils/core.server"
 import socketClient, { sendCommand } from "~/utils/socket.client"
 
@@ -57,20 +57,43 @@ export const BuildingDetails = () => {
         // Update Message Received
         if (msg.update) {
           // look for device ID and update it
+          // console.log("Update detected!")
           setState(prev => ({
             ...prev,
             devices: prev.devices?.map(d =>
-              d.id === msg.deviceId
+              d.id === msg.id
                 ? { ...d, state: { ...d.state, ...msg.update } }
                 : d
             ),
           })) //* Wow! what a cool statement I wrote! I love it!
         }
-        if (msg.deviceId) {
-          console.log(
-            "New message received related to a device: ",
-            msg.deviceId
-          )
+        if (msg.signal) {
+          console.log("Signal received: ", msg.signal)
+          if (
+            msg.signal === Signals.DEVICE_CONNECTED ||
+            msg.signal === Signals.DEVICE_DISCONNECTED
+          ) {
+            setState(prev => ({
+              ...prev,
+              devices: prev.devices?.map(d =>
+                d.id === msg.id
+                  ? {
+                      ...d,
+                      isOnline:
+                        msg.signal === Signals.DEVICE_CONNECTED ? true : false,
+                    }
+                  : d
+              ),
+            }))
+          }
+          // device got online
+          // device
+        }
+        if (msg.id) {
+          // console.log(
+          //   "New message received related to a device: ",
+          //   msg.deviceId
+          // )
         }
       })
       // socket?.send(JSON.stringify({ message: "Foo" }))
