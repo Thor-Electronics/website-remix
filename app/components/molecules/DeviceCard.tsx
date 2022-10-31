@@ -81,7 +81,7 @@ export const DeviceCard = ({
         title={`Name: ${data.name}`}
       >
         {data.name}
-        {data.isOnline && <OnlineAnimation />}
+        {data.isOnline && <OnlinePulse />}
       </div>
       <div className="device-body flex flex-col gap-2 text-xs">
         <div className="device-id font-mono row" title="Device ID">
@@ -100,14 +100,17 @@ export const DeviceCard = ({
           {data.isOnline ? (
             <>
               <MdWifi className="w-6 h-6 text-emerald-500" />
-              <span className="py-0.5 px-2 text-xs font-medium text-white bg-emerald-500 rounded-full">
+              <span className="OnlinePulse py-0.5 px-2 text-xs font-medium text-white bg-emerald-500 rounded-full">
                 Online
               </span>
             </>
           ) : (
             <>
               <MdWifiOff className="w-6 h-6" />
-              <span className="py-0.5 px-2 text-xs font-medium text-white bg-slate-500 rounded-full">
+              <span
+                className="py-0.5 px-2 text-xs font-medium text-white bg-slate-500 rounded-full"
+                title="When the device is offline, server can't send updates but keeps them and let the device know when connected to the network"
+              >
                 Offline
               </span>
             </>
@@ -190,9 +193,9 @@ export const getDeviceIcon = (t: DeviceTypes | string, className?: string) => {
   return icon
 }
 
-export const OnlineAnimation = () => (
+export const OnlinePulse = () => (
   <div
-    className="Online w-2 h-2 rounded-full bg-emerald-500"
+    className="OnlinePulse w-2 h-2 rounded-full bg-emerald-500"
     title="Online"
   ></div>
 )
