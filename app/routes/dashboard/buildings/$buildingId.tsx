@@ -45,59 +45,77 @@ export const BuildingDetails = () => {
         (socket, e) => {
           console.log("WS: ✅Connected to the server", building.id)
           setSocket(socket)
+          // listen for updates and react to them
+          // console.log("HERE", socket, socket?.OPEN)
+          socket?.addEventListener("message", e => {
+            const msg = socketClient.parseMessage(e)
+            if (!msg.ok) console.log("message with errors! ", msg.message)
+            // Update Message Received
+            if (msg.update) {
+              // look for device ID and update it
+              // console.log("Update detected!")
+              setState(prev => ({
+                ...prev,
+                devices: prev.devices?.map(d =>
+                  d.id === msg.id
+                    ? { ...d, state: { ...d.state, ...msg.update } }
+                    : d
+                ),
+              })) //* Wow! what a cool statement I wrote! I love it!
+            }
+
+            if (msg.signal) {
+              // console.log("Signal received: ", msg.signal)
+
+              /* Initial Data */
+              if (msg.signal === Signals.USER_INITIAL_DATA) {
+                setState(prev => ({
+                  ...prev,
+                  devices: prev.devices?.map(d =>
+                    msg.payload?.onlineDevices?.includes(d.id)
+                      ? { ...d, isOnline: true }
+                      : d
+                  ),
+                }))
+              }
+
+              /* Device connected / disconnected */
+              if (
+                msg.signal === Signals.DEVICE_CONNECTED ||
+                msg.signal === Signals.DEVICE_DISCONNECTED
+              ) {
+                setState(prev => ({
+                  ...prev,
+                  devices: prev.devices?.map(d =>
+                    d.id === msg.id
+                      ? {
+                          ...d,
+                          isOnline:
+                            msg.signal === Signals.DEVICE_CONNECTED
+                              ? true
+                              : false,
+                        }
+                      : d
+                  ),
+                }))
+              }
+            }
+
+            if (msg.id) {
+              // console.log(
+              //   "New message received related to a device: ",
+              //   msg.deviceId
+              // )
+            }
+          })
+          // socket?.send(JSON.stringify({ message: "Foo" }))
         }
       )
     }, [])
 
-    useEffect(() => {
-      // listen for updates and react to them
-      socket?.addEventListener("message", e => {
-        const msg = socketClient.parseMessage(e)
-        if (!msg.ok) console.log("message with errors! ", msg.message)
-        // Update Message Received
-        if (msg.update) {
-          // look for device ID and update it
-          // console.log("Update detected!")
-          setState(prev => ({
-            ...prev,
-            devices: prev.devices?.map(d =>
-              d.id === msg.id
-                ? { ...d, state: { ...d.state, ...msg.update } }
-                : d
-            ),
-          })) //* Wow! what a cool statement I wrote! I love it!
-        }
-        if (msg.signal) {
-          console.log("Signal received: ", msg.signal)
-          if (
-            msg.signal === Signals.DEVICE_CONNECTED ||
-            msg.signal === Signals.DEVICE_DISCONNECTED
-          ) {
-            setState(prev => ({
-              ...prev,
-              devices: prev.devices?.map(d =>
-                d.id === msg.id
-                  ? {
-                      ...d,
-                      isOnline:
-                        msg.signal === Signals.DEVICE_CONNECTED ? true : false,
-                    }
-                  : d
-              ),
-            }))
-          }
-          // device got online
-          // device
-        }
-        if (msg.id) {
-          // console.log(
-          //   "New message received related to a device: ",
-          //   msg.deviceId
-          // )
-        }
-      })
-      // socket?.send(JSON.stringify({ message: "Foo" }))
-    }, [socket])
+    // useEffect(() => {
+
+    // }, [socket])
   }
 
   return (

@@ -4,7 +4,9 @@ export type Message = {
   command?: object
   signal?: string
   message?: string
-  payload?: object
+  payload?: {
+    onlineDevices?: string[]
+  }
   id: string
 }
 
@@ -14,4 +16,5 @@ export enum Signals {
   USER_CONNECTED = "USER_CONNECTED",
   USER_DISCONNECTED = "USER_DISCONNECTED",
   DEVICE_STATE_UPDATED = "DEVICE_STATE_UPDATED",
+  USER_INITIAL_DATA = "USER_INITIAL_DATA",
 }
