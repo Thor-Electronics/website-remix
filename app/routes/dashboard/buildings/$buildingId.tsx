@@ -119,7 +119,7 @@ export const BuildingDetails = () => {
   }
 
   return (
-    <div className="BuildingDetails p-4">
+    <div className="BuildingDetails p-4 lg:max-w-5xl mx-auto">
       <BuildingCard
         data={state}
         size={4}

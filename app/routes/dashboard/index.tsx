@@ -18,7 +18,9 @@ import { getUserBuildings } from "~/utils/core.server"
 
 export const DashboardIndex = () => {
   // const { buildings } = useLoaderData<LoaderData>()
-  return <div className="DashboardIndex">Welcome to the dashboard!</div>
+  return (
+    <div className="DashboardIndex text-center">Welcome to the dashboard!</div>
+  )
 }
 
 export default DashboardIndex

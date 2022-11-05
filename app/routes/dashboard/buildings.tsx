@@ -1,8 +1,9 @@
-import { json, LoaderFunction } from "@remix-run/node"
+import type { LoaderFunction } from "@remix-run/node"
+import { json } from "@remix-run/node"
 import { Outlet, useLoaderData } from "@remix-run/react"
 import { DashboardBuildingsList } from "~/components/organisms/DashboardBuildingsList"
 import { getSessionData } from "~/models/session.server"
-import { Building } from "~/types/Building"
+import type { Building } from "~/types/Building"
 import { getUserBuildings } from "~/utils/core.server"
 
 type LoaderData = {
