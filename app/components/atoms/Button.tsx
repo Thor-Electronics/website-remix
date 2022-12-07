@@ -1,6 +1,6 @@
 // Styled components is better
 
-import { ButtonHTMLAttributes, DetailedHTMLProps } from "react"
+import type { ButtonHTMLAttributes, DetailedHTMLProps } from "react"
 
 export interface Props
   extends DetailedHTMLProps<

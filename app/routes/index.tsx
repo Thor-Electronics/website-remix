@@ -1,4 +1,5 @@
-import { json, LinksFunction, LoaderFunction } from "@remix-run/node"
+import type { LinksFunction, LoaderFunction } from "@remix-run/node"
+import { json } from "@remix-run/node"
 import { Link, useLoaderData } from "@remix-run/react"
 import Button, { TextButton } from "~/components/atoms/Button"
 import styles from "~/styles/index.css"
@@ -9,6 +10,8 @@ import {
   getUserId,
 } from "~/models/session.server"
 import { LogoutButton } from "~/components/atoms/LogoutButton"
+import Hero from "~/components/organisms/Hero"
+import Footer from "~/components/organisms/Footer"
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
@@ -38,11 +41,9 @@ export const loader: LoaderFunction = async ({ request }) =>
 export default function Index() {
   const { session, user } = useLoaderData<LoaderData>()
   return (
-    <main className="h-screen flex flex-col justify-center items-center gap-4">
-      <h1 className="font-bold text-4xl text-center">
-        Welcome to IoT Cloud Service
-      </h1>
-      <div className="buttons flex gap-2">
+    <main className="h-screen /max-w-6xl mx-auto text-center">
+      <Hero />
+      {/* <div className="buttons flex gap-2">
         {user ? (
           <>
             <Link to="/dashboard" prefetch="render">
@@ -62,7 +63,8 @@ export default function Index() {
             </Link>
           </>
         )}
-      </div>
+      </div> */}
+      {/* <Footer /> */}
     </main>
   )
 }

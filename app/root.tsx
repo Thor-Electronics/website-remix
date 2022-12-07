@@ -21,6 +21,7 @@ export const meta: MetaFunction = () => ({
   charset: "utf-8",
   title: "Caspian",
   viewport: "width=device-width,initial-scale=1",
+  "theme-color": "#3b82f6",
 })
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }]
@@ -39,7 +40,7 @@ function Document({
         <title>{title}</title>
         <Links />
       </head>
-      <body className="bg-slate-200 dark:bg-slate-900 text-slate-800 dark:text-slate-200">
+      <body className="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200">
         {/* <NavigatingScreen /> */}
         {children}
         <ScrollRestoration />
