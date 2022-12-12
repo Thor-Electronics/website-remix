@@ -12,6 +12,7 @@ import {
 import { LogoutButton } from "~/components/atoms/LogoutButton"
 import Hero from "~/components/organisms/Hero"
 import Footer from "~/components/organisms/Footer"
+import About from "~/components/organisms/About"
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
@@ -43,6 +44,7 @@ export default function Index() {
   return (
     <main className="h-screen /max-w-6xl mx-auto text-center">
       <Hero />
+      <About />
       {/* <div className="buttons flex gap-2">
         {user ? (
           <>
