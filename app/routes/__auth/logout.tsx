@@ -1,4 +1,4 @@
-import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node"
+import { ActionFunction, LoaderFunction, redirect } from "@remix-run/cloudflare"
 import { logout } from "~/models/session.server"
 
 export const action: ActionFunction = async ({ request }) => logout(request)

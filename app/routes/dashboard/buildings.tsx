@@ -1,5 +1,5 @@
-import type { LoaderFunction } from "@remix-run/node"
-import { json } from "@remix-run/node"
+import type { LoaderFunction } from "@remix-run/cloudflare"
+import { json } from "@remix-run/cloudflare"
 import { Outlet, useLoaderData } from "@remix-run/react"
 import { DashboardBuildingsList } from "~/components/organisms/DashboardBuildingsList"
 import { getSessionData } from "~/models/session.server"

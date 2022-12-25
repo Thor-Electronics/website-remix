@@ -4,7 +4,7 @@ import {
   json,
   LoaderFunction,
   redirect,
-} from "@remix-run/node"
+} from "@remix-run/cloudflare"
 import {
   Form,
   Link,

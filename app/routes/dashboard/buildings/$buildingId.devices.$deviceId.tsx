@@ -1,4 +1,4 @@
-import { LoaderFunction } from "@remix-run/node"
+import { LoaderFunction } from "@remix-run/cloudflare"
 
 export const loader: LoaderFunction = () => {
   return null

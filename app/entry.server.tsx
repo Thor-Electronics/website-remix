@@ -1,50 +1,72 @@
-import { PassThrough } from "stream"
-import type { EntryContext } from "@remix-run/node"
-import { Response } from "@remix-run/node"
+// import { PassThrough } from "stream"
+// import type { EntryContext } from "@remix-run/node"
+// import { Response } from "@remix-run/node"
+import type { EntryContext } from "@remix-run/cloudflare"
 import { RemixServer } from "@remix-run/react"
-import { renderToPipeableStream } from "react-dom/server"
+import { renderToString } from "react-dom/server"
+// import { renderToPipeableStream } from "react-dom/server"
 import { getEnv } from "./env.server"
 
 const ABORT_DELAY = 5000
 global.ENV = getEnv()
 
+/* =-=-=-=-=-=-=-= CLOUDFLARE PAGES =-=-=-=-=-=-=-= */
 export default function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
   remixContext: EntryContext
 ) {
-  return new Promise((resolve, reject) => {
-    let didError = false
+  const markup = renderToString(
+    <RemixServer context={remixContext} url={request.url} />
+  )
 
-    const { pipe, abort } = renderToPipeableStream(
-      <RemixServer context={remixContext} url={request.url} />,
-      {
-        onShellReady: () => {
-          const body = new PassThrough()
+  responseHeaders.set("Content-Type", "text/html")
 
-          responseHeaders.set("Content-Type", "text/html")
-
-          resolve(
-            new Response(body, {
-              headers: responseHeaders,
-              status: didError ? 500 : responseStatusCode,
-            })
-          )
-
-          pipe(body)
-        },
-        onShellError: err => {
-          reject(err)
-        },
-        onError: error => {
-          didError = true
-
-          console.error(error)
-        },
-      }
-    )
-
-    setTimeout(abort, ABORT_DELAY)
+  return new Response("<!DOCTYPE html>" + markup, {
+    status: responseStatusCode,
+    headers: responseHeaders,
   })
 }
+
+/* =-=-=-=-=-=-=-= REMIX APP SERVER =-=-=-=-=-=-=-= */
+// export default function handleRequest(
+//   request: Request,
+//   responseStatusCode: number,
+//   responseHeaders: Headers,
+//   remixContext: EntryContext
+// ) {
+//   return new Promise((resolve, reject) => {
+//     let didError = false
+
+//     const { pipe, abort } = renderToPipeableStream(
+//       <RemixServer context={remixContext} url={request.url} />,
+//       {
+//         onShellReady: () => {
+//           const body = new PassThrough()
+
+//           responseHeaders.set("Content-Type", "text/html")
+
+//           resolve(
+//             new Response(body, {
+//               headers: responseHeaders,
+//               status: didError ? 500 : responseStatusCode,
+//             })
+//           )
+
+//           pipe(body)
+//         },
+//         onShellError: err => {
+//           reject(err)
+//         },
+//         onError: error => {
+//           didError = true
+
+//           console.error(error)
+//         },
+//       }
+//     )
+
+//     setTimeout(abort, ABORT_DELAY)
+//   })
+// }

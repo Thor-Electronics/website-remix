@@ -1,4 +1,4 @@
-import { ActionFunction, json, redirect } from "@remix-run/node"
+import { ActionFunction, json, redirect } from "@remix-run/cloudflare"
 import { useActionData, useTransition } from "@remix-run/react"
 import Button, { TextButton } from "~/components/atoms/Button"
 import { getSessionData } from "~/models/session.server"

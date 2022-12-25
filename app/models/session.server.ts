@@ -1,4 +1,4 @@
-import { createCookieSessionStorage, redirect } from "@remix-run/node"
+import { createCookieSessionStorage, redirect } from "@remix-run/cloudflare"
 import api from "~/utils/core.server"
 import { db } from "~/utils/db.server"
 

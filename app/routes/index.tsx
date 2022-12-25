@@ -1,5 +1,5 @@
-import type { LinksFunction, LoaderFunction } from "@remix-run/node"
-import { json } from "@remix-run/node"
+import type { LinksFunction, LoaderFunction } from "@remix-run/cloudflare"
+import { json } from "@remix-run/cloudflare"
 import { Link, useLoaderData } from "@remix-run/react"
 import Button, { TextButton } from "~/components/atoms/Button"
 import styles from "~/styles/index.css"

@@ -1,4 +1,4 @@
-import { json, LoaderFunction } from "@remix-run/node"
+import { json, LoaderFunction } from "@remix-run/cloudflare"
 import { Link, useLoaderData } from "@remix-run/react"
 import Button from "~/components/atoms/Button"
 import { getSessionData } from "~/models/session.server"

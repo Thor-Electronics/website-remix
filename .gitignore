@@ -6,3 +6,7 @@ node_modules
 .env
 styles/tmp.scss
 *.DS_Store
+
+# Cloudflare Pages
+/functions/\[\[path\]\].js
+/functions/\[\[path\]\].js.map

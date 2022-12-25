@@ -1,4 +1,4 @@
-import { LoaderFunction, json, LinksFunction } from "@remix-run/node"
+import { LoaderFunction, json, LinksFunction } from "@remix-run/cloudflare"
 import { Link, Outlet, useLoaderData } from "@remix-run/react"
 import { Copyright } from "~/components/atoms/Copyright"
 import { LogoutButton } from "~/components/atoms/LogoutButton"
