@@ -11,7 +11,7 @@
     "start": "cross-env NODE_ENV=production npm run wrangler",
     "start:remix": "remix-serve build",
     "typecheck": "tsc -b",
-    "wrangler": "wrangler pages dev ./public"
+    "wrangler": "wrangler pages dev ./public --binding $(cat .env)"
   },
   "dependencies": {
     "@heroicons/react": "^2.0.11",

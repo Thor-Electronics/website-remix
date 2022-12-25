@@ -10,6 +10,11 @@ import { getEnv } from "./env.server"
 const ABORT_DELAY = 5000
 global.ENV = getEnv()
 
+// https://www.jacobparis.com/guides/cloudflare-remix#workers-environment-variables
+// global process = {
+//   env: global
+// }
+
 /* =-=-=-=-=-=-=-= CLOUDFLARE PAGES =-=-=-=-=-=-=-= */
 export default function handleRequest(
   request: Request,
