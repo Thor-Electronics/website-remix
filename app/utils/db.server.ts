@@ -1,5 +1,7 @@
 import { PrismaClient } from "@prisma/client"
 
+// declare var NODE_ENV: string
+
 let db: PrismaClient
 
 declare global {

@@ -9,7 +9,10 @@ export type User = {
   username?: string
 }
 
-const SESSION_SECRET = process.env.SESSION_SECRET
+// declare var NODE_ENV: string
+declare var SESSION_SECRET: string
+
+// const SESSION_SECRET = SESSION_SECRET
 if (!SESSION_SECRET) throw new Error("SESSION_SECRET must be set")
 
 const storage = createCookieSessionStorage({
