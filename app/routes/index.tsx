@@ -2,7 +2,6 @@ import type { LinksFunction, LoaderFunction } from "@remix-run/cloudflare"
 import { json } from "@remix-run/cloudflare"
 import { Link, useLoaderData } from "@remix-run/react"
 import Button, { TextButton } from "~/components/atoms/Button"
-import styles from "~/styles/index.css"
 import darkStyles from "~/styles/dark.css"
 import {
   getOptionalUser,
@@ -15,7 +14,7 @@ import Footer from "~/components/organisms/Footer"
 import About from "~/components/organisms/About"
 
 export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: styles },
+  // { rel: "stylesheet", href: styles },
   {
     rel: "stylesheet",
     href: darkStyles,
