@@ -1,9 +1,9 @@
-import {
-  json,
+import type {
   LinksFunction,
   LoaderFunction,
   MetaFunction,
 } from "@remix-run/node"
+import { json } from "@remix-run/node"
 import {
   Links,
   LiveReload,
@@ -13,13 +13,13 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react"
-import NavigatingScreen from "./components/NavigatingScreen"
+// import NavigatingScreen from "./components/NavigatingScreen"
 import styles from "~/styles/root.css"
 import { getEnv } from "./env.server"
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
-  title: "Caspian",
+  title: "Thor Electronics",
   viewport: "width=device-width,initial-scale=1",
   "theme-color": "#3b82f6",
 })
@@ -28,7 +28,7 @@ export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }]
 
 function Document({
   children,
-  title = `IoT Network`,
+  title = `Thor Electronics`,
 }: {
   children: React.ReactNode
   title?: string
