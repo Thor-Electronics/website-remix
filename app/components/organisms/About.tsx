@@ -29,11 +29,11 @@ export const About = () => {
           +98 935 712 5443
         </a>
         <a
-          href="mailto:info@thor-electronics.co.uk"
+          href="mailto:info@thor-electronics.com"
           className="email text-slate-700 flex gap-2 items-center"
         >
           <AtSymbolIcon className="w-8" />
-          info@thor-electronics.co.uk
+          info@thor-electronics.com
         </a>
         <a
           href="/"
