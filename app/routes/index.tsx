@@ -14,7 +14,7 @@ import Footer from "~/components/organisms/Footer"
 import About from "~/components/organisms/About"
 
 export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: styles },
+  // { rel: "stylesheet", href: styles },
   {
     rel: "stylesheet",
     href: darkStyles,
