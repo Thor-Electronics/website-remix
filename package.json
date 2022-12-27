@@ -5,7 +5,7 @@
     "dev": "run-p dev:*",
     "dev:remix": "remix dev",
     "dev:css": "postcss styles --base styles --dir app/styles -w",
-    "build": "remix build",
+    "build": "npm run build:css && remix build",
     "build:css": "postcss styles --base styles --dir app/styles --env production",
     "start": "remix-serve build"
   },
