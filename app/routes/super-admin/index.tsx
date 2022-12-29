@@ -93,12 +93,13 @@ export const SuperAdminIndex = () => {
   ]
   return (
     <div className="SuperAdminIndex">
-      <h2 className="title font-black font-serif text-2xl text-center">
+      <h2 className="title font-black font-serif text-3xl text-center mb-4">
         Super Admin
       </h2>
       <div className="cards flex flex-wrap gap-2">
         {cards.map(c => (
           <DashboardCard
+            key={c.title}
             className={`bg-gradient-to-br from-${c.color}-500 to-${c.color}-700 text-white`}
             icon={c.icon}
             heroTitle={c.title}
