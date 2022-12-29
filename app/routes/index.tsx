@@ -41,7 +41,7 @@ export const loader: LoaderFunction = async ({ request }) =>
 export default function Index() {
   const { session, user } = useLoaderData<LoaderData>()
   return (
-    <main className="h-screen /max-w-6xl mx-auto text-center">
+    <main className="min-h-screen /max-w-6xl mx-auto text-center snap-mandatory snap-y">
       <Hero />
       <About />
       {/* <div className="buttons flex gap-2">
