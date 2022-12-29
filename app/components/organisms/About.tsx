@@ -4,7 +4,7 @@ import { LogoIcon } from "../atoms/LogoIcon"
 
 export const About = () => {
   return (
-    <div className="about h-screen bg-blue-50 text-slate-700 relative flex flex-col justify-center items-center gap-7 py-4 px-6">
+    <div className="about min-h-screen bg-blue-50 text-slate-700 relative flex flex-col justify-center items-center gap-7 py-4 px-6 snap-start">
       {/* <p className="text-xl font-bold text-slate-500">ABOUT THOR ELECTRONICS</p> */}
       <div className="headline flex flex-col justify-center items-center max-w-3xl">
         <div className="flex flex-col items-center justify-center gap-2 mb-4 sm:flex-row sm:justify-start sm:w-full">
@@ -37,7 +37,7 @@ export const About = () => {
         </a>
         <a
           href="/"
-          className="map text-slate-700 flex gap-2 items-center text-sm text-start"
+          className="map text-slate-700 flex gap-2 items-center text-sm text-start mb-8"
         >
           <MapPinIcon className="w-8" />
           Quchan University of Technology, Razavi Khorasan, IRAN

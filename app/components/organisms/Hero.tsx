@@ -3,7 +3,7 @@ import { Copyright } from "../atoms/Copyright"
 import { LogoIcon } from "../atoms/LogoIcon"
 
 export const Hero = () => (
-  <section className="h-screen bg-blue-500 py-4 text-white relative flex flex-col items-center justify-center gap-4">
+  <section className="min-h-screen bg-blue-500 py-4 text-white relative flex flex-col items-center justify-center gap-4 snap-start">
     <LogoIcon className="w-48 sm:w-full sm:max-w-xs md:max-w-md mx-auto flex items-center justify-center text-white" />
     <h1 className="text-center text-4xl sm:text-6xl md:text-7xl font-bold italic text-white">
       Thor Electronics
