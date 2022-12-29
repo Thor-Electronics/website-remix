@@ -12,6 +12,8 @@ html {
   --secondary-color: #6366f1;
   --body-bg: #f1f5f9;
   --links-color: #2563eb;
+  scroll-behaviour: smooth;
+  /* scroll-snap-type: y mandatory; */
 }
 
 a {
