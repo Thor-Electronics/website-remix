@@ -14,7 +14,7 @@ export const DashboardCard = ({
 }: IProps) => {
   return (
     <div
-      className={`DashboardCard p-2 bg-white shadow-lg rounded-2xl flex-grow ${className}`}
+      className={`DashboardCard p-2 sm:p-4 md:p-6 bg-white shadow-lg rounded-2xl flex-grow flex flex-col gap-1 sm:gap-2 md:gap-3 ${className}`}
       {...props}
     >
       {/* Could be a separate component */}
