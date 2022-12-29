@@ -13,9 +13,17 @@ interface IProps extends HTMLAttributes<HTMLElement> {
   items: NavItems[]
 }
 
-export const SuperAdminNav = ({ heroTitle, items, ...props }: IProps) => {
+export const SuperAdminNav = ({
+  heroTitle,
+  items,
+  className,
+  ...props
+}: IProps) => {
   return (
-    <nav className="SuperAdminNav bg-white rounded-xl p-2 shadow-lg absolute bottom-2">
+    <nav
+      className={`SuperAdminNav bg-white rounded-xl p-2 shadow-lg fixed bottom-2 w-full ${props.className}`}
+      {...props}
+    >
       <div className="hero-title hidden">{heroTitle ?? "SUPER ADMIN"}</div>
       <ul className="items flex items-center gap-2 overflow-x-auto">
         {/* <li className="fake-space-to-fix-css-scroll-bug sm:hidden p-6"></li>
