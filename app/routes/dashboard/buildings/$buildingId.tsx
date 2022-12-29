@@ -40,7 +40,9 @@ export const BuildingDetails = () => {
   if (typeof window !== "undefined") {
     useEffect(() => {
       socketClient.connect(
-        `ws://${ENV.CORE_ADDR}/api/v1/control/manage/${building.id}`,
+        `${process.env.NODE_ENV === "production" ? "wss" : "ws"}://${
+          ENV.CORE_ADDR
+        }/api/v1/control/manage/${building.id}`,
         socketToken,
         (socket, e) => {
           console.log("WS: ✅Connected to the server", building.id)
