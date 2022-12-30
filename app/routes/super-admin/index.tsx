@@ -97,10 +97,11 @@ export const SuperAdminIndex = () => {
         Super Admin
       </h2>
       <div className="cards flex flex-wrap gap-2">
+        <div className="fake-div-to-generate-colors hidden from-indigo-400 to-indigo-600 from-sky-400 to-sky-600 from-pink-400 to-pink-600 from-teal-400 to-teal-600"></div>
         {cards.map(c => (
           <DashboardCard
             key={c.title}
-            className={`bg-gradient-to-br from-${c.color}-500 to-${c.color}-700 text-white`}
+            className={`bg-gradient-to-br from-${c.color}-400 to-${c.color}-600 text-white`}
             icon={c.icon}
             heroTitle={c.title}
           >
