@@ -11,14 +11,14 @@ import { LinksFunction } from "@remix-run/node"
 import { Outlet } from "@remix-run/react"
 import { Copyright } from "~/components/atoms/Copyright"
 import { LogoIcon } from "~/components/atoms/LogoIcon"
-import SuperAdminNav, { NavItems } from "~/components/organisms/SuperAdminNav"
-import superAdminStyles from "~/styles/super-admin.css"
+import AdminNav, { NavItems } from "~/components/organisms/AdminNav"
+import adminStyles from "~/styles/admin.css"
 
 export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: superAdminStyles },
+  { rel: "stylesheet", href: adminStyles },
 ]
 
-const prefix = "/super-admin"
+const prefix = "/admin"
 const iconClassNames = "w-8 h-8"
 const navItems: NavItems[] = [
   {
@@ -58,10 +58,10 @@ const navItems: NavItems[] = [
   },
 ]
 
-export const SuperAdmin = () => {
+export const Admin = () => {
   return (
-    <div className="SuperAdmin bg-slate-200 h-screen p-2 relative">
-      <SuperAdminNav
+    <div className="Admin bg-slate-200 h-screen p-2 relative">
+      <AdminNav
         heroTitle={
           <>
             <LogoIcon />
@@ -76,4 +76,4 @@ export const SuperAdmin = () => {
   )
 }
 
-export default SuperAdmin
+export default Admin

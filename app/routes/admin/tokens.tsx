@@ -11,9 +11,9 @@ export const loader: LoaderFunction = async ({ request }) => {
   return json<LoaderData>({ user })
 }
 
-export const SuperAdminOTAUpdates = () => {
+export const AdminTokens = () => {
   const { user } = useLoaderData<LoaderData>() // <typeof loader>
-  return <div>SUPER ADMIN OTA UPDATES</div>
+  return <div>SUPER ADMIN TOKENS</div>
 }
 
-export default SuperAdminOTAUpdates
+export default AdminTokens

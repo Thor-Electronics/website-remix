@@ -55,7 +55,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   })
 }
 
-export const SuperAdminIndex = () => {
+export const AdminIndex = () => {
   const {
     user,
     totalUsers,
@@ -92,9 +92,9 @@ export const SuperAdminIndex = () => {
     },
   ]
   return (
-    <div className="SuperAdminIndex">
+    <div className="AdminIndex">
       <h2 className="title font-black font-serif text-3xl text-center mb-4">
-        Super Admin
+        {false ? "Super Admin" : "Admin"}
       </h2>
       <div className="cards flex flex-wrap gap-2">
         <div className="fake-div-to-generate-colors hidden from-indigo-400 to-indigo-600 from-sky-400 to-sky-600 from-pink-400 to-pink-600 from-teal-400 to-teal-600"></div>
@@ -114,4 +114,4 @@ export const SuperAdminIndex = () => {
   )
 }
 
-export default SuperAdminIndex
+export default AdminIndex

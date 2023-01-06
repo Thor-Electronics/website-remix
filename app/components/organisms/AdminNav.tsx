@@ -13,7 +13,7 @@ interface IProps extends HTMLAttributes<HTMLElement> {
   items: NavItems[]
 }
 
-export const SuperAdminNav = ({
+export const AdminNav = ({
   heroTitle,
   items,
   className,
@@ -21,7 +21,7 @@ export const SuperAdminNav = ({
 }: IProps) => {
   return (
     <nav
-      className={`SuperAdminNav bg-white rounded-xl p-2 shadow-lg fixed bottom-2 w-full ${props.className}`}
+      className={`AdminNav bg-white rounded-xl p-2 shadow-lg fixed bottom-2 w-full ${props.className}`}
       {...props}
     >
       <div className="hero-title hidden">{heroTitle ?? "SUPER ADMIN"}</div>
@@ -44,4 +44,4 @@ export const SuperAdminNav = ({
   )
 }
 
-export default SuperAdminNav
+export default AdminNav

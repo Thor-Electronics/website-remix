@@ -11,9 +11,9 @@ export const loader: LoaderFunction = async ({ request }) => {
   return json<LoaderData>({ user })
 }
 
-export const SuperAdminInvoices = () => {
+export const AdminInvoices = () => {
   const { user } = useLoaderData<LoaderData>() // <typeof loader>
   return <div>SUPER ADMIN INVOICES</div>
 }
 
-export default SuperAdminInvoices
+export default AdminInvoices

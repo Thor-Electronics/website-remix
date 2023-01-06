@@ -11,9 +11,9 @@ export const loader: LoaderFunction = async ({ request }) => {
   return json<LoaderData>({ user })
 }
 
-export const SuperAdminTokens = () => {
+export const AdminAdmins = () => {
   const { user } = useLoaderData<LoaderData>() // <typeof loader>
-  return <div>SUPER ADMIN TOKENS</div>
+  return <div>SUPER ADMIN ADMINS</div>
 }
 
-export default SuperAdminTokens
+export default AdminAdmins
