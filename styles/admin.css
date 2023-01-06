@@ -4,3 +4,9 @@
 .AdminNav {
   max-width: calc(100vw - 1rem);
 }
+
+.data-container {
+  /* min-height: 64vh; */
+  /* height: 100vh; */
+  /* max-height: calc(100vh - 175px); */
+}
