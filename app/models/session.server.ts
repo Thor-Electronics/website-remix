@@ -6,7 +6,10 @@ export type User = {
   id: string
   name: string
   email: string
+  phone?: string
   username?: string
+  created_at?: Date
+  updated_at?: Date
 }
 
 const SESSION_SECRET = process.env.SESSION_SECRET
