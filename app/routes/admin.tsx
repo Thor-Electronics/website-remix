@@ -60,7 +60,7 @@ const navItems: NavItems[] = [
 
 export const Admin = () => {
   return (
-    <div className="Admin bg-slate-200 h-screen p-2 relative pb-20">
+    <div className="Admin bg-slate-200 h-screen p-2 relative pb-20 sm:bp-2 sm:pt-28 xl:pt-2 xl:pl-36">
       <AdminNav
         heroTitle={
           <>

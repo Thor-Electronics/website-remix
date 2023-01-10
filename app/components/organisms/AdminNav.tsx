@@ -13,24 +13,24 @@ interface IProps extends HTMLAttributes<HTMLElement> {
   items: NavItems[]
 }
 
-export const AdminNav = ({
-  heroTitle,
-  items,
-  className,
-  ...props
-}: IProps) => {
+export const AdminNav = ({ heroTitle, items, className, ...props }: IProps) => {
   return (
     <nav
-      className={`AdminNav bg-white rounded-xl p-2 shadow-lg fixed bottom-2 w-full ${props.className}`}
+      className={`AdminNav bg-white rounded-xl p-2 shadow-lg fixed bottom-2 sm:bottom-auto sm:top-2 w-full xl:w-32 xl:left-2 xl:bottom-2 ${props.className}`}
       {...props}
     >
       <div className="hero-title hidden">{heroTitle ?? "SUPER ADMIN"}</div>
-      <ul className="items flex items-center gap-2 overflow-x-auto">
+      <ul className="items flex items-center gap-2 overflow-x-auto xl:overflow-x-hidden xl:overflow-y-auto xl:flex-col xl:items-stretch">
         {/* <li className="fake-space-to-fix-css-scroll-bug sm:hidden p-6"></li>
         <li className="fake-space-to-fix-css-scroll-bug sm:hidden p-6"></li>
         <solution>NO NEED TO USE THESE FAKE STUFF, I JUST REMOVED JUSTIFY-CNETER SO THAT THE PROBLEM WAS FIXED</solution> */}
         {items.map(i => (
-          <Link to={i.to} key={i.to}>
+          <Link
+            to={i.to}
+            key={i.to}
+            className="sm:grow xl:grow-0"
+            prefetch="intent"
+          >
             <li className="item flex flex-col items-center justify-center bg-sky-100 rounded-lg p-2 text-blue-500">
               <span className="icon">{i.icon}</span>
               <span className="label text-xs font-semibold hidden sm:block">
