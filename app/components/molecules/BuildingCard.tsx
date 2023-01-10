@@ -19,6 +19,7 @@ export type Props = {
   size: number
   link?: string
   updateHandler: Function
+  connected?: number
   // sizes => 0: only name, 1: icon, plan, 2: id, address, 3: device count, plugins count, 4: device panel, plugin panel
 }
 
@@ -27,10 +28,24 @@ export const BuildingCard = ({
   size,
   link = data.id,
   updateHandler,
+  connected,
   ...props
 }: Props) => {
   return (
-    <div to={link} className={`BuildingCard size-${size} card`} {...props}>
+    <div
+      to={link}
+      className={`BuildingCard relative size-${size} card transition-all duration-700 ${
+        connected
+          ? "!shadow-emerald-200 border border-emerald-500 border-b-[16px]"
+          : ""
+      }`}
+      {...props}
+    >
+      {connected && (
+        <div className="connected absolute text-white text-xs top-full text-center w-full font-extrabold italic">
+          ONLINE!
+        </div>
+      )}
       {size > 0 && (
         <div className="icon">
           <HomeModernIcon className="w-6 h-6" />

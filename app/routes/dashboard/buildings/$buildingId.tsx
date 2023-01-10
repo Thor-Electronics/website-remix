@@ -120,6 +120,8 @@ export const BuildingDetails = () => {
     // }, [socket])
   }
 
+  console.log("OPEN: ", socket?.OPEN)
+
   return (
     <div className="BuildingDetails p-4 lg:max-w-5xl mx-auto">
       <BuildingCard
@@ -127,6 +129,7 @@ export const BuildingDetails = () => {
         size={4}
         link=""
         updateHandler={handleUpdate}
+        connected={socket?.OPEN}
       />
     </div>
   )
