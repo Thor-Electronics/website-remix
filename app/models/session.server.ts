@@ -10,6 +10,33 @@ export type User = {
   username?: string
   created_at?: Date
   updated_at?: Date
+  permissions?: Permission[]
+  permissionGroupIds?: string[]
+  groups?: Group[]
+}
+
+export type Group = {
+  id: string
+  name: string
+  permissions: Permission[]
+  created_at?: Date
+  updated_at?: Date
+}
+
+export type Permission = {
+  context: string
+  access: number
+}
+
+export enum PERMISSION_CONTEXT {
+  TOKENS = "TOKENS",
+  DEVICES = "DEVICES",
+  BUILDINGS = "BUILDINGS",
+  USERS = "USERS",
+  PAYMENTS = "PAYMENTS",
+  NETWORK = "NETWORK",
+  FIRMWARE_UPDATE = "FIRMWARE_UPDATE",
+  ADMINS = "ADMINS",
 }
 
 const SESSION_SECRET = process.env.SESSION_SECRET
