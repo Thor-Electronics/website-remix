@@ -33,6 +33,8 @@ export const dly = (t: number) =>
 
 export const adminGetUsers = (token: string) =>
   ax.get(`${v1}/admin/users`, h(token)).then(extractResponseData)
+export const adminGetFirmwares = (token: string) =>
+  ax.get(`${v1}/admin/firmware-updates`, h(token)).then(extractResponseData)
 
 const api = {
   healthCheck,
@@ -45,6 +47,7 @@ const api = {
   delay,
   dly,
   adminGetUsers,
+  adminGetFirmwares,
 }
 
 export default api

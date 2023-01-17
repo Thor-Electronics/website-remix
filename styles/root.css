@@ -41,10 +41,11 @@ a {
 }
 
 .label {
-  // @apply mb-2;
+  @apply block;
 }
 
-input {
+input,
+select {
   @apply w-full border border-slate-400 rounded-md py-1 px-2 shadow;
 }
 

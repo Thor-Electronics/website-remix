@@ -21,7 +21,7 @@ export const AdminNav = ({ heroTitle, items, className, ...props }: IProps) => {
       className={`AdminNav bg-white rounded-xl p-2 shadow-lg fixed bottom-2 sm:bottom-auto sm:top-2 w-full xl:w-32 xl:left-2 xl:bottom-2 ${props.className}`}
       {...props}
     >
-      <div className="hero-title hidden">{heroTitle ?? "SUPER ADMIN"}</div>
+      <div className="hero-title hidden">{heroTitle ?? " ADMIN"}</div>
       <ul className="items flex items-center gap-2 overflow-x-auto xl:overflow-x-hidden xl:overflow-y-auto xl:flex-col xl:items-stretch">
         {/* <li className="fake-space-to-fix-css-scroll-bug sm:hidden p-6"></li>
         <li className="fake-space-to-fix-css-scroll-bug sm:hidden p-6"></li>
@@ -35,7 +35,7 @@ export const AdminNav = ({ heroTitle, items, className, ...props }: IProps) => {
           >
             <li className="item flex flex-col items-center justify-center bg-sky-100 rounded-lg p-2 text-blue-500">
               <span className="icon">{i.icon}</span>
-              <span className="label text-xs font-semibold hidden sm:block">
+              <span className="item-label text-xs font-semibold hidden sm:block">
                 {i.label}
               </span>
             </li>

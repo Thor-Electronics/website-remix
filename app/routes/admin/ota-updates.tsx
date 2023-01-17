@@ -1,19 +1,70 @@
+import { FolderPlusIcon, PlusCircleIcon } from "@heroicons/react/24/solid"
+import { DataGrid, GridColDef } from "@mui/x-data-grid"
 import { json, type LoaderFunction } from "@remix-run/node"
-import { useLoaderData } from "@remix-run/react"
-import { requireUser, type User } from "~/models/session.server"
+import { Link, useLoaderData } from "@remix-run/react"
+import Button from "~/components/atoms/Button"
+import { getSessionToken, requireUser } from "~/models/session.server"
+import { type User } from "~/types/User"
+import { adminGetFirmwares } from "~/utils/core.server"
+import { timeAgo } from "~/utils/time"
 
 type LoaderData = {
-  user: User
+  firmwares: {
+    fileName: string
+    fileSize: string
+    modifiedAt: Date
+  }[]
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const user = await requireUser(request)
-  return json<LoaderData>({ user })
+  const firmwares = await adminGetFirmwares(await getSessionToken(request))
+  return json<LoaderData>({ firmwares })
 }
 
 export const AdminOTAUpdates = () => {
-  const { user } = useLoaderData<LoaderData>() // <typeof loader>
-  return <div>SUPER ADMIN OTA UPDATES</div>
+  const { firmwares } = useLoaderData<LoaderData>() // <typeof loader>
+
+  console.log("FIRMWARES: ", firmwares)
+
+  const refinedFirmwares = firmwares.map((f, i) => ({ id: i, ...f }))
+
+  return (
+    <div className="AdminFirmwares admin-page">
+      <h2 className="page-title">Firmware Updates(OTA)</h2>
+      <Link to="new" prefetch="render">
+        <Button className="bg-primary py-1 px-3 shadow-blue-300 mb-4 mx-auto flex items-center gap-2.5">
+          <FolderPlusIcon className="w-5 h-5" />
+          Upload New Firmware
+        </Button>
+      </Link>
+      <div className="data-container">
+        <DataGrid
+          rows={refinedFirmwares}
+          columns={gridColumns}
+          autoHeight
+          checkboxSelection
+          isRowSelectable={() => true}
+        />
+      </div>
+    </div>
+  )
 }
+
+const gridColumns: GridColDef[] = [
+  {
+    field: "id",
+    headerName: "ID",
+    width: 200,
+    cellClassName: "text-xs font-mono",
+  },
+  { field: "fileName", headerName: "File Name", width: 400 },
+  { field: "fileSize", headerName: "File Size", width: 200 },
+  {
+    field: "modifiedAt",
+    headerName: "Modification Date",
+    width: 150,
+    valueGetter: params => timeAgo(new Date(params.value)),
+  },
+]
 
 export default AdminOTAUpdates

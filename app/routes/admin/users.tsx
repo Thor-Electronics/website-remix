@@ -21,11 +21,9 @@ export const AdminUsers = () => {
   // console.log("USERS: ", users)
 
   return (
-    <div className="AdminUsers">
-      <h2 className="title font-black font-serif text-3xl text-center mb-4">
-        User Management
-      </h2>
-      <div className="data-container bg-white rounded-lg p-2 shadow-lg text-center">
+    <div className="AdminUsers admin-page">
+      <h2 className="page-title">User Management</h2>
+      <div className="data-container">
         <DataGrid
           rows={users}
           columns={gridColumns}

@@ -111,12 +111,12 @@ export const Admin = () => {
   )
 
   return (
-    <div className="Admin bg-slate-200 h-screen p-2 relative pb-20 sm:bp-2 sm:pt-28 xl:pt-2 xl:pl-36">
+    <div className="Admin bg-slate-200 min-h-screen p-2 relative pb-20 sm:bp-2 sm:pt-28 xl:pt-2 xl:pl-36">
       <AdminNav
         heroTitle={
           <>
             <LogoIcon />
-            <h1 className="font-bold italic">Thor Super Admin</h1>
+            <h1 className="font-bold italic">Thor Admin</h1>
           </>
         }
         items={userNavItems}

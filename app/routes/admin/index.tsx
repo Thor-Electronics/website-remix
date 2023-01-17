@@ -7,7 +7,8 @@ import {
 import { json, type LoaderFunction } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 import DashboardCard from "~/components/molecules/DashboardCard"
-import { requireUser, type User } from "~/models/session.server"
+import { requireUser } from "~/models/session.server"
+import { type User } from "~/types/User"
 
 type LoaderData = {
   user: User
