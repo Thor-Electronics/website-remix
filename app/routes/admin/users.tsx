@@ -1,11 +1,8 @@
 import { DataGrid, GridColDef } from "@mui/x-data-grid"
 import { json, type LoaderFunction } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
-import {
-  getSessionToken,
-  requireUser,
-  type User,
-} from "~/models/session.server"
+import { getSessionToken } from "~/models/session.server"
+import { type User } from "~/types/User"
 import api from "~/utils/core.server"
 import { timeAgo } from "~/utils/time"
 

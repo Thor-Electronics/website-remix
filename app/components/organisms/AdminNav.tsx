@@ -1,16 +1,18 @@
 import { Link } from "@remix-run/react"
 import { HTMLAttributes, ReactNode } from "react"
+import { type Permission } from "~/types/User"
 
-export type NavItems = {
+export type NavItem = {
   icon: ReactNode
   label: ReactNode
   to: string
+  permission?: Permission
   onClick?: Function
 }
 
 interface IProps extends HTMLAttributes<HTMLElement> {
   heroTitle?: ReactNode // since we are extending HTMLAttributes, non-string types of title interferes with HTML title attribute
-  items: NavItems[]
+  items: NavItem[]
 }
 
 export const AdminNav = ({ heroTitle, items, className, ...props }: IProps) => {

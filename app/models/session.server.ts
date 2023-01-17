@@ -2,43 +2,6 @@ import { createCookieSessionStorage, redirect } from "@remix-run/node"
 import api from "~/utils/core.server"
 import { db } from "~/utils/db.server"
 
-export type User = {
-  id: string
-  name: string
-  email: string
-  phone?: string
-  username?: string
-  created_at?: Date
-  updated_at?: Date
-  permissions?: Permission[]
-  permissionGroupIds?: string[]
-  groups?: Group[]
-}
-
-export type Group = {
-  id: string
-  name: string
-  permissions: Permission[]
-  created_at?: Date
-  updated_at?: Date
-}
-
-export type Permission = {
-  context: string
-  access: number
-}
-
-export enum PERMISSION_CONTEXT {
-  TOKENS = "TOKENS",
-  DEVICES = "DEVICES",
-  BUILDINGS = "BUILDINGS",
-  USERS = "USERS",
-  PAYMENTS = "PAYMENTS",
-  NETWORK = "NETWORK",
-  FIRMWARE_UPDATE = "FIRMWARE_UPDATE",
-  ADMINS = "ADMINS",
-}
-
 const SESSION_SECRET = process.env.SESSION_SECRET
 if (!SESSION_SECRET) throw new Error("SESSION_SECRET must be set")
 
