@@ -1,12 +1,18 @@
 // Core Service APIs
 
+import { fetch } from "@remix-run/node"
 import axios from "axios"
 
 export const ax = axios.create({
-  baseURL: ENV.CORE_URL, // may need https? so we probably need more env vars :)
+  baseURL: ENV.CORE_URL,
   // timeout: 10000,
   headers: { "X-Request-From": "Website" },
+  // transformRequest: axios.defaults.transformRequest,
+  // transformResponse: axios.defaults.transformResponse,
 })
+
+// axios.defaults.baseURL = ENV.CORE_URL
+// const ax = axios
 
 export const h = (token: string) => ({
   headers: { Authorization: `Bearer ${token}` },
@@ -35,8 +41,19 @@ export const adminGetUsers = (token: string) =>
   ax.get(`${v1}/admin/users`, h(token)).then(extractResponseData)
 export const adminGetFirmwares = (token: string) =>
   ax.get(`${v1}/admin/firmware-updates`, h(token)).then(extractResponseData)
+export const adminPostFirmware = (formData: FormData, token: string) =>
+  ax
+    .post(`${v1}/admin/firmware-updates`, formData, h(token))
+    .then(extractResponseData)
+// fetch(`${ENV.CORE_URL + v1}/admin/firmware-updates`, {
+//   ...h(token),
+//   method: "POST",
+//   body: formData,
+// }).then(res => res.json())
+// .then(extractResponseData)
 
 const api = {
+  v1,
   healthCheck,
   checkAuth,
   login,
@@ -48,6 +65,7 @@ const api = {
   dly,
   adminGetUsers,
   adminGetFirmwares,
+  adminPostFirmware,
 }
 
 export default api

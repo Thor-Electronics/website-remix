@@ -24,7 +24,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 export const AdminOTAUpdates = () => {
   const { firmwares } = useLoaderData<LoaderData>() // <typeof loader>
 
-  console.log("FIRMWARES: ", firmwares)
+  // console.log("FIRMWARES: ", firmwares)
 
   const refinedFirmwares = firmwares.map((f, i) => ({ id: i, ...f }))
 
