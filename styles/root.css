@@ -90,6 +90,14 @@ label {
   @apply text-center text-xl font-black font-serif italic text-primary;
 }
 
+.FixedNav {
+  max-width: calc(100vw - 1rem);
+}
+
+.FixedNav .fake-class-to-generate-colors {
+  /* @apply bg-rose-100 text-rose-500; */
+}
+
 /* ========== KeyFrames ========== */
 
 @keyframes fadeIn {

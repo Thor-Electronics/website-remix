@@ -1,12 +1,8 @@
 .Admin {
 }
 
-.AdminNav {
-  max-width: calc(100vw - 1rem);
-}
-
 .data-container {
-  @apply bg-white rounded-lg p-2 shadow-lg text-center;
+  @apply bg-slate-100 rounded-lg p-2 shadow-lg text-center;
   /* min-height: 64vh; */
   /* height: 100vh; */
   /* max-height: calc(100vh - 175px); */

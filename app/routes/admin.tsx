@@ -1,4 +1,5 @@
 import {
+  ArrowRightOnRectangleIcon,
   BanknotesIcon,
   CreditCardIcon,
   CubeTransparentIcon,
@@ -11,7 +12,7 @@ import { json, LinksFunction, LoaderFunction, Response } from "@remix-run/node"
 import { Link, Outlet, useCatch, useLoaderData } from "@remix-run/react"
 import { Copyright } from "~/components/atoms/Copyright"
 import { LogoIcon } from "~/components/atoms/LogoIcon"
-import AdminNav, { NavItem } from "~/components/organisms/AdminNav"
+import FixedNav, { FixedNavItem } from "~/components/organisms/FixedNav"
 import {
   ACCESS,
   PERMISSION_CONTEXT,
@@ -25,10 +26,6 @@ type LoaderData = {
   user: User
 }
 
-export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: adminStyles },
-]
-
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await requireUser(request)
   if (!user.groups)
@@ -39,9 +36,62 @@ export const loader: LoaderFunction = async ({ request }) => {
   return json<LoaderData>({ user })
 }
 
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: adminStyles },
+]
+
+export const generateNavItemsBasedOnUserPermission = (
+  permissions: Permission[]
+): FixedNavItem[] => {
+  return initialAdminNavItems.map(i => {
+    if (!i.permission) return i
+    let isAllowed = false
+    const allow = () => (isAllowed = true)
+    permissions.forEach(p =>
+      p.context === i.permission?.context ? allow() : null
+    )
+    return isAllowed ? i : ({} as FixedNavItem)
+  })
+}
+
+export const Admin = () => {
+  const { user } = useLoaderData<LoaderData>()
+  // console.log("Permissions: ", user.groups?.at(0)?.permissions)
+
+  const userNavItems: FixedNavItem[] = generateNavItemsBasedOnUserPermission(
+    user.groups!.at(0)!.permissions
+  )
+
+  return (
+    <div className="Admin bg-slate-200 min-h-screen p-2 relative pb-20 sm:bp-2 sm:pt-28 xl:pt-2 xl:pl-36">
+      <FixedNav items={userNavItems} />
+      <Outlet />
+      <Copyright />
+    </div>
+  )
+}
+
+export const CatchBoundary = () => {
+  const caught = useCatch()
+  return (
+    <div className="caught h-screen bg-rose-200 text-rose-600 flex flex-col gap-6 items-center justify-center text-center">
+      <LogoIcon className="w-32" />
+      <h2 className="status flex items-center justify-center gap-2 text-3xl font-bold">
+        <span className="code">{caught.status}</span>|
+        <span className="text">{caught.statusText}</span>
+      </h2>
+      <div className="error text-3xl font-bold uppercase">{caught.data}</div>
+      {/* <p className="description">There was an error handling your request</p> */}
+      <Link to="/" className="font-semibold !underline" prefetch="render">
+        Back to home
+      </Link>
+    </div>
+  )
+}
+
 const prefix = "/admin"
 const iconClassNames = "w-8 h-8"
-const initialNavItems: NavItem[] = [
+const initialAdminNavItems: FixedNavItem[] = [
   {
     icon: <LogoIcon className={iconClassNames} />,
     label: "Dashboard",
@@ -86,63 +136,14 @@ const initialNavItems: NavItem[] = [
     to: `${prefix}/invoices`,
     permission: { context: PERMISSION_CONTEXT.PAYMENTS, access: ACCESS.VIEW },
   },
-] // FIXME: add buildings and devices and other stuff and complete the list
-
-export const generateNavItemsBasedOnUserPermission = (
-  permissions: Permission[]
-): NavItem[] => {
-  return initialNavItems.map(i => {
-    if (!i.permission) return i
-    let isAllowed = false
-    const allow = () => (isAllowed = true)
-    permissions.forEach(p =>
-      p.context === i.permission?.context ? allow() : null
-    )
-    return isAllowed ? i : ({} as NavItem)
-  })
-}
-
-export const Admin = () => {
-  const { user } = useLoaderData<LoaderData>()
-  // console.log("Permissions: ", user.groups?.at(0)?.permissions)
-
-  const userNavItems: NavItem[] = generateNavItemsBasedOnUserPermission(
-    user.groups!.at(0)!.permissions
-  )
-
-  return (
-    <div className="Admin bg-slate-200 min-h-screen p-2 relative pb-20 sm:bp-2 sm:pt-28 xl:pt-2 xl:pl-36">
-      <AdminNav
-        heroTitle={
-          <>
-            <LogoIcon />
-            <h1 className="font-bold italic">Thor Admin</h1>
-          </>
-        }
-        items={userNavItems}
-      />
-      <Outlet />
-      <Copyright />
-    </div>
-  )
-}
-
-export const CatchBoundary = () => {
-  const caught = useCatch()
-  return (
-    <div className="caught h-screen bg-rose-200 text-rose-600 flex flex-col gap-6 items-center justify-center text-center">
-      <LogoIcon className="w-32" />
-      <h2 className="status flex items-center justify-center gap-2 text-3xl font-bold">
-        <span className="code">{caught.status}</span>|
-        <span className="text">{caught.statusText}</span>
-      </h2>
-      <div className="error text-3xl font-bold uppercase">{caught.data}</div>
-      {/* <p className="description">There was an error handling your request</p> */}
-      <Link to="/" className="font-semibold !underline" prefetch="render">
-        Back to home
-      </Link>
-    </div>
-  )
-}
+  {
+    icon: <ArrowRightOnRectangleIcon className={iconClassNames} />,
+    label: "Logout",
+    to: `/logout`,
+    props: {
+      className: "!bg-rose-100 !text-rose-500",
+    },
+  },
+]
 
 export default Admin
