@@ -21,10 +21,10 @@ export const extractResponseData = (res: any) => res.data
 
 export const v1 = "/api/v1"
 
-export const healthCheck = () => ax.get("/health")
-export const checkAuth = (token: string) => ax.get(`${v1}/auth`, h(token))
-export const login = (data: object) => ax.post(`${v1}/auth`, data)
-export const signup = (data: object) => ax.post(`${v1}/auth/signup`, data)
+export const healthCheck = () => ax.get("/health/")
+export const checkAuth = (token: string) => ax.get(`${v1}/auth/`, h(token))
+export const login = (data: object) => ax.post(`${v1}/auth/`, data)
+export const signup = (data: object) => ax.post(`${v1}/auth/signup/`, data)
 
 export const getUserBuildings = (token: string) =>
   ax.get(`${v1}/buildings/`, h(token)).then(extractResponseData)
