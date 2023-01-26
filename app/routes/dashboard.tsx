@@ -3,8 +3,9 @@ import { Link, Outlet, useLoaderData } from "@remix-run/react"
 import { Copyright } from "~/components/atoms/Copyright"
 import { LogoutButton } from "~/components/atoms/LogoutButton"
 import { DashboardNav } from "~/components/organisms/DashboardNav"
-import { requireUser, User } from "~/models/session.server"
+import { requireUser } from "~/models/session.server"
 import dashboardStyles from "~/styles/dashboard.css"
+import { type User } from "~/types/User"
 // import styles from "~/styles/root.css"
 
 type LoaderData = {
