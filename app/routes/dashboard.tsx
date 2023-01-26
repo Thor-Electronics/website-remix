@@ -30,7 +30,7 @@ export const Dashboard = () => {
   const { user } = useLoaderData<LoaderData>()
 
   return (
-    <div className="Dashboard">
+    <div className="Dashboard bg-slate-200 min-h-screen p-2 relative pb-20 sm:pb-2 sm:pt-28 xl:pt-2 xl:pl-36">
       <DashboardNav user={user as User} items={initialUserNavItems} />
       <Outlet />
       <Copyright />

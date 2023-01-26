@@ -21,7 +21,7 @@ export const DashboardBuildings = () => {
   return (
     <div className="DashboardBuildings">
       <h1 className="title text-center font-bold">Buildings</h1>
-      <DashboardBuildingsList items={buildings} />
+      <DashboardBuildingsList items={buildings as Building[]} />
       <Outlet />
     </div>
   )

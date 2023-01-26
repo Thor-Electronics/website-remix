@@ -12,7 +12,7 @@ import {
   SquaresPlusIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid"
-import { TextButton } from "../atoms/Button"
+import Button, { TextButton } from "../atoms/Button"
 
 export type Props = {
   data: Building
@@ -93,15 +93,23 @@ export const BuildingCard = ({
           )}
           {size > 2 && (
             <div className="options flex flex-row gap-2 justify-end items-center text-base">
-              <TextButton className="bg-blue-500 shadow-blue-200">
-                <PencilIcon className="w-4 h-4" />
-                Edit Building
-              </TextButton>
+              <Button
+                className="p-2 rounded-xl sm:rounded-lg sm:px-3 sm:py-1
+                 bg-blue-500 shadow-blue-300 sm:shadow-blue-200"
+                title="Edit the Building"
+              >
+                <PencilIcon className="w-5 h-5 sm:w-4 sm:h-4" />
+                <span className="text hidden sm:block">Edit Building</span>
+              </Button>
 
-              <TextButton className="bg-red-500 shadow-red-200">
-                <TrashIcon className="w-4 h-4" />
-                Disable Building
-              </TextButton>
+              <Button
+                className="p-2 rounded-xl sm:rounded-lg sm:px-3 sm:py-1
+                 bg-red-500 shadow-red-300 sm:shadow-red-200"
+                title="Disable the Building"
+              >
+                <TrashIcon className="w-5 h-5 sm:w-4 sm:h-4" />
+                <span className="text hidden sm:block">Disable Building</span>
+              </Button>
             </div>
           )}
           {size > 3 && data.devices && (

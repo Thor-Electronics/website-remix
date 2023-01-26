@@ -25,7 +25,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
 export const BuildingDetails = () => {
   const { building, socketToken } = useLoaderData<LoaderData>()
   const [socket, setSocket] = useState<WebSocket>()
-  const [state, setState] = useState<Building>(building)
+  const [state, setState] = useState<Building>(building as Building)
 
   const handleUpdate = (newState: object, deviceId: string) => {
     console.log(
@@ -120,10 +120,8 @@ export const BuildingDetails = () => {
     // }, [socket])
   }
 
-  console.log("OPEN: ", socket?.OPEN)
-
   return (
-    <div className="BuildingDetails p-4 lg:max-w-5xl mx-auto">
+    <div className="BuildingDetails lg:max-w-5xl mx-auto">
       <BuildingCard
         data={state}
         size={4}
@@ -134,5 +132,7 @@ export const BuildingDetails = () => {
     </div>
   )
 }
+
+// FIXME: CATCHBOUNDRAY
 
 export default BuildingDetails
