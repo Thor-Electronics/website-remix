@@ -18,6 +18,7 @@ export const DashboardBuildingsList = ({ items: buildings }: Props) => (
         key={b.id}
         className="card flex-grow flex items-center justify-center 
           gap-2 text-center whitespace-nowrap text-slate-700 font-semibold"
+        prefetch="render"
       >
         <HomeModernIcon className="h-6 w-6" />
         {b.name}

@@ -1,0 +1,10 @@
+/.cache
+# /node_modules
+/public/build
+/build
+
+.env
+.DS_Store
+npm-debug.log
+
+*.log
