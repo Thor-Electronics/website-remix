@@ -1,7 +1,7 @@
 /.cache
-# /node_modules
-/public/build
 /build
+/node_modules
+/public/build
 
 .env
 .DS_Store
