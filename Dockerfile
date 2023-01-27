@@ -53,7 +53,7 @@ COPY --from=build /remix/node_modules/.prisma /remix/node_modules/.prisma
 COPY --from=build /remix/build /remix/build
 COPY --from=build /remix/public /remix/public
 COPY --from=build /remix/package.json /remix/package.json
-COPY --from=build /remix/start.sh /remix/start.sh
+# COPY --from=build /remix/start.sh /remix/start.sh
 COPY --from=build /remix/prisma /remix/prisma
 
 CMD [ "npm", "start" ]
