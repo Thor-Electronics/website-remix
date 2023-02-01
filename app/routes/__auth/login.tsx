@@ -33,7 +33,7 @@ export const action: ActionFunction = async ({ request }) => {
         token,
         // getClientIPAddress(request) ?? "",
         "",
-        "/dashboard"
+        !user.groups ? "/dashboard" : "/admin"
       )
       return redirect
     })

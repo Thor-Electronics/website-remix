@@ -1,6 +1,7 @@
 import { json, type LoaderFunction } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
-import { requireUser, type User } from "~/models/session.server"
+import { requireUser } from "~/models/session.server"
+import { type User } from "~/types/User"
 
 type LoaderData = {
   user: User
@@ -11,9 +12,9 @@ export const loader: LoaderFunction = async ({ request }) => {
   return json<LoaderData>({ user })
 }
 
-export const SuperAdminPlans = () => {
+export const AdminTokens = () => {
   const { user } = useLoaderData<LoaderData>() // <typeof loader>
-  return <div>SUPER ADMIN PLANS</div>
+  return <div> ADMIN TOKENS</div>
 }
 
-export default SuperAdminPlans
+export default AdminTokens

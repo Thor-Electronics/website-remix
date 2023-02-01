@@ -1,4 +1,4 @@
-import { Device } from "./Device"
+import type { Device } from "./Device"
 
 export interface Building {
   id: string

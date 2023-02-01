@@ -19,7 +19,10 @@ import { getUserBuildings } from "~/utils/core.server"
 export const DashboardIndex = () => {
   // const { buildings } = useLoaderData<LoaderData>()
   return (
-    <div className="DashboardIndex text-center">Welcome to the dashboard!</div>
+    <div className="DashboardIndex text-center">
+      Welcome to the dashboard! You'll see your most recent building here or
+      maybe the most used buildings and shortcuts probably
+    </div>
   )
 }
 

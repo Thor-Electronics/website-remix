@@ -41,10 +41,11 @@ a {
 }
 
 .label {
-  // @apply mb-2;
+  @apply block;
 }
 
-input {
+input,
+select {
   @apply w-full border border-slate-400 rounded-md py-1 px-2 shadow;
 }
 
@@ -87,6 +88,14 @@ label {
 
 .Logo {
   @apply text-center text-xl font-black font-serif italic text-primary;
+}
+
+.FixedNav {
+  max-width: calc(100vw - 1rem);
+}
+
+.FixedNav .fake-class-to-generate-colors {
+  /* @apply bg-rose-100 text-rose-500; */
 }
 
 /* ========== KeyFrames ========== */

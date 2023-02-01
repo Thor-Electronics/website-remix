@@ -1,20 +1,26 @@
-import { User } from "~/models/session.server"
+import type { User } from "~/types/User"
 import { DashboardUserProfile } from "../molecules/DashboardUserProfile"
 import { Logo } from "../atoms/Logo"
+import FixedNav, { type FixedNavItem } from "./FixedNav"
+import type { HTMLAttributes } from "react"
 
-type Props = {
+interface IProps extends HTMLAttributes<HTMLElement> {
   user: User
+  items: FixedNavItem[]
 }
 
-export const DashboardNav = ({ user, ...props }: Props) => {
+export const DashboardNav = ({ user, items, ...props }: IProps) => {
   return (
-    <div className="DashboardNav">
-      <Logo />
-      <DashboardUserProfile user={user} />
-      {/* <div className="list">
-        <Link to="buildings">Buildings</Link>
-        <Link to="subscription">Subscription</Link>
-      </div> */}
-    </div>
+    <FixedNav
+      header={
+        <div className="hidden sm:flex sm:flex-col">
+          <Logo />
+          <DashboardUserProfile user={user} />
+        </div>
+      }
+      items={items}
+      className={`DashboardNav ${props.className}`}
+      {...props}
+    />
   )
 }
