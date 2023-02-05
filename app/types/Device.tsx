@@ -31,6 +31,9 @@ export enum DeviceTypes {
   BELL = "BELL",
   TV = "TV",
   LIGHT = "LIGHT",
+  IRHUB = "IRHUB",
+  BLINDS = "BLINDS",
+  DOOR = "DOOR",
 }
 
 export type DeviceActionCallbackReturnType =
@@ -105,5 +108,12 @@ export const deviceActions: { [key: string]: DeviceAction[] } = {
       icon: "ß",
       callback: () => "SET_COLOR",
     },
+  ],
+  [DeviceTypes.IRHUB]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceTypes.LOCK]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceTypes.DOOR]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceTypes.BLINDS]: [
+    commonActions.powerAction,
+    commonActions.restartAction,
   ],
 }

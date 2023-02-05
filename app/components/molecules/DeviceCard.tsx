@@ -34,7 +34,7 @@ export const DeviceCard = ({
   ...props
 }: Props) => {
   // console.log("DEVICE CARD update handler:", updateHandler)
-  // console.log("Device state", data.state)
+  console.log("Device state", data)
   const handleClick =
     (callback: () => DeviceActionCallbackReturnType) => (e: MouseEvent) => {
       // console.log("Handle click was called ...")
