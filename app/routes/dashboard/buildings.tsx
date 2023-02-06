@@ -30,7 +30,7 @@ export const DashboardBuildings = () => {
 export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
   console.error("Error in buildings: ", error)
   return (
-    <div className="DashboardBuildings bg-rose-200 shadow-lg  text-rose-600 p-4 rounded-xl">
+    <div className="DashboardBuildings bg-rose-200 shadow-lg text-rose-600 p-4 rounded-xl">
       <h1 className="text-lg font-bold mb-4">Error Loading Buildings!</h1>
       <p className="error">
         Something happened when we tried to show you the buildings.{" "}

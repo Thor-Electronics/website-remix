@@ -1,4 +1,4 @@
-import type { LoaderFunction } from "@remix-run/node"
+import type { ErrorBoundaryComponent, LoaderFunction } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 import { useEffect, useState } from "react"
@@ -133,6 +133,19 @@ export const BuildingDetails = () => {
   )
 }
 
-// FIXME: CATCHBOUNDRAY
+export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
+  console.error("Error in buildings: ", error)
+  return (
+    <div className="DashboardBuildings bg-rose-100 shadow-lg text-rose-600 p-4 rounded-xl">
+      <h1 className="text-lg font-bold mb-4">
+        Error Loading Building Details!
+      </h1>
+      <p className="error">
+        Something happened when we tried to show you the building details.{" "}
+        {error.message}
+      </p>
+    </div>
+  )
+}
 
 export default BuildingDetails
