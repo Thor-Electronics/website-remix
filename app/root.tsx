@@ -1,10 +1,13 @@
-import type {
+import {
+  ErrorBoundaryComponent,
   LinksFunction,
   LoaderFunction,
   MetaFunction,
+  Response,
 } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import {
+  Link,
   Links,
   LiveReload,
   Meta,
@@ -15,6 +18,7 @@ import {
 } from "@remix-run/react"
 // import NavigatingScreen from "./components/NavigatingScreen"
 import styles from "~/styles/root.css"
+import { LogoIcon } from "./components/atoms/LogoIcon"
 import { getEnv } from "./env.server"
 
 export const meta: MetaFunction = () => ({
@@ -55,10 +59,12 @@ type LoaderData = {
   ENV: ReturnType<typeof getEnv>
 }
 
-export const loader: LoaderFunction = () =>
-  json<LoaderData>({
-    ENV: getEnv(),
-  })
+export const loader: LoaderFunction = () => {
+  throw Error("ERROR, BITCH!")
+  // json<LoaderData>({
+  //   ENV: getEnv(),
+  // })
+}
 
 export default function App() {
   const { ENV } = useLoaderData<LoaderData>()
@@ -87,13 +93,21 @@ export default function App() {
   )
 }
 
-// export function ErrorBoundary({ error }: { error: Error }) {
-//   return (
-//     <Document title="Uh-oh!">
-//       <div className="error-container">
-//         <h1>App Error</h1>
-//         <pre>{error.message}</pre>
-//       </div>
-//     </Document>
-//   )
-// }
+export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
+  console.error("ERROR: ", error)
+  return (
+    <Document title="Error!">
+      <div className="error-container h-screen bg-rose-200 text-rose-600 flex flex-col gap-6 items-center justify-center text-center">
+        <LogoIcon className="w-32" />
+        <h1 className="status flex items-center justify-center gap-2 text-3xl font-bold">
+          <span className="code">App Error</span>
+        </h1>
+        <div className="error text-xl font-bold">{error.message}</div>
+        {/* <pre>{error.message}</pre> */}
+        <Link to="/" className="font-semibold !underline" prefetch="render">
+          Back to home
+        </Link>
+      </div>
+    </Document>
+  )
+}
