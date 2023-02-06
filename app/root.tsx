@@ -59,12 +59,10 @@ type LoaderData = {
   ENV: ReturnType<typeof getEnv>
 }
 
-export const loader: LoaderFunction = () => {
-  throw Error("ERROR, BITCH!")
-  // json<LoaderData>({
-  //   ENV: getEnv(),
-  // })
-}
+export const loader: LoaderFunction = () =>
+  json<LoaderData>({
+    ENV: getEnv(),
+  })
 
 export default function App() {
   const { ENV } = useLoaderData<LoaderData>()
@@ -100,7 +98,7 @@ export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
       <div className="error-container h-screen bg-rose-200 text-rose-600 flex flex-col gap-6 items-center justify-center text-center">
         <LogoIcon className="w-32" />
         <h1 className="status flex items-center justify-center gap-2 text-3xl font-bold">
-          <span className="code">App Error</span>
+          App Error
         </h1>
         <div className="error text-xl font-bold">{error.message}</div>
         {/* <pre>{error.message}</pre> */}
