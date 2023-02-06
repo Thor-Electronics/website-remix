@@ -134,9 +134,9 @@ export const BuildingDetails = () => {
 }
 
 export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
-  console.error("Error in buildings: ", error)
+  console.error("Error in $buildingId: ", error)
   return (
-    <div className="DashboardBuildings bg-rose-100 shadow-lg text-rose-600 p-4 rounded-xl">
+    <div className="BuildingDetails bg-rose-100 shadow-lg text-rose-600 p-4 rounded-xl">
       <h1 className="text-lg font-bold mb-4">
         Error Loading Building Details!
       </h1>
