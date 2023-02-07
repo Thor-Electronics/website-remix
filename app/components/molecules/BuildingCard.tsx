@@ -1,7 +1,7 @@
 import { Link } from "@remix-run/react"
 import { CSSProperties } from "react"
 import { Building } from "~/types/Building"
-import DetailedDeviceCard, { OnlinePulse } from "./DeviceCard"
+import DetailedDeviceCard, { OnlinePulse } from "./DetailedDeviceCard"
 import {
   CpuChipIcon,
   HashtagIcon,
