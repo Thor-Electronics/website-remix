@@ -13,7 +13,7 @@ export const DashboardNav = ({ user, items, ...props }: IProps) => {
   return (
     <FixedNav
       header={
-        <div className="hidden sm:flex sm:flex-col">
+        <div className="hidden xl:flex xl:flex-col">
           <Logo />
           <DashboardUserProfile user={user} />
         </div>
