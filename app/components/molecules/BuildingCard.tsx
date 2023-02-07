@@ -1,7 +1,7 @@
 import { Link } from "@remix-run/react"
 import { CSSProperties } from "react"
 import { Building } from "~/types/Building"
-import DeviceCard from "./DeviceCard"
+import DeviceCard, { OnlinePulse } from "./DeviceCard"
 import {
   CpuChipIcon,
   HashtagIcon,
@@ -49,12 +49,13 @@ export const BuildingCard = ({
         <HomeModernIcon className="w-6 h-6" />
       </div>
       <div
-        className={`name font-semibold flex flex-row items-center justify-start gap-1 text-lg`}
+        className={`name font-semibold flex flex-row items-center justify-start gap-2 text-lg`}
       >
-        {data.name}
+        <span>{data.name}</span>
         <div className="plan-badge rounded-full shadow bg-primary text-white text-xs px-1.5">
           Pro
         </div>
+        {connected && <OnlinePulse />}
       </div>
       <div className="body flex flex-col gap-2 text-sm">
         {data.devices && (
