@@ -1,7 +1,7 @@
 import { Link } from "@remix-run/react"
 import { CSSProperties } from "react"
 import { Building } from "~/types/Building"
-import DeviceCard, { OnlinePulse } from "./DeviceCard"
+import DetailedDeviceCard, { OnlinePulse } from "./DeviceCard"
 import {
   CpuChipIcon,
   HashtagIcon,
@@ -61,7 +61,7 @@ export const BuildingCard = ({
         {data.devices && (
           <div className="devices">
             {data.devices?.map(d => (
-              <DeviceCard
+              <DetailedDeviceCard
                 key={d.id}
                 data={d}
                 link={`devices/${d.id}`}

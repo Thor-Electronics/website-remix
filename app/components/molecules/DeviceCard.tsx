@@ -27,7 +27,7 @@ type Props = {
   updateHandler: Function
 }
 
-export const DeviceCard = ({
+export const DetailedDeviceCard = ({
   data,
   link = data.id,
   updateHandler,
@@ -200,4 +200,4 @@ export const OnlinePulse = () => (
   ></div>
 )
 
-export default DeviceCard
+export default DetailedDeviceCard
