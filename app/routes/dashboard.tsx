@@ -3,16 +3,16 @@ import {
   BuildingOffice2Icon,
   ArrowRightOnRectangleIcon,
 } from "@heroicons/react/24/solid"
-import {
+import type {
   LoaderFunction,
-  json,
   LinksFunction,
   ErrorBoundaryComponent,
 } from "@remix-run/node"
+import { json } from "@remix-run/node"
 import { Link, Outlet, useLoaderData } from "@remix-run/react"
 import { Copyright } from "~/components/atoms/Copyright"
 import { LogoIcon } from "~/components/atoms/LogoIcon"
-import { FixedNavItem } from "~/components/organisms/FixedNav"
+import type { FixedNavItem } from "~/components/organisms/FixedNav"
 import { DashboardNav } from "~/components/organisms/DashboardNav"
 import { requireUser } from "~/models/session.server"
 import dashboardStyles from "~/styles/dashboard.css"

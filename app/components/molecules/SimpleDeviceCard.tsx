@@ -1,14 +1,28 @@
-import { HTMLAttributes } from "react"
-import { Device } from "~/types/Device"
-import { Switch } from "../atoms/Switch"
+import { Switch } from "@mui/material"
+import type { HTMLAttributes } from "react"
+import type { Device } from "~/types/Device"
+import type { Message } from "~/types/Message"
 import { OnlinePulse } from "./DetailedDeviceCard"
 
 interface IProps extends HTMLAttributes<HTMLElement> {
   data: Device
   className?: string
+  onUpdate?: (msg: Message) => boolean
 }
 
-export const SimpleDeviceCard = ({ data: d, className, ...props }: IProps) => {
+export const SimpleDeviceCard = ({
+  data: d,
+  className,
+  onUpdate: updateHandler,
+  ...props
+}: IProps) => {
+  const togglePower = () => {
+    if (!updateHandler) return
+    updateHandler({
+      update: { power: d.state.power ? "0" : "1" },
+      id: d.id,
+    })
+  }
   return (
     <div
       className={`SimpleDeviceCard bg-white border rounded-lg p-2 flex justify-between ${
@@ -22,7 +36,8 @@ export const SimpleDeviceCard = ({ data: d, className, ...props }: IProps) => {
       <div className="switch">
         <Switch
           checked={!!d.state.power}
-          onClick={e => (d.state.power = !d.state.power)}
+          // onClick={e => (d.state.power = !d.state.power)}
+          onChange={togglePower}
         />
       </div>
     </div>
