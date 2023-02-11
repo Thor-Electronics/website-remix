@@ -6,7 +6,7 @@ import invariant from "tiny-invariant"
 import { BuildingCard } from "~/components/molecules/BuildingCard"
 import { getSessionToken } from "~/models/session.server"
 import type { Building } from "~/types/Building"
-import { Signals } from "~/types/Message"
+import { Signal } from "~/types/Message"
 import api from "~/utils/core.server"
 import socketClient, { sendCommand } from "~/utils/socket.client"
 
@@ -70,7 +70,7 @@ export const BuildingDetails = () => {
               // console.log("Signal received: ", msg.signal)
 
               /* Initial Data */
-              if (msg.signal === Signals.USER_INITIAL_DATA) {
+              if (msg.signal === Signal.USER_INITIAL_DATA) {
                 setState(prev => ({
                   ...prev,
                   devices: prev.devices?.map(d =>
@@ -83,8 +83,8 @@ export const BuildingDetails = () => {
 
               /* Device connected / disconnected */
               if (
-                msg.signal === Signals.DEVICE_CONNECTED ||
-                msg.signal === Signals.DEVICE_DISCONNECTED
+                msg.signal === Signal.DEVICE_CONNECTED ||
+                msg.signal === Signal.DEVICE_DISCONNECTED
               ) {
                 setState(prev => ({
                   ...prev,
@@ -93,7 +93,7 @@ export const BuildingDetails = () => {
                       ? {
                           ...d,
                           isOnline:
-                            msg.signal === Signals.DEVICE_CONNECTED
+                            msg.signal === Signal.DEVICE_CONNECTED
                               ? true
                               : false,
                         }
@@ -124,7 +124,7 @@ export const BuildingDetails = () => {
     <div className="BuildingDetails lg:max-w-5xl mx-auto">
       <BuildingCard
         data={state}
-        size={4}
+        // size={4}
         link=""
         updateHandler={handleUpdate}
         connected={socket?.OPEN}
