@@ -11,6 +11,7 @@ import { getSessionToken } from "~/models/session.server"
 import type { Building } from "~/types/Building"
 import type { Device } from "~/types/Device"
 import type { Message } from "~/types/Message"
+import { Signal } from "~/types/Message"
 import { getBuildingDetails, getUserBuildings } from "~/utils/core.server"
 
 const DASHBOARD_BUILDING_ID_KEY = ""
@@ -58,36 +59,38 @@ export const DashboardIndex = () => {
   }/api/v1/control/manage/${mostAccessedBuilding.id}`
 
   // https://www.npmjs.com/package/react-use-websocket
-  const { lastJsonMessage, sendJsonMessage, readyState } = useWebSocket(
-    WS_URI,
-    {
-      onOpen: e => {
-        // TODO: send token and authenticate signal "AUTHENTICATE_CLIENT"
-        console.log("WS Connected: ", e)
-      },
-      onClose: e => console.warn("WS Closed: ", e),
-      onError: e => console.warn("WS ERROR: ", e),
-      onMessage: e => {
-        const msg = JSON.parse(e.data) as Message
-        console.log("MESSAGE: ", msg)
-        if (msg.update) {
-          console.log("Update detected")
-          setBuilding(prev => ({
-            ...prev,
-            devices: prev.devices?.map(d =>
-              d.id === msg.id
-                ? { ...d, state: { ...d.state, ...msg.update } }
-                : d
-            ),
-          }))
-        }
-      },
-      share: true,
-      // filter: () => false,
-      shouldReconnect: e => true,
-      protocols: socketToken, // FIXME: this causes the connection error on chrome, use a better way!
-    }
-  )
+  const { sendJsonMessage, sendMessage, readyState } = useWebSocket(WS_URI, {
+    onOpen: e => {
+      console.log("WS Connected: ", e)
+      const authSignal: Message = {
+        signal: Signal.AUTHENTICATE_CLIENT,
+        payload: {
+          token: socketToken,
+        },
+        id: "authentication message doesn't have an id",
+      }
+      sendMessage(JSON.stringify(authSignal))
+      console.log("Sent the authentication signal with payload")
+    },
+    onClose: e => console.warn("WS Closed: ", e),
+    onError: e => console.warn("WS ERROR: ", e),
+    onMessage: e => {
+      const msg = JSON.parse(e.data) as Message
+      if (msg.message) console.log("🔽 MESSAGE: ", msg.message)
+      if (msg.update) {
+        setBuilding(prev => ({
+          ...prev,
+          devices: prev.devices?.map(d =>
+            d.id === msg.id ? { ...d, state: { ...d.state, ...msg.update } } : d
+          ),
+        }))
+      }
+    },
+    share: true,
+    // filter: () => false,
+    shouldReconnect: e => true,
+    // protocols: socketToken, // FIXME: this causes the connection error on chrome, use a better way!
+  })
 
   const connectionStatus = {
     [ReadyState.CONNECTING]: {
@@ -112,14 +115,7 @@ export const DashboardIndex = () => {
     },
   }[readyState]
 
-  if (lastJsonMessage) {
-    console.log("🔽", lastJsonMessage)
-    const msg = lastJsonMessage as unknown as Message
-    if (msg.message) console.log("MESSAGE: ", msg.message)
-  }
-
   const handleUpdate = (message: object): boolean => {
-    console.log("Sending Update to server")
     sendJsonMessage(message)
     return true
   }
