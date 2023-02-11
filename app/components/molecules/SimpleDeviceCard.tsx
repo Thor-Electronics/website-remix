@@ -19,7 +19,7 @@ export const SimpleDeviceCard = ({
   const togglePower = () => {
     if (!updateHandler) return
     updateHandler({
-      update: { power: d.state.power ? "0" : "1" },
+      command: { power: d.state.power ? 0 : 1 },
       id: d.id,
     })
   }
