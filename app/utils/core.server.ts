@@ -37,6 +37,8 @@ export const delay = (time: number) => ax.get(`${v1}/dev/delay?time=${time}`)
 export const dly = (t: number) =>
   fetch(`${process.env.CORE_ADDR}/api/v1/dev/delay?time=${t}`)
 
+export const adminGetInitialData = (token: string) =>
+  ax.get(`${v1}/admin`, h(token)).then(extractResponseData)
 export const adminGetUsers = (token: string) =>
   ax.get(`${v1}/admin/users`, h(token)).then(extractResponseData)
 export const adminGetFirmwares = (token: string) =>
@@ -63,6 +65,7 @@ const api = {
   getBuildingDetails,
   delay,
   dly,
+  adminGetInitialData,
   adminGetUsers,
   adminGetFirmwares,
   adminPostFirmware,

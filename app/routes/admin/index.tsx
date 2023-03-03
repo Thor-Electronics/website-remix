@@ -7,14 +7,15 @@ import {
 import { json, type LoaderFunction } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 import DashboardCard from "~/components/molecules/DashboardCard"
-import { requireUser } from "~/models/session.server"
+import { getSessionToken, requireUser } from "~/models/session.server"
 import { type User } from "~/types/User"
+import api from "~/utils/core.server"
 
 type LoaderData = {
   user: User
-  totalUsers: number
-  totalBuildings: number
-  totalDevices: number
+  users: { count: number; online: number; grouped: number }
+  buildings: { count: number; online: number }
+  devices: { count: number; online: number; verified: number }
   totalRevenue: number
   latestOTAUpdates: {
     date: Date
@@ -33,11 +34,23 @@ type LoaderData = {
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await requireUser(request)
+  const { user: u, dashboard: d } = await api.adminGetInitialData(
+    await getSessionToken(request)
+  )
+  console.log("INITIAL DATA -> Dashboard: ", d)
   return json<LoaderData>({
-    user,
-    totalUsers: 45157,
-    totalBuildings: 97461,
-    totalDevices: 324819,
+    user: u,
+    users: {
+      count: d.users.count,
+      online: d.users.online,
+      grouped: d.users.grouped,
+    },
+    buildings: { count: d.buildings.count, online: d.buildings.online },
+    devices: {
+      count: d.devices.count,
+      online: d.devices.online,
+      verified: d.devices.verified,
+    },
     totalRevenue: 9900000000,
     latestOTAUpdates: [
       {
@@ -57,33 +70,27 @@ export const loader: LoaderFunction = async ({ request }) => {
 }
 
 export const AdminIndex = () => {
-  const {
-    user,
-    totalUsers,
-    totalBuildings,
-    totalDevices,
-    totalRevenue,
-    latestOTAUpdates,
-  } = useLoaderData<LoaderData>() // <typeof loader>
+  const { user, users, buildings, devices, totalRevenue, latestOTAUpdates } =
+    useLoaderData<LoaderData>() // <typeof loader>
 
   const cards = [
     {
       color: "indigo",
       icon: <UserGroupIcon />,
       title: "Users",
-      text: totalUsers.toLocaleString(),
+      text: users.count.toLocaleString(),
     },
     {
       color: "sky",
       icon: <HomeModernIcon />,
       title: "Buildings",
-      text: totalBuildings.toLocaleString(),
+      text: buildings.count.toLocaleString(),
     },
     {
       color: "pink",
       icon: <CpuChipIcon />,
       title: "Devices",
-      text: totalDevices.toLocaleString(),
+      text: devices.count.toLocaleString(),
     },
     {
       color: "teal",
