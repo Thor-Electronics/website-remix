@@ -37,7 +37,6 @@ export const loader: LoaderFunction = async ({ request }) => {
   const { user: u, dashboard: d } = await api.adminGetInitialData(
     await getSessionToken(request)
   )
-  console.log("INITIAL DATA -> Dashboard: ", d)
   return json<LoaderData>({
     user: u,
     users: {
