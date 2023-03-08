@@ -19,14 +19,18 @@ export interface Device {
 
 export type DeviceState = {
   [x: string]: string | number | boolean | object
-  power: "on" | "off" | boolean | number
-  volume: number // TV, Radio, Speaker
-  channel: number // TV, Radio
+  power: number | { [x: string]: number }
+  // volume?: number // TV, Radio, Speaker
+  // channel?: number // TV, Radio
   // [key: string]: object
 }
 
 export enum DeviceTypes {
   KEY = "KEY",
+  KEY1 = "KEY1",
+  KEY2 = "KEY2",
+  KEY3 = "KEY3",
+  KEY4 = "KEY4",
   LOCK = "LOCK",
   BELL = "BELL",
   TV = "TV",
@@ -47,6 +51,12 @@ export type DeviceAction = {
   icon: string | ReactNode
   callback: () => DeviceActionCallbackReturnType // generate new state or return action type or do something and return nothing
 }
+
+// Sends update requests to the server(helps with)
+export type StateUpdateHandler = (msg: Message) => boolean
+
+// Generates the message to be sent through StateUpdateHandler
+export type DeviceStateUpdater = () => Message
 
 const cn = "w-7 h-7"
 

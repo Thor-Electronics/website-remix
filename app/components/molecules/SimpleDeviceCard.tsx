@@ -1,13 +1,13 @@
 import { Switch } from "@mui/material"
 import type { HTMLAttributes } from "react"
-import type { Device } from "~/types/Device"
-import type { Message } from "~/types/Message"
+import type { Device, DeviceTypes, StateUpdateHandler } from "~/types/Device"
 import { OnlinePulse } from "./DetailedDeviceCard"
+import DeviceControl from "./DeviceControl"
 
 interface IProps extends HTMLAttributes<HTMLElement> {
   data: Device
   className?: string
-  onUpdate?: (msg: Message) => boolean
+  onUpdate?: StateUpdateHandler
 }
 
 export const SimpleDeviceCard = ({
@@ -33,13 +33,19 @@ export const SimpleDeviceCard = ({
         {d.name}
         {d.isOnline && <OnlinePulse />}
       </h4>
-      <div className="switch">
-        <Switch
-          checked={!!d.state.power}
-          // onClick={e => (d.state.power = !d.state.power)}
-          onChange={togglePower}
+      <div className="control">
+        <DeviceControl
+          type={d.type as DeviceTypes}
+          state={d.state}
+          onUpdate={updateHandler}
         />
       </div>
+      {/* <div className="switch">
+        <Switch
+          checked={!!d.state.power}
+          onChange={togglePower}
+        />
+      </div> */}
     </div>
   )
 }
