@@ -53,10 +53,15 @@ export type DeviceAction = {
 }
 
 // Sends update requests to the server(helps with)
-export type StateUpdateHandler = (msg: Message) => boolean
+export type DeviceStateUpdateSender = (msg: Message) => boolean
 
-// Generates the message to be sent through StateUpdateHandler
+// Generates the message to be sent through StateUpdateSender
 export type DeviceStateUpdater = () => Message
+
+// Generates a new updater for the given action?
+export type DeviceStateUpdaterGenerator = () => DeviceStateUpdater
+
+// export type Action
 
 const cn = "w-7 h-7"
 
