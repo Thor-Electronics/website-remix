@@ -1,13 +1,17 @@
 import { Switch } from "@mui/material"
 import type { HTMLAttributes } from "react"
-import type { Device, DeviceTypes, StateUpdateHandler } from "~/types/Device"
+import type {
+  Device,
+  DeviceTypes,
+  DeviceStateUpdateSender,
+} from "~/types/Device"
 import { OnlinePulse } from "./DetailedDeviceCard"
 import DeviceControl from "./DeviceControl"
 
 interface IProps extends HTMLAttributes<HTMLElement> {
   data: Device
   className?: string
-  onUpdate?: StateUpdateHandler
+  onUpdate?: DeviceStateUpdateSender
 }
 
 export const SimpleDeviceCard = ({

@@ -4,14 +4,14 @@ import type {
   DeviceState,
   DeviceStateUpdater,
   DeviceTypes,
-  StateUpdateHandler,
+  DeviceStateUpdateSender,
 } from "~/types/Device"
 import type { Message } from "~/types/Message"
 
 interface IProps extends HTMLAttributes<HTMLElement> {
   type: DeviceTypes
   state: DeviceState
-  onUpdate?: StateUpdateHandler
+  onUpdate?: DeviceStateUpdateSender
 }
 
 export const DeviceControl = ({
