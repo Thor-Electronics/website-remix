@@ -23,14 +23,30 @@ export const DeviceControl = ({
 }: IProps) => {
   console.log("Device Control: ", type, state)
   // console.log("")
-  const options = generateControlOptionsForThisSingleDevice({
-    power: { "0": 1, roof: 0, "2": 0, "3": 1 },
-  })
-  return <div className={`DeviceControl ${className}`}>options</div>
+  // const options = generateControlOptionsForThisSingleDevice({
+  //   power: { "0": 1, roof: 0, "2": 0, "3": 1 },
+  // })
+  return (
+    <div className={`DeviceControl ${className}`}>
+      {/* {Object.entries(state).map(([k, v]) => {
+        if (k === "power") {
+          return <Switch
+            checked={v}
+            onChange={}
+          />
+        }
+      })} */}
+    </div>
+  )
 }
 
+export const
+
 // {power: [ "0":1, "roof":0, "2":0, "3":1 ]} // returns an array or object of StateUpdaters
-export const generateControlOptionsForThisSingleDevice = (state: object) => {
+export const generateControlOptionsForThisSingleDevice = (
+  state: object,
+  updateHandler?: StateUpdateHandler
+) => {
   // console.log("Generating controllers for state: ", state)
   let options: { [k: string]: any }
   Object.entries(state).map(([k, v]) => {
@@ -38,7 +54,12 @@ export const generateControlOptionsForThisSingleDevice = (state: object) => {
     let controller: DeviceStateUpdater
     switch (typeof v) {
       case "boolean":
-        // options[k] = <Switch checked={v} onChange={} />
+        // options[k] = (
+        //   <Switch
+        //     checked={v}
+        //     onChange={() => updateHandler({ id: "", command: { [k]: !v } })}
+        //   />
+        // )
         // Generate Switch
         break
       case "number":
