@@ -4,6 +4,7 @@ import type {
   Device,
   DeviceTypes,
   DeviceStateUpdateSender,
+  DeviceState,
 } from "~/types/Device"
 import { OnlinePulse } from "./DetailedDeviceCard"
 import DeviceControl from "./DeviceControl"
@@ -23,10 +24,11 @@ export const SimpleDeviceCard = ({
   const togglePower = () => {
     if (!updateHandler) return
     updateHandler({
-      command: { power: d.state.power ? 0 : 1 },
+      command: { power: d.state.power ? false : true },
       id: d.id,
     })
   }
+
   return (
     <div
       className={`SimpleDeviceCard bg-white border rounded-lg p-2 flex justify-between ${
@@ -37,19 +39,40 @@ export const SimpleDeviceCard = ({
         {d.name}
         {d.isOnline && <OnlinePulse />}
       </h4>
-      <div className="control">
+      {/* <div className="control">
         <DeviceControl
+          deviceId={d.id}
           type={d.type as DeviceTypes}
           state={d.state}
           onUpdate={updateHandler}
         />
-      </div>
-      {/* <div className="switch">
-        <Switch
-          checked={!!d.state.power}
-          onChange={togglePower}
-        />
       </div> */}
+      <div className="switch">
+        {typeof d.state.power === "object" ? (
+          Object.entries(d.state.power).map(([k, v]) => {
+            return (
+              <Switch
+                key={k}
+                checked={!!d.state.power}
+                onChange={() => {
+                  if (!updateHandler)
+                    return console.warn(
+                      "Update handler is not configured for this key!"
+                    )
+                  updateHandler({
+                    command: {
+                      power: { [k]: v ? false : true },
+                    },
+                    id: d.id,
+                  })
+                }}
+              />
+            )
+          })
+        ) : (
+          <Switch checked={!!d.state.power} onChange={togglePower} />
+        )}
+      </div>
     </div>
   )
 }

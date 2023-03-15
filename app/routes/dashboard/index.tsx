@@ -4,7 +4,6 @@ import { json } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 import { useState } from "react"
 import { ReadyState } from "react-use-websocket"
-import type { JsonValue } from "react-use-websocket/dist/lib/types"
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket"
 import { SimpleDeviceCard } from "~/components/molecules/SimpleDeviceCard"
 import { getSessionToken } from "~/models/session.server"
@@ -16,6 +15,28 @@ import { getBuildingDetails, getUserBuildings } from "~/utils/core.server"
 
 const DASHBOARD_BUILDING_ID_KEY = ""
 let WS_URI = "" // "ws://localhost:3993/api/v1/control/echo"
+const WS_STATUS_BADGES = {
+  [ReadyState.CONNECTING]: {
+    text: "Connecting",
+    className: "bg-orange-500 shadow-orange-300",
+  },
+  [ReadyState.OPEN]: {
+    text: "Connected",
+    className: "bg-green-500 shadow-green-300",
+  },
+  [ReadyState.CLOSING]: {
+    text: "Disconnecting",
+    className: "bg-rose-500 shadow-rose-300",
+  },
+  [ReadyState.CLOSED]: {
+    text: "Disconnected",
+    className: "bg-slate-800 shadow-slate-300",
+  },
+  [ReadyState.UNINSTANTIATED]: {
+    text: "Uninstantiated",
+    className: "bg-red-500",
+  },
+}
 
 type LoaderData = {
   buildings: Building[]
@@ -92,28 +113,7 @@ export const DashboardIndex = () => {
     // protocols: socketToken, // FIXME: this causes the connection error on chrome, use a better way!
   })
 
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: {
-      text: "Connecting",
-      className: "bg-orange-500 shadow-orange-300",
-    },
-    [ReadyState.OPEN]: {
-      text: "Connected",
-      className: "bg-green-500 shadow-green-300",
-    },
-    [ReadyState.CLOSING]: {
-      text: "Disconnecting",
-      className: "bg-rose-500 shadow-rose-300",
-    },
-    [ReadyState.CLOSED]: {
-      text: "Disconnected",
-      className: "bg-slate-800 shadow-slate-300",
-    },
-    [ReadyState.UNINSTANTIATED]: {
-      text: "Uninstantiated",
-      className: "bg-red-500",
-    },
-  }[readyState]
+  const connectionStatus = WS_STATUS_BADGES[readyState]
 
   const handleUpdate = (message: object): boolean => {
     sendJsonMessage(message)
