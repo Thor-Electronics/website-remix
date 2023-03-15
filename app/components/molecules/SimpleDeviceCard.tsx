@@ -47,30 +47,36 @@ export const SimpleDeviceCard = ({
           onUpdate={updateHandler}
         />
       </div> */}
-      <div className="switch">
+      <div className="switches">
         {typeof d.state.power === "object" ? (
           Object.entries(d.state.power).map(([k, v]) => {
             return (
-              <Switch
-                key={k}
-                checked={!!d.state.power}
-                onChange={() => {
-                  if (!updateHandler)
-                    return console.warn(
-                      "Update handler is not configured for this key!"
-                    )
-                  updateHandler({
-                    command: {
-                      power: { [k]: v ? false : true },
-                    },
-                    id: d.id,
-                  })
-                }}
-              />
+              <div className="switch" key={k}>
+                <label>
+                  {k}
+                  <Switch
+                    checked={!!v}
+                    onChange={() => {
+                      if (!updateHandler)
+                        return console.warn(
+                          "Update handler is not configured for this key!"
+                        )
+                      updateHandler({
+                        command: {
+                          power: { ...d.state.power, [k]: v ? false : true },
+                        },
+                        id: d.id,
+                      })
+                    }}
+                  />
+                </label>
+              </div>
             )
           })
         ) : (
-          <Switch checked={!!d.state.power} onChange={togglePower} />
+          <div className="switch">
+            <Switch checked={!!d.state.power} onChange={togglePower} />
+          </div>
         )}
       </div>
     </div>
