@@ -5,14 +5,17 @@ import {
   CubeTransparentIcon,
   QrCodeIcon,
   ShieldCheckIcon,
+  SignalIcon,
   StopIcon,
   UsersIcon,
 } from "@heroicons/react/24/solid"
-import { json, LinksFunction, LoaderFunction, Response } from "@remix-run/node"
+import type { LinksFunction, LoaderFunction } from "@remix-run/node"
+import { json, Response } from "@remix-run/node"
 import { Link, Outlet, useCatch, useLoaderData } from "@remix-run/react"
 import { Copyright } from "~/components/atoms/Copyright"
 import { LogoIcon } from "~/components/atoms/LogoIcon"
-import FixedNav, { FixedNavItem } from "~/components/organisms/FixedNav"
+import type { FixedNavItem } from "~/components/organisms/FixedNav"
+import FixedNav from "~/components/organisms/FixedNav"
 import {
   ACCESS,
   PERMISSION_CONTEXT,
@@ -135,6 +138,12 @@ const initialAdminNavItems: FixedNavItem[] = [
     label: "Invoices",
     to: `${prefix}/invoices`,
     permission: { context: PERMISSION_CONTEXT.PAYMENTS, access: ACCESS.VIEW },
+  },
+  {
+    icon: <SignalIcon className={iconClassNames} />,
+    label: "Network",
+    to: `${prefix}/network`,
+    permission: { context: PERMISSION_CONTEXT.NETWORK, access: ACCESS.VIEW },
   },
   {
     icon: <ArrowRightOnRectangleIcon className={iconClassNames} />,

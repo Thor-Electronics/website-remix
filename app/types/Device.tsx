@@ -19,18 +19,25 @@ export interface Device {
 
 export type DeviceState = {
   [x: string]: string | number | boolean | object
-  power: "on" | "off" | boolean | number
-  volume: number // TV, Radio, Speaker
-  channel: number // TV, Radio
+  power: number | boolean | { [x: string]: number | boolean }
+  // volume?: number // TV, Radio, Speaker
+  // channel?: number // TV, Radio
   // [key: string]: object
 }
 
 export enum DeviceTypes {
   KEY = "KEY",
+  KEY1 = "KEY1",
+  KEY2 = "KEY2",
+  KEY3 = "KEY3",
+  KEY4 = "KEY4",
   LOCK = "LOCK",
   BELL = "BELL",
   TV = "TV",
   LIGHT = "LIGHT",
+  IRHUB = "IRHUB",
+  BLINDS = "BLINDS",
+  DOOR = "DOOR",
 }
 
 export type DeviceActionCallbackReturnType =
@@ -38,16 +45,45 @@ export type DeviceActionCallbackReturnType =
   | string
   | void
 
-export type DeviceAction = {
+export type LegacyDeviceAction = {
   title: string
   className?: string
   icon: string | ReactNode
   callback: () => DeviceActionCallbackReturnType // generate new state or return action type or do something and return nothing
 }
 
+// A device action can be a button which controls an action in the
+// device control panel
+export type DeviceAction = ReactNode
+
+// Sends update requests to the server(helps with)
+export type DeviceStateUpdateSender = (msg: Message) => boolean
+
+// Generates the message to be sent through StateUpdateSender
+export type DeviceStateUpdater = () => Message
+
+// Generates a new updater for the given action?
+export type DeviceStateUpdaterGenerator = () => DeviceStateUpdater
+
+// Generates device actions for the device to be used in the device control
+export type DeviceActionGenerator = (
+  id: string,
+  type: DeviceTypes,
+  state: DeviceState,
+  onUpdate: Function
+) => ReactNode
+
+// Genertes device actions for
+export type DeviceStateEntryActionGenerator = (
+  id: string,
+  key: string,
+  value: any,
+  onUpdate: Function
+) => DeviceAction
+
 const cn = "w-7 h-7"
 
-export const commonActions: { [key: string]: DeviceAction } = {
+export const commonActions: { [key: string]: LegacyDeviceAction } = {
   powerAction: {
     title: "Power",
     className: "!bg-slate-700 hover:bg-slate-800",
@@ -62,7 +98,7 @@ export const commonActions: { [key: string]: DeviceAction } = {
   },
 }
 
-export const deviceActions: { [key: string]: DeviceAction[] } = {
+export const deviceActions: { [key: string]: LegacyDeviceAction[] } = {
   [DeviceTypes.KEY]: [commonActions.powerAction, commonActions.restartAction],
   [DeviceTypes.BELL]: [
     commonActions.powerAction,
@@ -105,5 +141,12 @@ export const deviceActions: { [key: string]: DeviceAction[] } = {
       icon: "ß",
       callback: () => "SET_COLOR",
     },
+  ],
+  [DeviceTypes.IRHUB]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceTypes.LOCK]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceTypes.DOOR]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceTypes.BLINDS]: [
+    commonActions.powerAction,
+    commonActions.restartAction,
   ],
 }

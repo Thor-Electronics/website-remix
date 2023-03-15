@@ -57,7 +57,7 @@ export default function Index() {
             <Link to="/signup" prefetch="render">
               <TextButton className="!bg-primary">Signup</TextButton>
             </Link>
-            <Link to="login" prefetch="render">
+            <Link to="/login" prefetch="render">
               <TextButton className="!bg-white !text-slate-700 dark:bg-slate-800 dark:text-white">
                 Login
               </TextButton>

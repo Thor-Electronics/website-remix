@@ -1,4 +1,4 @@
-import type { LoaderFunction } from "@remix-run/node"
+import type { ErrorBoundaryComponent, LoaderFunction } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { Outlet, useLoaderData } from "@remix-run/react"
 import { DashboardBuildingsList } from "~/components/organisms/DashboardBuildingsList"
@@ -23,6 +23,19 @@ export const DashboardBuildings = () => {
       <h1 className="title text-center font-bold">Buildings</h1>
       <DashboardBuildingsList items={buildings as Building[]} />
       <Outlet />
+    </div>
+  )
+}
+
+export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
+  console.error("Error in buildings: ", error)
+  return (
+    <div className="DashboardBuildings bg-rose-200 shadow-lg text-rose-600 p-4 rounded-xl">
+      <h1 className="text-lg font-bold mb-4">Error Loading Buildings!</h1>
+      <p className="error">
+        Something happened when we tried to show you the buildings.{" "}
+        {error.message}
+      </p>
     </div>
   )
 }

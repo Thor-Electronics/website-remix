@@ -27,14 +27,14 @@ type Props = {
   updateHandler: Function
 }
 
-export const DeviceCard = ({
+export const DetailedDeviceCard = ({
   data,
   link = data.id,
   updateHandler,
   ...props
 }: Props) => {
   // console.log("DEVICE CARD update handler:", updateHandler)
-  // console.log("Device state", data.state)
+  // console.log("Device state", data)
   const handleClick =
     (callback: () => DeviceActionCallbackReturnType) => (e: MouseEvent) => {
       // console.log("Handle click was called ...")
@@ -200,4 +200,4 @@ export const OnlinePulse = () => (
   ></div>
 )
 
-export default DeviceCard
+export default DetailedDeviceCard

@@ -3,11 +3,16 @@ import {
   BuildingOffice2Icon,
   ArrowRightOnRectangleIcon,
 } from "@heroicons/react/24/solid"
-import { LoaderFunction, json, LinksFunction } from "@remix-run/node"
-import { Outlet, useLoaderData } from "@remix-run/react"
+import type {
+  LoaderFunction,
+  LinksFunction,
+  ErrorBoundaryComponent,
+} from "@remix-run/node"
+import { json } from "@remix-run/node"
+import { Link, Outlet, useLoaderData } from "@remix-run/react"
 import { Copyright } from "~/components/atoms/Copyright"
 import { LogoIcon } from "~/components/atoms/LogoIcon"
-import { FixedNavItem } from "~/components/organisms/FixedNav"
+import type { FixedNavItem } from "~/components/organisms/FixedNav"
 import { DashboardNav } from "~/components/organisms/DashboardNav"
 import { requireUser } from "~/models/session.server"
 import dashboardStyles from "~/styles/dashboard.css"
@@ -34,6 +39,21 @@ export const Dashboard = () => {
       <DashboardNav user={user as User} items={initialUserNavItems} />
       <Outlet />
       <Copyright />
+    </div>
+  )
+}
+
+export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
+  console.error("Error in dashboard: ", error)
+  return (
+    <div className="h-screen bg-rose-100 shadow-lg text-rose-600 p-4">
+      <h1 className="text-lg font-bold mb-4">Error Loading Dashboard!</h1>
+      <p className="error">
+        Something happened when we tried to show your dashboard. {error.message}
+      </p>
+      <Link to="/" className="font-semibold !underline" prefetch="render">
+        Back to home
+      </Link>
     </div>
   )
 }

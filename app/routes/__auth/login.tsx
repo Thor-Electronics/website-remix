@@ -1,4 +1,5 @@
-import { ActionFunction, json, LoaderFunction, redirect } from "@remix-run/node"
+import type { ActionFunction, LoaderFunction } from "@remix-run/node"
+import { json, redirect } from "@remix-run/node"
 import { Form, Link, useActionData, useTransition } from "@remix-run/react"
 import Button, { TextButton } from "~/components/atoms/Button"
 import { createSession, getUserId } from "~/models/session.server"
