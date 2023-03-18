@@ -103,6 +103,8 @@ export const BuildingCard = ({
     return true
   }
 
+  const buildingActionIconClassNames = "w-5 h-5 sm:w-4 sm:h-4"
+
   return (
     <div
       className={`BuildingCard relative card transition-all duration-700 ${
@@ -171,19 +173,28 @@ export const BuildingCard = ({
         <div className="options flex flex-row gap-2 justify-end items-center text-base">
           <Button
             className="p-2 rounded-xl sm:rounded-lg sm:px-3 sm:py-1
-                 bg-blue-500 shadow-blue-300 sm:shadow-blue-200"
+                 !bg-emerald-500 shadow-emerald-300 sm:shadow-emerald-200"
+            title="Add New Device to the Building"
+          >
+            <SquaresPlusIcon className={buildingActionIconClassNames} />
+            <span className="text hidden sm:block">Add Device</span>
+          </Button>
+
+          <Button
+            className="p-2 rounded-xl sm:rounded-lg sm:px-3 sm:py-1
+                 !bg-blue-500 shadow-blue-300 sm:shadow-blue-200"
             title="Edit the Building"
           >
-            <PencilIcon className="w-5 h-5 sm:w-4 sm:h-4" />
+            <PencilIcon className={buildingActionIconClassNames} />
             <span className="text hidden sm:block">Edit Building</span>
           </Button>
 
           <Button
             className="p-2 rounded-xl sm:rounded-lg sm:px-3 sm:py-1
-                 bg-red-500 shadow-red-300 sm:shadow-red-200"
+                 !bg-red-500 shadow-red-300 sm:shadow-red-200"
             title="Disable the Building"
           >
-            <TrashIcon className="w-5 h-5 sm:w-4 sm:h-4" />
+            <TrashIcon className={buildingActionIconClassNames} />
             <span className="text hidden sm:block">Disable Building</span>
           </Button>
         </div>
