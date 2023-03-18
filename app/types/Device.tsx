@@ -4,14 +4,14 @@ import {
   PowerIcon,
 } from "@heroicons/react/24/solid"
 import type { ReactNode } from "react"
-import type { Message } from "./Message"
+import type { CommandMessage, Message } from "./Message"
 
 export interface Device {
   id: string
   cpuId: string
   name: string
   buildingId: string
-  type: string
+  type: DeviceTypes
   state: DeviceState
   isOnline?: boolean // could be connected timestamp to calculate uptime
   uptime?: Date
@@ -59,6 +59,10 @@ export type DeviceAction = ReactNode
 // Sends update requests to the server(helps with)
 export type DeviceStateUpdateSender = (msg: Message) => boolean
 
+export type DeviceControlPanelStateUpdateHandler = (
+  cmd: CommandMessage
+) => boolean
+
 // Generates the message to be sent through StateUpdateSender
 export type DeviceStateUpdater = () => Message
 
@@ -81,6 +85,12 @@ export type DeviceStateEntryActionGenerator = (
   onUpdate: Function
 ) => DeviceAction
 
+export type DeviceControlProps = {
+  type: DeviceTypes
+  state: DeviceState
+  onUpdate: DeviceControlPanelStateUpdateHandler
+}
+
 const cn = "w-7 h-7"
 
 export const commonActions: { [key: string]: LegacyDeviceAction } = {
@@ -100,6 +110,10 @@ export const commonActions: { [key: string]: LegacyDeviceAction } = {
 
 export const deviceActions: { [key: string]: LegacyDeviceAction[] } = {
   [DeviceTypes.KEY]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceTypes.KEY1]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceTypes.KEY2]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceTypes.KEY3]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceTypes.KEY4]: [commonActions.powerAction, commonActions.restartAction],
   [DeviceTypes.BELL]: [
     commonActions.powerAction,
     commonActions.restartAction,

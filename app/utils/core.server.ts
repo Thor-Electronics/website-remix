@@ -2,6 +2,7 @@
 
 import { fetch } from "@remix-run/node"
 import axios from "axios"
+import { ReadyState } from "react-use-websocket"
 
 export const ax = axios.create({
   baseURL: ENV.CORE_URL,
@@ -10,6 +11,33 @@ export const ax = axios.create({
   // transformRequest: axios.defaults.transformRequest,
   // transformResponse: axios.defaults.transformResponse,
 })
+
+// export const WS_BASE_URI = `${
+//   process.env.NODE_ENV === "production" ? "wss" : "ws"
+// }://${ENV.CORE_ADDR}/api/v1/control`
+
+// export const WS_STATUS_BADGES = {
+//   [ReadyState.CONNECTING]: {
+//     text: "Connecting",
+//     className: "bg-orange-500 shadow-orange-300",
+//   },
+//   [ReadyState.OPEN]: {
+//     text: "Connected",
+//     className: "bg-green-500 shadow-green-300",
+//   },
+//   [ReadyState.CLOSING]: {
+//     text: "Disconnecting",
+//     className: "bg-rose-500 shadow-rose-300",
+//   },
+//   [ReadyState.CLOSED]: {
+//     text: "Disconnected",
+//     className: "bg-slate-800 shadow-slate-300",
+//   },
+//   [ReadyState.UNINSTANTIATED]: {
+//     text: "Uninstantiated",
+//     className: "bg-red-500",
+//   },
+// }
 
 // axios.defaults.baseURL = ENV.CORE_URL
 // const ax = axios

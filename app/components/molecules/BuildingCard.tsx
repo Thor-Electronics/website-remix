@@ -1,6 +1,4 @@
-import { Link } from "@remix-run/react"
-import { CSSProperties } from "react"
-import { Building } from "~/types/Building"
+import type { Building } from "~/types/Building"
 import DetailedDeviceCard, { OnlinePulse } from "./DetailedDeviceCard"
 import {
   CpuChipIcon,
@@ -12,25 +10,99 @@ import {
   SquaresPlusIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid"
-import Button, { TextButton } from "../atoms/Button"
+import Button from "../atoms/Button"
+import type { HTMLAttributes } from "react"
+import { useState } from "react"
+import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket"
+import type { Message } from "~/types/Message"
+import { Signal } from "~/types/Message"
+import { ReadyState } from "react-use-websocket"
+import { SimpleDeviceCard } from "./SimpleDeviceCard"
 
-export type Props = {
+export interface Props extends HTMLAttributes<HTMLElement> {
   data: Building
-  link?: string
-  updateHandler: Function
-  connected?: number
-  className?: string
-  // sizes => 0: only name, 1: icon, plan, 2: id, address, 3: device count, plugins count, 4: device panel, plugin panel
+  // updateHandler: Function
+  socketToken: string
+  // connected?: number
+}
+
+export const WS_STATUS_BADGES = {
+  [ReadyState.CONNECTING]: {
+    text: "Connecting",
+    className: "bg-orange-500 shadow-orange-300",
+  },
+  [ReadyState.OPEN]: {
+    text: "Connected",
+    className: "bg-green-500 shadow-green-300",
+  },
+  [ReadyState.CLOSING]: {
+    text: "Disconnecting",
+    className: "bg-rose-500 shadow-rose-300",
+  },
+  [ReadyState.CLOSED]: {
+    text: "Disconnected",
+    className: "bg-slate-800 shadow-slate-300",
+  },
+  [ReadyState.UNINSTANTIATED]: {
+    text: "Uninstantiated",
+    className: "bg-red-500",
+  },
 }
 
 export const BuildingCard = ({
-  data,
-  link = data.id,
-  updateHandler,
-  connected,
+  data: b,
+  socketToken,
   className,
   ...props
 }: Props) => {
+  const [building, setBuilding] = useState<Building>(b)
+  const { sendJsonMessage, sendMessage, readyState } = useWebSocket(
+    `${process.env.NODE_ENV === "production" ? "wss" : "ws"}://${
+      ENV.CORE_ADDR
+    }/api/v1/control/manage/${b.id}`,
+    {
+      onOpen: e => {
+        console.log("WS Connected: ", e)
+        const authSignal: Message = {
+          signal: Signal.AUTHENTICATE_CLIENT,
+          payload: {
+            token: socketToken,
+          },
+          id: "authentication message doesn't have an id",
+        }
+        sendMessage(JSON.stringify(authSignal))
+        console.log("Sent the authentication signal with payload")
+      },
+      onClose: e => console.warn("WS Closed: ", e),
+      onError: e => console.warn("WS ERROR: ", e),
+      onMessage: e => {
+        const msg = JSON.parse(e.data) as Message
+        if (msg.message) console.log("🔽 MESSAGE: ", msg.message)
+        if (msg.update) {
+          setBuilding(prev => ({
+            ...prev,
+            devices: prev.devices?.map(d =>
+              d.id === msg.id
+                ? { ...d, state: { ...d.state, ...msg.update } }
+                : d
+            ),
+          }))
+        }
+      },
+      share: true,
+      shouldReconnect: e => true,
+    }
+  )
+
+  const connectionStatus = WS_STATUS_BADGES[readyState]
+  const connected = readyState === ReadyState.OPEN
+
+  const handleUpdate = (message: object): boolean => {
+    console.log("Sending Update: ", message)
+    sendJsonMessage(message)
+    return true
+  }
+
   return (
     <div
       className={`BuildingCard relative card transition-all duration-700 ${
@@ -51,22 +123,28 @@ export const BuildingCard = ({
       <div
         className={`name font-semibold flex flex-row items-center justify-start gap-2 text-lg`}
       >
-        <span>{data.name}</span>
+        <span>{building.name}</span>
         <div className="plan-badge rounded-full shadow bg-primary text-white text-xs px-1.5">
           Pro
         </div>
+        <span
+          className={`status text-xs px-2 py-0.5 rounded-full text-white shadow-md ${connectionStatus.className}`}
+        >
+          {connectionStatus.text}
+        </span>
         {connected && <OnlinePulse />}
       </div>
       <div className="body flex flex-col gap-2 text-sm">
-        {data.devices && (
+        {building.devices && (
           <div className="devices">
-            {data.devices?.map(d => (
-              <DetailedDeviceCard
-                key={d.id}
-                data={d}
-                link={`devices/${d.id}`}
-                updateHandler={updateHandler}
-              />
+            {building.devices?.map(d => (
+              <SimpleDeviceCard key={d.id} data={d} onUpdate={handleUpdate} />
+              // <DetailedDeviceCard
+              //   key={d.id}
+              //   data={d}
+              //   // link={`devices/${d.id}`}
+              //   updateHandler={handleUpdate}
+              // />
             ))}
           </div>
         )}
@@ -75,20 +153,20 @@ export const BuildingCard = ({
           title="address"
         >
           <MapPinIcon className="w-6 h-6" />
-          {data.address}
+          {building.address}
         </div>
         <div className="id font-mono text-slate-600 hover:text-emerald-600 row">
           <HashtagIcon className="w-6 h-6" />
-          {data.id}
+          {building.id}
         </div>
         <div className="device-count row">
           <CpuChipIcon className="w-6 h-6" />
-          {data.devices?.length || 0} Devices
+          {building.devices?.length || 0} Devices
         </div>
         <div className="plugin-count row">
           {/* <SquaresPlusIcon className="w-6 h-6" /> */}
           <PuzzlePieceIcon className="w-6 h-6" />
-          {data.plugins?.length || 0} Plugins
+          {building.plugins?.length || 0} Plugins
         </div>
         <div className="options flex flex-row gap-2 justify-end items-center text-base">
           <Button

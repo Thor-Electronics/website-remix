@@ -12,68 +12,27 @@ import {
 } from "@heroicons/react/24/solid"
 import { MdWifi, MdWifiOff } from "react-icons/md"
 import type { MouseEvent } from "react"
-import {
-  Device,
-  DeviceActionCallbackReturnType,
-  DeviceState,
-  DeviceTypes,
-} from "~/types/Device"
+import type { Device, DeviceActionCallbackReturnType } from "~/types/Device"
+import { DeviceState, DeviceTypes } from "~/types/Device"
 import { deviceActions } from "~/types/Device"
 import { IconButton } from "../atoms/Button"
 
 type Props = {
   data: Device
-  link?: string
   updateHandler: Function
 }
 
 export const DetailedDeviceCard = ({
   data,
-  link = data.id,
   updateHandler,
   ...props
 }: Props) => {
-  // console.log("DEVICE CARD update handler:", updateHandler)
-  // console.log("Device state", data)
-  const handleClick =
-    (callback: () => DeviceActionCallbackReturnType) => (e: MouseEvent) => {
-      // console.log("Handle click was called ...")
-      const handlers = {
-        TOGGLE_POWER: {
-          update: { power: data.state.power === "on" ? "off" : "on" },
-          // FIXME: how about if power is 0 or 1 or true or false, we
-          // need an standard for it I think numbers are really good
-          // to represent the device state because we can also represent
-          // the intensity and sleep states.Like:
-          // power< 0 -> off, power == 0 -> sleep / standby,
-          // power > 0 -> the power level of the device which means it
-          // is on and how much power will this work on.
-        },
-        RESTART: { signal: "RESTART" },
-        BUZZ: { signal: "BUZZ" },
-        VOLUME_UP: { update: { volume: (data.state.volume ?? 0) + 1 } }, // todo: could be signal instead of update
-        VOLUME_DOWN: { update: { volume: (data.state.volume ?? 0) - 1 } }, // todo: could be signal instead of update
-        SET_COLOR: { update: { color: "#ffffff" } },
-      }
-
-      const callbackResult = callback()
-      switch (typeof callbackResult) {
-        case "string":
-          return updateHandler(handlers[callbackResult], data.id)
-        case "object":
-          return updateHandler(callbackResult, data.id)
-        default:
-          break
-      }
-    }
-
   return (
-    // <Link to={link}>
     <div className="DeviceCard card" {...props}>
       <div className="device-icon">
         {getDeviceIcon(
           data.type,
-          `w-12 h-12 ${data.state?.power === "on" ? "text-emerald-500" : ""}`
+          `w-12 h-12 ${data.state?.power ? "text-emerald-500" : ""}`
         )}
       </div>
       <div
@@ -121,8 +80,7 @@ export const DetailedDeviceCard = ({
         {deviceActions[data.type].map(action => (
           <IconButton
             key={action.title}
-            onClick={handleClick(action.callback)}
-            // TODO: I could define a function that checks if the callback is string, then use one of those built-in funcitons like turn on or off and if it's a callable function, then reutrn itself so that on click calls it otherwise the builting function will be passed to on click and would be handeled by the component because builtin functions are inside the component
+            // onClick={handleClick(action.callback)}
             className={action.className}
           >
             {action.icon}

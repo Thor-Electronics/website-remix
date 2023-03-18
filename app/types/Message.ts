@@ -11,6 +11,9 @@ export type Message = {
   id: string
 }
 
+// Contains a command or signal
+export type CommandMessage = Pick<Message, "command" | "signal" | "payload">
+
 export enum Signal {
   DEVICE_CONNECTED = "DEVICE_CONNECTED",
   DEVICE_DISCONNECTED = "DEVICE_DISCONNECTED",
