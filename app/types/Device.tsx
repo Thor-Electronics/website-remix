@@ -15,6 +15,7 @@ export interface Device {
   state: DeviceState
   isOnline?: boolean // could be connected timestamp to calculate uptime
   uptime?: Date
+  latency?: number
 }
 
 export type DeviceState = {

@@ -7,6 +7,8 @@ export type Message = {
   payload?: {
     onlineDevices?: string[] // initial client data
     token?: string // authentication signal message
+    devices?: { [key: string]: number } // pings?
+    users?: { [key: string]: number } // pings?
   }
   id: string
 }
@@ -23,4 +25,5 @@ export enum Signal {
   USER_INITIAL_DATA = "USER_INITIAL_DATA",
   RELOAD = "RELOAD",
   AUTHENTICATE_CLIENT = "AUTHENTICATE_CLIENT",
+  REFRESH_LATENCIES = "REFRESH_LATENCIES",
 }

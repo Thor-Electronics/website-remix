@@ -6,5 +6,5 @@ export default function TVControl({
   state,
   onUpdate: updateHandler,
 }: DeviceControlProps): ReactNode {
-  return "TV CONTROL"
+  return <>TV CONTROL</>
 }

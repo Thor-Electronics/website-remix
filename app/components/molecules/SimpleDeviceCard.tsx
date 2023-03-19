@@ -44,6 +44,9 @@ export const SimpleDeviceCard = ({
         state={d.state}
         onUpdate={handleControlUpdate}
       />
+      {d.isOnline && (
+        <div className="latency text-xs">Ping: {d.latency ?? 0}ms</div>
+      )}
     </div>
   )
 }
@@ -56,7 +59,7 @@ export const DeviceControlPanels: Record<DeviceTypes, Function> = {
   KEY4: KeyControl,
   LOCK: () => "LOCK CONTROL",
   BELL: () => "BELL CONTROL",
-  TV: () => TVControl,
+  TV: TVControl,
   LIGHT: () => "LIGHT CONTROL",
   IRHUB: () => "IR_HUB CONTROL",
   BLINDS: () => "BLINDS CONTROL",

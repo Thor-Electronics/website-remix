@@ -88,6 +88,33 @@ export const BuildingCard = ({
             ),
           }))
         }
+        if (msg.signal) {
+          console.log("📡 Signal: ", msg.signal)
+          if (!msg.payload) console.warn("Signal with empty payload!")
+          if (msg.signal === Signal.USER_INITIAL_DATA) {
+            setBuilding(prev => ({
+              ...prev,
+              devices: prev.devices?.map(d =>
+                msg.payload?.onlineDevices?.includes(d.id)
+                  ? { ...d, isOnline: true }
+                  : d
+              ),
+            }))
+          }
+          if (msg.signal === Signal.REFRESH_LATENCIES) {
+            if (!msg.payload) return
+            if (msg.payload.devices) {
+              setBuilding(prev => ({
+                ...prev,
+                devices: prev.devices?.map(d =>
+                  d.id in msg.payload?.devices!
+                    ? { ...d, latency: msg.payload?.devices![d.id] }
+                    : d
+                ),
+              }))
+            }
+          }
+        }
       },
       share: true,
       shouldReconnect: e => true,
