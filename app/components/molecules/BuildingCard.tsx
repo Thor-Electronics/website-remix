@@ -1,5 +1,5 @@
 import type { Building } from "~/types/Building"
-import DetailedDeviceCard, { OnlinePulse } from "./DetailedDeviceCard"
+import { OnlinePulse } from "../atoms/Pulse"
 import {
   CpuChipIcon,
   HashtagIcon,
@@ -91,6 +91,8 @@ export const BuildingCard = ({
         if (msg.signal) {
           console.log("📡 Signal: ", msg.signal)
           if (!msg.payload) console.warn("Signal with empty payload!")
+
+          /* Initial Data */
           if (msg.signal === Signal.USER_INITIAL_DATA) {
             setBuilding(prev => ({
               ...prev,
@@ -101,6 +103,27 @@ export const BuildingCard = ({
               ),
             }))
           }
+
+          /* Device connected / disconnected */
+          if (
+            msg.signal === Signal.DEVICE_CONNECTED ||
+            msg.signal === Signal.DEVICE_DISCONNECTED
+          ) {
+            setBuilding(prev => ({
+              ...prev,
+              devices: prev.devices?.map(d =>
+                d.id === msg.id
+                  ? {
+                      ...d,
+                      isOnline:
+                        msg.signal === Signal.DEVICE_CONNECTED ? true : false,
+                    }
+                  : d
+              ),
+            }))
+          }
+
+          /* Refresh Latencies */
           if (msg.signal === Signal.REFRESH_LATENCIES) {
             if (!msg.payload) return
             if (msg.payload.devices) {
@@ -134,11 +157,7 @@ export const BuildingCard = ({
 
   return (
     <div
-      className={`BuildingCard relative card transition-all duration-700 ${
-        connected
-          ? "!shadow-emerald-200 border border-emerald-500 border-b-[16px]"
-          : ""
-      } ${className}`}
+      className={`BuildingCard ${connected ? "online" : ""} ${className}`}
       {...props}
     >
       {connected && (

@@ -40,7 +40,7 @@ export default function Key4({
   }
 
   return (
-    <div className="switches">
+    <div className={`KeyControl`}>
       {t === DeviceTypes.KEY || t === DeviceTypes.KEY1 ? (
         <Switch checked={!!state.power} onChange={toggleSinglePower} />
       ) : (

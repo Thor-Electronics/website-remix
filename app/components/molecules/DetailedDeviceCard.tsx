@@ -16,6 +16,7 @@ import type { Device, DeviceActionCallbackReturnType } from "~/types/Device"
 import { DeviceState, DeviceTypes } from "~/types/Device"
 import { deviceActions } from "~/types/Device"
 import { IconButton } from "../atoms/Button"
+import OnlinePulse from "../atoms/Pulse"
 
 type Props = {
   data: Device
@@ -150,12 +151,5 @@ export const getDeviceIcon = (t: DeviceTypes | string, className?: string) => {
   }
   return icon
 }
-
-export const OnlinePulse = () => (
-  <div
-    className="OnlinePulse w-2 h-2 rounded-full bg-emerald-500"
-    title="Online"
-  ></div>
-)
 
 export default DetailedDeviceCard

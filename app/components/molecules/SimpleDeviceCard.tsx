@@ -5,7 +5,7 @@ import type {
   DeviceStateUpdateSender,
   DeviceTypes,
 } from "~/types/Device"
-import { OnlinePulse } from "./DetailedDeviceCard"
+import { OnlinePulse } from "../atoms/Pulse"
 import KeyControl from "./KeyControl"
 import TVControl from "./TVControl"
 
@@ -30,23 +30,42 @@ export const SimpleDeviceCard = ({
 
   return (
     <div
-      className={`SimpleDeviceCard bg-white border rounded-lg p-2 flex justify-between ${
-        d.isOnline ? "border-green-500" : "border-slate-300"
-      }`}
+      className={`SimpleDeviceCard ${d.isOnline ? "online" : ""}`}
       {...props}
     >
-      <h4 className="name font-medium text-start flex items-center gap-2">
-        {d.name}
-        {d.isOnline && <OnlinePulse />}
-      </h4>
-      <ControlPanel
-        type={d.type}
-        state={d.state}
-        onUpdate={handleControlUpdate}
-      />
-      {d.isOnline && (
-        <div className="latency text-xs">Ping: {d.latency ?? 0}ms</div>
-      )}
+      <div className="head">
+        <h4 className="name font-medium text-start flex items-center gap-2">
+          {d.name}
+          {d.isOnline && <OnlinePulse />}
+        </h4>
+        <ControlPanel
+          type={d.type}
+          state={d.state}
+          onUpdate={handleControlUpdate}
+        />
+      </div>
+      <div className="details">
+        {d.isOnline && d.latency !== undefined && (
+          <span
+            className={`ping ${
+              d.latency <= 10
+                ? "perfect"
+                : d.latency <= 30
+                ? "great"
+                : d.latency <= 70
+                ? "good"
+                : d.latency <= 200
+                ? "weak"
+                : d.latency <= 500
+                ? "very-week"
+                : "awful"
+            }`}
+            title="Ping"
+          >
+            {d.latency ?? "?"}ms
+          </span>
+        )}
+      </div>
     </div>
   )
 }
