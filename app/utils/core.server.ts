@@ -47,6 +47,8 @@ export const adminPostFirmware = (formData: FormData, token: string) =>
   ax
     .post(`${v1}/admin/firmware-updates`, formData, h(token))
     .then(extractResponseData)
+export const adminGetDevices = (token: string) =>
+  ax.get(`${v1}/admin/devices`, h(token)).then(extractResponseData)
 // fetch(`${ENV.CORE_URL + v1}/admin/firmware-updates`, {
 //   ...h(token),
 //   method: "POST",
@@ -69,6 +71,7 @@ const api = {
   adminGetUsers,
   adminGetFirmwares,
   adminPostFirmware,
+  adminGetDevices,
 }
 
 export default api

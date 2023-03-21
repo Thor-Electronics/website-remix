@@ -3,6 +3,7 @@ import { json, redirect } from "@remix-run/node"
 import { Form, Link, useActionData, useTransition } from "@remix-run/react"
 import Button, { TextButton } from "~/components/atoms/Button"
 import { createSession, getUserId } from "~/models/session.server"
+import type { User } from "~/types/User"
 import api from "~/utils/core.server"
 
 type ActionData = {
@@ -28,13 +29,14 @@ export const action: ActionFunction = async ({ request }) => {
   return await api
     .login({ email, password })
     .then(async res => {
-      const { user, token, message } = res.data
+      const { user: u, token, message } = res.data
+      const user: User = u
       const { session, redirect } = await createSession(
         user.id,
         token,
         // getClientIPAddress(request) ?? "",
         "",
-        !user.groups ? "/dashboard" : "/admin"
+        !user.roles ? "/dashboard" : "/admin"
       )
       return redirect
     })

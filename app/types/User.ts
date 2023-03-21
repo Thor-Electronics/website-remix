@@ -7,8 +7,8 @@ export type User = {
   created_at?: Date
   updated_at?: Date
   permissions?: Permission[]
-  permissionGroupIds?: string[]
-  groups?: Group[]
+  roleIds?: string[]
+  roles?: Role[]
 }
 
 export type Permission = {
@@ -16,7 +16,7 @@ export type Permission = {
   access: ACCESS
 }
 
-export type Group = {
+export type Role = {
   id: string
   name: string
   permissions: Permission[]

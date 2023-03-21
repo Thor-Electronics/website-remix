@@ -1,8 +1,11 @@
 import {
   ArrowRightOnRectangleIcon,
   BanknotesIcon,
+  BuildingOffice2Icon,
+  CpuChipIcon,
   CreditCardIcon,
   CubeTransparentIcon,
+  HomeModernIcon,
   QrCodeIcon,
   ShieldCheckIcon,
   SignalIcon,
@@ -30,8 +33,8 @@ type LoaderData = {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const user = await requireUser(request)
-  if (!user.groups)
+  const user: User = await requireUser(request)
+  if (!user.roles)
     throw new Response("access denied", {
       status: 403,
       statusText: "Forbidden",
@@ -62,7 +65,7 @@ export const Admin = () => {
   // console.log("Permissions: ", user.groups?.at(0)?.permissions)
 
   const userNavItems: FixedNavItem[] = generateNavItemsBasedOnUserPermission(
-    user.groups!.at(0)!.permissions
+    user.roles!.at(0)!.permissions
   )
 
   return (
@@ -108,9 +111,21 @@ const initialAdminNavItems: FixedNavItem[] = [
   },
   {
     icon: <ShieldCheckIcon className={iconClassNames} />,
-    label: "Admins",
+    label: "Admins", // manufacturers
     to: `${prefix}/admins`,
     permission: { context: PERMISSION_CONTEXT.ADMINS, access: ACCESS.VIEW },
+  },
+  {
+    icon: <BuildingOffice2Icon className={iconClassNames} />,
+    label: "Buildings",
+    to: `${prefix}/buildings`,
+    permission: { context: PERMISSION_CONTEXT.BUILDINGS, access: ACCESS.VIEW },
+  },
+  {
+    icon: <CpuChipIcon className={iconClassNames} />,
+    label: "Devices",
+    to: `${prefix}/devices`,
+    permission: { context: PERMISSION_CONTEXT.DEVICES, access: ACCESS.VIEW },
   },
   {
     icon: <CubeTransparentIcon className={iconClassNames} />, // ArrowPathIcon
