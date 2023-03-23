@@ -6,7 +6,9 @@ import {
   CreditCardIcon,
   CubeTransparentIcon,
   HomeModernIcon,
+  MapIcon,
   QrCodeIcon,
+  RectangleGroupIcon,
   ShieldCheckIcon,
   SignalIcon,
   StopIcon,
@@ -100,7 +102,7 @@ const iconClassNames = "w-8 h-8"
 const initialAdminNavItems: FixedNavItem[] = [
   {
     icon: <LogoIcon className={iconClassNames} />,
-    label: "Dashboard",
+    label: "Overview",
     to: `${prefix}/`,
   },
   {
@@ -126,6 +128,12 @@ const initialAdminNavItems: FixedNavItem[] = [
     label: "Devices",
     to: `${prefix}/devices`,
     permission: { context: PERMISSION_CONTEXT.DEVICES, access: ACCESS.VIEW },
+  },
+  {
+    icon: <MapIcon className={iconClassNames} />,
+    label: "Areas",
+    to: `${prefix}/areas`,
+    permission: { context: PERMISSION_CONTEXT.AREAS, access: ACCESS.VIEW },
   },
   {
     icon: <CubeTransparentIcon className={iconClassNames} />, // ArrowPathIcon
@@ -158,6 +166,12 @@ const initialAdminNavItems: FixedNavItem[] = [
     icon: <SignalIcon className={iconClassNames} />,
     label: "Network",
     to: `${prefix}/network`,
+    permission: { context: PERMISSION_CONTEXT.NETWORK, access: ACCESS.VIEW },
+  },
+  {
+    icon: <RectangleGroupIcon className={iconClassNames} />,
+    label: "Dashboard",
+    to: `/dashboard`,
     permission: { context: PERMISSION_CONTEXT.NETWORK, access: ACCESS.VIEW },
   },
   {
