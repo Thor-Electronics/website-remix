@@ -4,12 +4,6 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/solid"
 import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   IconButton,
   ListItemIcon,
   ListItemText,
@@ -18,32 +12,32 @@ import {
 } from "@mui/material"
 import type { GridColDef } from "@mui/x-data-grid"
 import { DataGrid } from "@mui/x-data-grid"
-import { json, type LoaderFunction } from "@remix-run/node"
-import { Link, useLoaderData } from "@remix-run/react"
-import axios from "axios"
+import type { LoaderFunction } from "@remix-run/node"
+import { json } from "@remix-run/node"
+import { useLoaderData } from "@remix-run/react"
 import type { ReactNode } from "react"
 import { useState } from "react"
 import { getSessionToken, requireUser } from "~/models/session.server"
-import type { Device } from "~/types/Device"
-import { type User } from "~/types/User"
+import type { Area } from "~/types/Area"
+import type { User } from "~/types/User"
 import api from "~/utils/core.server"
 import { timeAgo } from "~/utils/time"
 
 type LoaderData = {
   user: User
   token: string
-  devices: Device[]
+  areas: Area[]
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await requireUser(request)
   const token = await getSessionToken(request)
-  const devices = await api.adminGetDevices(token)
-  return json<LoaderData>({ user, token, devices })
+  const areas = await api.adminGetAreas(token)
+  return json<LoaderData>({ user, token, areas })
 }
 
-export const ManageDevices = () => {
-  const { user, token, devices } = useLoaderData<LoaderData>()
+export const ManageAreas = () => {
+  const { user, token, areas } = useLoaderData<LoaderData>()
   const [editOpen, setEditOpen] = useState<boolean>(false)
   const [editId, setEditId] = useState<string>("")
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false)
@@ -52,33 +46,15 @@ export const ManageDevices = () => {
   const openEditDialog = (dId: string) => {
     setEditOpen(true)
     setEditId(dId)
-    // Set edit state so that the dialog knows what to load ...
   }
   const openDeleteDialog = (dId: string) => {
     setDeleteOpen(true)
     setDeleteId(dId)
-    // Set delete state so that the dialog knows what to load?
   }
-  const closeEditDialog = () => setEditOpen(false)
-  const closeDeleteDialog = () => setDeleteOpen(false)
+  // Use remix like stuff with multiple actions in a different page to edit?
 
-  const deleteDevice = () => {
-    console.log("Device was deleted through API!")
-    axios
-      .delete(`${ENV.CORE_URL}/api/v1/devices/${deleteId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then(res => {
-        console.log("Device was deleted")
-        alert(`Device(${deleteId}) was deleted successfully`)
-        closeDeleteDialog()
-        window.location.reload()
-      })
-  }
-
-  const isUserAllowedToMutate = !!user.roles
-  const deviceOptions = {
-    edit: true,
+  const areaOptions = {
+    edit: true, // based on user roles/permissions
     onEdit: openEditDialog,
     onEditClose: closeEditDialog,
     delete: true,
@@ -87,76 +63,18 @@ export const ManageDevices = () => {
   }
 
   return (
-    <div className="ManageDevices admin-page">
-      <h2 className="page-title">Device Management</h2>
+    <div className="ManageAreas admin-page">
+      <h2 className="title">Area Management</h2>
       <div className="data-container">
         <DataGrid
-          rows={devices}
-          columns={generateGridColumns(deviceOptions)}
+          rows={areas}
+          columns={generateGridColumns(areaOptions)}
           autoHeight
-          // checkboxSelection={isUserAllowedToMutate}
-          // isRowSelectable={() => true}
         />
       </div>
-
-      {/* Edit Device Dialog */}
-      <Dialog
-        open={editOpen}
-        onClose={closeEditDialog}
-        aria-labelledby="edit-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="edit-dialog-title">
-          Edit "Device Name" as {user.roles![0].name}
-        </DialogTitle>
-        <DialogContent id="edit-dialog-description">
-          You'll be redirected to another page!
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={closeEditDialog}>Cancel</Button>
-          <Link to={`/devices/${editId}/edit`} prefetch="render">
-            <Button autoFocus variant="contained" color="primary">
-              Edit
-            </Button>
-          </Link>
-        </DialogActions>
-      </Dialog>
-
-      {/* Delete Device Dialog */}
-      <Dialog
-        open={deleteOpen}
-        onClose={closeDeleteDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          Delete "Device Name" as {user.roles![0].name}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Deleting this device will cause it{" "}
-            <b>being disconnected form Thor IoT Network</b>, which means it
-            needs to re-signup in in order to use the services. Are you sure you
-            want to delete this device? (The page will reload after the device
-            is deleted successfully)
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={closeDeleteDialog}>Cancel</Button>
-          <Button
-            onClick={deleteDevice}
-            autoFocus
-            variant="contained"
-            color="error"
-          >
-            DELETE
-          </Button>
-        </DialogActions>
-      </Dialog>
     </div>
   )
 }
-
 const generateGridColumns = (options: {
   // todo: create a type for it!
   edit: boolean
@@ -284,4 +202,4 @@ export const OptionsMenu = ({ options }: DeviceOptionsMenuProps) => {
   )
 }
 
-export default ManageDevices
+export default ManageAreas
