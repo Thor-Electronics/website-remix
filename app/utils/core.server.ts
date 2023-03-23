@@ -32,6 +32,10 @@ export const createBuilding = (token: string, data: object) =>
   ax.post(`${v1}/buildings/`, data, h(token)).then(extractResponseData)
 export const getBuildingDetails = (id: string, token: string) =>
   ax.get(`${v1}/buildings/${id}/`, h(token)).then(extractResponseData)
+export const getDeviceDetails = (id: string, token: string) =>
+  ax.get(`${v1}/devices/${id}/`, h(token)).then(extractResponseData)
+export const deleteDevice = (id: string, token: string) =>
+  ax.delete(`${v1}/devices/${id}/`, h(token)).then(extractResponseData)
 
 export const delay = (time: number) => ax.get(`${v1}/dev/delay?time=${time}`)
 export const dly = (t: number) =>
@@ -65,6 +69,8 @@ const api = {
   getUserBuildings,
   createBuilding,
   getBuildingDetails,
+  getDeviceDetails,
+  deleteDevice,
   delay,
   dly,
   adminGetInitialData,

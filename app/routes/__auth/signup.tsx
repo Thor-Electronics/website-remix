@@ -1,10 +1,5 @@
-import {
-  ActionFunction,
-  fetch,
-  json,
-  LoaderFunction,
-  redirect,
-} from "@remix-run/node"
+import type { ActionFunction, LoaderFunction } from "@remix-run/node"
+import { fetch, json, redirect } from "@remix-run/node"
 import {
   Form,
   Link,

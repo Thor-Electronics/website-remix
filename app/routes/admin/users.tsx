@@ -1,4 +1,5 @@
-import { DataGrid, GridColDef } from "@mui/x-data-grid"
+import type { GridColDef } from "@mui/x-data-grid"
+import { DataGrid } from "@mui/x-data-grid"
 import { json, type LoaderFunction } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 import { getSessionToken } from "~/models/session.server"

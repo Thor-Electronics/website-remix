@@ -2,9 +2,11 @@ import {
   ExclamationTriangleIcon,
   FolderPlusIcon,
 } from "@heroicons/react/24/solid"
-import { ActionFunction, json, LoaderFunction, redirect } from "@remix-run/node"
+import type { LoaderFunction } from "@remix-run/node"
+import { ActionFunction, json, redirect } from "@remix-run/node"
 import { useActionData, useLoaderData, useNavigation } from "@remix-run/react"
-import { FormEvent, useState } from "react"
+import type { FormEvent } from "react"
+import { useState } from "react"
 import Button from "~/components/atoms/Button"
 import { getSessionToken } from "~/models/session.server"
 import api from "~/utils/core.server"

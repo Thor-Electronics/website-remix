@@ -1,5 +1,6 @@
 import { FolderPlusIcon, PlusCircleIcon } from "@heroicons/react/24/solid"
-import { DataGrid, GridColDef } from "@mui/x-data-grid"
+import type { GridColDef } from "@mui/x-data-grid"
+import { DataGrid } from "@mui/x-data-grid"
 import { json, type LoaderFunction } from "@remix-run/node"
 import { Link, useLoaderData } from "@remix-run/react"
 import Button from "~/components/atoms/Button"
