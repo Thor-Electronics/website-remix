@@ -113,9 +113,9 @@ const initialAdminNavItems: FixedNavItem[] = [
   },
   {
     icon: <ShieldCheckIcon className={iconClassNames} />,
-    label: "Admins", // manufacturers
-    to: `${prefix}/admins`,
-    permission: { context: PERMISSION_CONTEXT.ADMINS, access: ACCESS.VIEW },
+    label: "Access Management", // manufacturers
+    to: `${prefix}/access-management`,
+    permission: { context: PERMISSION_CONTEXT.ACCESS, access: ACCESS.VIEW },
   },
   {
     icon: <BuildingOffice2Icon className={iconClassNames} />,
@@ -154,7 +154,7 @@ const initialAdminNavItems: FixedNavItem[] = [
     icon: <BanknotesIcon className={iconClassNames} />,
     label: "Plans",
     to: `${prefix}/plans`,
-    permission: { context: PERMISSION_CONTEXT.ADMINS, access: ACCESS.VIEW },
+    permission: { context: PERMISSION_CONTEXT.ACCESS, access: ACCESS.VIEW },
   },
   {
     icon: <CreditCardIcon className={iconClassNames} />,
