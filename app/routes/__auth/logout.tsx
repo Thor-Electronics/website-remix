@@ -17,7 +17,7 @@ export const LogoutPage = () => {
     >
       <p>Are you sure you want to log out?</p>
       <div className="flex justify-center items-center gap-4 my-4">
-        <TextButton className="bg-rose-500  gap-2.5">
+        <TextButton className="!bg-rose-500  gap-2.5">
           SIGN OUT
           <ArrowRightOnRectangleIcon className="w-5 h-5" />
         </TextButton>
