@@ -40,31 +40,11 @@ export const loader: LoaderFunction = async ({ request }) =>
 
 export default function Index() {
   const { session, user } = useLoaderData<LoaderData>()
+
   return (
     <main className="min-h-screen /max-w-6xl mx-auto text-center snap-mandatory snap-y">
-      <Hero />
+      <Hero user={user} />
       <About />
-      {/* <div className="buttons flex gap-2">
-        {user ? (
-          <>
-            <Link to="/dashboard" prefetch="render">
-              <TextButton className="!bg-primary">Dashboard</TextButton>
-            </Link>
-            <LogoutButton />
-          </>
-        ) : (
-          <>
-            <Link to="/signup" prefetch="render">
-              <TextButton className="!bg-primary">Signup</TextButton>
-            </Link>
-            <Link to="/login" prefetch="render">
-              <TextButton className="!bg-white !text-slate-700 dark:bg-slate-800 dark:text-white">
-                Login
-              </TextButton>
-            </Link>
-          </>
-        )}
-      </div> */}
       {/* <Footer /> */}
     </main>
   )
