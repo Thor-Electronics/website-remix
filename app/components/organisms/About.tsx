@@ -22,11 +22,11 @@ export const About = () => {
       <div className="line w-full bg-slate-700 sm:pt-0.5 max-w-3xl"></div>
       <div className="contact flex flex-col gap-4">
         <a
-          href="tel:+989357125443"
+          href="tel:+989123125443"
           className="phone text-slate-700 flex gap-2 items-center"
         >
           <PhoneIcon className="w-8" />
-          +98 935 712 5443
+          +98 912 312 5443
         </a>
         <a
           href="mailto:info@thor-electronics.com"
