@@ -66,7 +66,7 @@ export const DashboardIndex = () => {
 
   if (typeof window !== "undefined") {
     mostAccessedBuildingId =
-      localStorage.getItem(DASHBOARD_BUILDING_ID_KEY) ?? buildings[0].id
+      localStorage.getItem(DASHBOARD_BUILDING_ID_KEY) ?? buildings[0]?.id
   }
   buildings.map(b => {
     if (b.id === mostAccessedBuildingId) {
@@ -99,11 +99,18 @@ export const DashboardIndex = () => {
           ))}
         </div>
       </div> */}
-      <BuildingCard
-        data={b as Building}
-        socketToken={socketToken}
-        className="dashboard-friendly"
-      />
+      {b ? (
+        <BuildingCard
+          data={b as Building}
+          socketToken={socketToken}
+          className="dashboard-friendly"
+        />
+      ) : (
+        <p>
+          You don't have any building yet! Create a new one in the buildings
+          page
+        </p>
+      )}
     </div>
   )
 }
