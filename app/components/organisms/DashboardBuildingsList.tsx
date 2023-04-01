@@ -1,6 +1,6 @@
 import { BuildingOfficeIcon, HomeModernIcon } from "@heroicons/react/24/solid"
 import { Link } from "@remix-run/react"
-import { Building } from "~/types/Building"
+import type { Building } from "~/types/Building"
 import { TextButton } from "../atoms/Button"
 
 type Props = {
@@ -16,7 +16,7 @@ export const DashboardBuildingsList = ({ items: buildings }: Props) => (
       <Link
         to={b.id}
         key={b.id}
-        className="card flex-grow flex items-center justify-center 
+        className="card flex-grow flex items-center justify-center
           gap-2 text-center whitespace-nowrap text-slate-700 font-semibold"
         prefetch="render"
       >
@@ -26,8 +26,8 @@ export const DashboardBuildingsList = ({ items: buildings }: Props) => (
     ))}
     <Link to="./new" prefetch="intent">
       <TextButton
-        className="building bg-primary h-full rounded-lg 
-        shadow-lg whitespace-nowrap"
+        className="building bg-primary h-full rounded-lg
+        shadow-lg whitespace-nowrap !bg-blue-500"
       >
         <BuildingOfficeIcon className="h-5 w-5" />
         Create New Building
