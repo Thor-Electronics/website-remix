@@ -24,7 +24,11 @@ export const BuildingDetails = () => {
 
   return (
     <div className="BuildingDetails lg:max-w-5xl mx-auto">
-      <BuildingCard data={building as Building} socketToken={socketToken} />
+      <BuildingCard
+        key={building.id}
+        data={building as Building}
+        socketToken={socketToken}
+      />
     </div>
   )
 }
