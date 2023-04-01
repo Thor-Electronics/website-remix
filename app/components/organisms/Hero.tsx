@@ -18,7 +18,7 @@ export const Hero = ({ user, ...props }: Props) => (
     {/* <div className="tmp">
       <Link to="/">About</Link>
     </div> */}
-    <div className="buttons mt-4">
+    {/* <div className="buttons mt-4">
       {user ? (
         <div className="flex flex-col items-center justify-center gap-2">
           <p className="italic text-blue-100">
@@ -44,7 +44,7 @@ export const Hero = ({ user, ...props }: Props) => (
           </Link>
         </div>
       )}
-    </div>
+    </div> */}
     <div className="absolute bottom-4 w-full">
       <Copyright />
     </div>
