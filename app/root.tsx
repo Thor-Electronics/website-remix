@@ -1,10 +1,10 @@
-import {
+import type {
   ErrorBoundaryComponent,
   LinksFunction,
   LoaderFunction,
   MetaFunction,
-  Response,
 } from "@remix-run/node"
+import { Response } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import {
   Link,
@@ -37,6 +37,7 @@ function Document({
   children: React.ReactNode
   title?: string
 }) {
+  console.log("ROOT.TSX", children)
   return (
     <html lang="en">
       <head>

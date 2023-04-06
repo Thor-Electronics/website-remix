@@ -40,9 +40,10 @@ export const loader: LoaderFunction = async ({ request }) =>
 
 export default function Index() {
   const { session, user } = useLoaderData<LoaderData>()
+  console.log("_landing.index.tsx")
 
   return (
-    <main className="min-h-screen /max-w-6xl mx-auto text-center snap-mandatory snap-y">
+    <main className="h-full /max-w-6xl mx-auto text-center snap-mandatory snap-y">
       <Hero user={user} />
       <About />
       {/* <Footer /> */}
