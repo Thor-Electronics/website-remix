@@ -26,12 +26,12 @@ export const checkAuth = (token: string) => ax.get(`${v1}/auth/`, h(token))
 export const login = (data: object) => ax.post(`${v1}/auth/`, data)
 export const signup = (data: object) => ax.post(`${v1}/auth/signup/`, data)
 
-export const getUserBuildings = (token: string) =>
-  ax.get(`${v1}/buildings/`, h(token)).then(extractResponseData)
-export const createBuilding = (token: string, data: object) =>
-  ax.post(`${v1}/buildings/`, data, h(token)).then(extractResponseData)
-export const getBuildingDetails = (id: string, token: string) =>
-  ax.get(`${v1}/buildings/${id}/`, h(token)).then(extractResponseData)
+export const getUserGroups = (token: string) =>
+  ax.get(`${v1}/groups/`, h(token)).then(extractResponseData)
+export const createGroup = (token: string, data: object) =>
+  ax.post(`${v1}/groups/`, data, h(token)).then(extractResponseData)
+export const getGroupDetails = (id: string, token: string) =>
+  ax.get(`${v1}/groups/${id}/`, h(token)).then(extractResponseData)
 export const getDeviceDetails = (id: string, token: string) =>
   ax.get(`${v1}/devices/${id}/`, h(token)).then(extractResponseData)
 export const deleteDevice = (id: string, token: string) =>
@@ -68,9 +68,9 @@ const api = {
   checkAuth,
   login,
   signup,
-  getUserBuildings,
-  createBuilding,
-  getBuildingDetails,
+  getUserGroups,
+  createGroup,
+  getGroupDetails,
   getDeviceDetails,
   deleteDevice,
   delay,

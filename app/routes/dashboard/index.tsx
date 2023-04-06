@@ -5,16 +5,16 @@ import { useLoaderData } from "@remix-run/react"
 import { useState } from "react"
 import { ReadyState } from "react-use-websocket"
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket"
-import { BuildingCard } from "~/components/molecules/BuildingCard"
+import { GroupCard } from "~/components/molecules/GroupCard"
 import { SimpleDeviceCard } from "~/components/molecules/SimpleDeviceCard"
 import { getSessionToken } from "~/models/session.server"
-import type { Building } from "~/types/Building"
+import type { Group } from "~/types/Group"
 import type { Device } from "~/types/Device"
 import type { Message } from "~/types/Message"
 import { Signal } from "~/types/Message"
-import { getBuildingDetails, getUserBuildings } from "~/utils/core.server"
+import { getGroupDetails, getUserGroups } from "~/utils/core.server"
 
-const DASHBOARD_BUILDING_ID_KEY = ""
+const DASHBOARD_GROUP_ID_KEY = ""
 let WS_URI = "" // "ws://localhost:3993/api/v1/control/echo"
 const WS_STATUS_BADGES = {
   [ReadyState.CONNECTING]: {
@@ -40,18 +40,18 @@ const WS_STATUS_BADGES = {
 }
 
 type LoaderData = {
-  buildings: Building[]
+  groups: Group[]
   socketToken: string
-  building: Building
+  group: Group
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
   return json<LoaderData>({
-    buildings: await getUserBuildings(await getSessionToken(request)),
+    groups: await getUserGroups(await getSessionToken(request)),
     socketToken: await getSessionToken(request),
-    building: await getBuildingDetails(
+    group: await getGroupDetails(
       (
-        await getUserBuildings(await getSessionToken(request))
+        await getUserGroups(await getSessionToken(request))
       )[0]?.id,
       await getSessionToken(request)
     ),
@@ -59,29 +59,29 @@ export const loader: LoaderFunction = async ({ request }) => {
 }
 
 export const DashboardIndex = () => {
-  const { buildings, socketToken, building: b } = useLoaderData<LoaderData>()
+  const { groups, socketToken, group: b } = useLoaderData<LoaderData>()
 
-  let mostAccessedBuildingId = buildings[0]?.id
-  let mostAccessedBuilding: Building = buildings[0] as Building
+  let mostAccessedGroupId = groups[0]?.id
+  let mostAccessedGroup: Group = groups[0] as Group
 
   if (typeof window !== "undefined") {
-    mostAccessedBuildingId =
-      localStorage.getItem(DASHBOARD_BUILDING_ID_KEY) ?? buildings[0]?.id
+    mostAccessedGroupId =
+      localStorage.getItem(DASHBOARD_GROUP_ID_KEY) ?? groups[0]?.id
   }
-  buildings.map(b => {
-    if (b.id === mostAccessedBuildingId) {
-      mostAccessedBuilding = b as Building
+  groups.map(b => {
+    if (b.id === mostAccessedGroupId) {
+      mostAccessedGroup = b as Group
     }
   })
 
   return (
     <div className="DashboardIndex text-center">
       <h1 className="text-2xl font-bold mb-3 text-slate-400">Smart Home</h1>
-      {/* <div className="building-card">
-        <div className="building-head flex items-center gap-2 mb-4 text-slate-700">
+      {/* <div className="group-card">
+        <div className="group-head flex items-center gap-2 mb-4 text-slate-700">
           <HomeModernIcon className="w-12 h-12" />
-          <h3 className="building-name font-semibold text-xl">
-            {building.name}
+          <h3 className="group-name font-semibold text-xl">
+            {group.name}
           </h3>
           <span
             className={`status text-xs px-2 py-0.5 rounded-full text-white shadow-md ${connectionStatus.className}`}
@@ -90,7 +90,7 @@ export const DashboardIndex = () => {
           </span>
         </div>
         <div className="devices-card bg-slate-50 rounded-2xl mx-[-0.5em] p-2 shadow flex flex-col items-stretch gap-2">
-          {building.devices?.map(d => (
+          {group.devices?.map(d => (
             <SimpleDeviceCard
               key={d.id}
               data={d as Device}
@@ -100,16 +100,13 @@ export const DashboardIndex = () => {
         </div>
       </div> */}
       {b ? (
-        <BuildingCard
-          data={b as Building}
+        <GroupCard
+          data={b as Group}
           socketToken={socketToken}
           className="dashboard-friendly"
         />
       ) : (
-        <p>
-          You don't have any building yet! Create a new one in the buildings
-          page
-        </p>
+        <p>You don't have any group yet! Create a new one in the groups page</p>
       )}
     </div>
   )
@@ -117,11 +114,11 @@ export const DashboardIndex = () => {
 
 export default DashboardIndex
 
-// const [building, setBuilding] = useState<Building>(b as Building)
-// // console.log("Most Accessed Building is: ", mostAccessedBuilding.name)
+// const [group, setGroup] = useState<Group>(b as Group)
+// // console.log("Most Accessed Group is: ", mostAccessedGroup.name)
 // WS_URI = `${process.env.NODE_ENV === "production" ? "wss" : "ws"}://${
 //   ENV.CORE_ADDR
-// }/api/v1/control/manage/${mostAccessedBuilding.id}`
+// }/api/v1/control/manage/${mostAccessedGroup.id}`
 
 // // https://www.npmjs.com/package/react-use-websocket
 // const { sendJsonMessage, sendMessage, readyState } = useWebSocket(WS_URI, {
@@ -143,7 +140,7 @@ export default DashboardIndex
 //     const msg = JSON.parse(e.data) as Message
 //     if (msg.message) console.log("🔽 MESSAGE: ", msg.message)
 //     if (msg.update) {
-//       setBuilding(prev => ({
+//       setGroup(prev => ({
 //         ...prev,
 //         devices: prev.devices?.map(d =>
 //           d.id === msg.id ? { ...d, state: { ...d.state, ...msg.update } } : d

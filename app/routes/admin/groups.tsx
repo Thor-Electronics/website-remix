@@ -12,9 +12,9 @@ export const loader: LoaderFunction = async ({ request }) => {
   return json<LoaderData>({ user })
 }
 
-export const AdminBuildings = () => {
+export const AdminGroups = () => {
   const { user } = useLoaderData<LoaderData>() // <typeof loader>
-  return <div>BUILDINGS</div>
+  return <div>GROUPS</div>
 }
 
-export default AdminBuildings
+export default AdminGroups

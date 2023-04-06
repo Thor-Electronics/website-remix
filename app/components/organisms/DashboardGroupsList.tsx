@@ -1,18 +1,18 @@
 import { BuildingOfficeIcon, HomeModernIcon } from "@heroicons/react/24/solid"
 import { Link } from "@remix-run/react"
-import type { Building } from "~/types/Building"
+import type { Group } from "~/types/Group"
 import { TextButton } from "../atoms/Button"
 
 type Props = {
-  items: Building[]
+  items: Group[]
 }
 
-export const DashboardBuildingsList = ({ items: buildings }: Props) => (
+export const DashboardGroupsList = ({ items: groups }: Props) => (
   <div
-    className="DashboardBuildingsList flex flex-row gap-2 pt-2 pb-3
+    className="DashboardGroupsList flex flex-row gap-2 pt-2 pb-3
       w-full overflow-x-auto flex-nowrap"
   >
-    {buildings?.map(b => (
+    {groups?.map(b => (
       <Link
         to={b.id}
         key={b.id}
@@ -26,11 +26,11 @@ export const DashboardBuildingsList = ({ items: buildings }: Props) => (
     ))}
     <Link to="./new" prefetch="intent">
       <TextButton
-        className="building bg-primary h-full rounded-lg
+        className="group bg-primary h-full rounded-lg
         shadow-lg whitespace-nowrap !bg-blue-500"
       >
         <BuildingOfficeIcon className="h-5 w-5" />
-        Create New Building
+        Create New Group
       </TextButton>
     </Link>
   </div>

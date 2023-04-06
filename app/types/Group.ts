@@ -1,6 +1,6 @@
 import type { Device } from "./Device"
 
-export interface Building {
+export interface Group {
   id: string
   name: string
   address: string

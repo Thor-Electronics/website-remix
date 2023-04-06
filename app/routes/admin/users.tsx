@@ -48,7 +48,7 @@ const gridColumns: GridColDef[] = [
   { field: "email", headerName: "Email", width: 300 },
   { field: "phone", headerName: "Phone", width: 150 },
   { field: "username", headerName: "Username", width: 150 },
-  { field: "buildings", headerName: "Buildings", width: 100 },
+  { field: "groups", headerName: "Groups", width: 100 },
   { field: "devices", headerName: "Devices", width: 100 },
   {
     field: "created_at",

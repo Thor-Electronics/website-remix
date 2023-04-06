@@ -1,4 +1,5 @@
-import { ActionFunction, json, redirect } from "@remix-run/node"
+import type { ActionFunction } from "@remix-run/node"
+import { json, redirect } from "@remix-run/node"
 import { useActionData, useTransition } from "@remix-run/react"
 import Button, { TextButton } from "~/components/atoms/Button"
 import { getSessionData } from "~/models/session.server"
@@ -21,10 +22,10 @@ export const action: ActionFunction = async ({ request }) => {
   if (Object.values(errors).some(Boolean)) return json({ errors }, 400)
 
   return await api
-    .createBuilding(await (await getSessionData(request)).token, {
+    .createGroup(await (await getSessionData(request)).token, {
       name,
     })
-    .then(data => redirect(`/dashboard/buildings/${data.id}/`))
+    .then(data => redirect(`/dashboard/groups/${data.id}/`))
     .catch(err =>
       json<ActionData>(
         { errors: { name: err.response?.data.message } },
@@ -33,14 +34,14 @@ export const action: ActionFunction = async ({ request }) => {
     )
 }
 
-export const NewBuilding = () => {
+export const NewGroup = () => {
   const actionData = useActionData<ActionData>()
   const transition = useTransition()
 
   return (
     <div>
       <form className="flex flex-col gap-4" method="post">
-        <h1 className="title font-bold text-2xl text-center">New Building</h1>
+        <h1 className="title font-bold text-2xl text-center">New Group</h1>
         <div className="inputs flex flex-col gap-4">
           <label className="label">
             Name:{" "}
@@ -62,7 +63,7 @@ export const NewBuilding = () => {
           >
             {transition.state === "submitting"
               ? "Creating ..."
-              : "Create New Building"}
+              : "Create New Group"}
           </TextButton>
         </div>
       </form>
@@ -70,4 +71,4 @@ export const NewBuilding = () => {
   )
 }
 
-export default NewBuilding
+export default NewGroup

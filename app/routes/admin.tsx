@@ -119,9 +119,9 @@ const initialAdminNavItems: FixedNavItem[] = [
   },
   {
     icon: <BuildingOffice2Icon className={iconClassNames} />,
-    label: "Buildings",
-    to: `${prefix}/buildings`,
-    permission: { context: PERMISSION_CONTEXT.BUILDINGS, access: ACCESS.VIEW },
+    label: "Groups",
+    to: `${prefix}/groups`,
+    permission: { context: PERMISSION_CONTEXT.GROUPS, access: ACCESS.VIEW },
   },
   {
     icon: <CpuChipIcon className={iconClassNames} />,

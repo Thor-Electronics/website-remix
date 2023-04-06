@@ -147,11 +147,11 @@ export const AdminOTAUpdatesNew = () => {
           />
         </label>
         <label className="label">
-          Building ID: (Optional)
+          Group ID: (Optional)
           <input
             type="text"
-            name="buildingId"
-            placeholder="Leave empty for global building scope"
+            name="groupId"
+            placeholder="Leave empty for global group scope"
           />
         </label>
         <label className="label">

@@ -6,15 +6,15 @@
   /*  */
 }
 
-.DashboardBuildings {
+.DashboardGroups {
   /* */
 }
 
-.DashboardBuildingsList {
+.DashboardGroupsList {
   /*  */
 }
 
-.BuildingCard {
+.GroupCard {
   @apply text-slate-700 gap-3 relative bg-white
   rounded-xl px-2 py-3 shadow-md;
   display: grid;

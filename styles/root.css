@@ -1,12 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* https://tailwindcss.com/docs/functions-and-directives */
 
 /* Light Color Palette */
 
-* {
-  box-sizing: border-box;
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
 }
+
+@layer components {
+}
+
+@layer utilities {
+}
+/* theme(), screen() */
+
 html {
   --primary-color: #3b82f6;
   --secondary-color: #6366f1;
@@ -59,8 +70,8 @@ label {
 }
 
 .NavigatingScreen {
-  @apply fixed top-0 left-0 bottom-0 right-0 
-    text-white text-2xl bg-emerald-400 flex 
+  @apply fixed top-0 left-0 bottom-0 right-0
+    text-white text-2xl bg-emerald-400 flex
     flex-col items-center justify-center font-bold italic; //pointer-events-none
   /* display: none; */
   /* opacity: 0; */

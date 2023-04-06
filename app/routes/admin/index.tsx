@@ -14,7 +14,7 @@ import api from "~/utils/core.server"
 type LoaderData = {
   user: User
   users: { count: number; online: number; grouped: number }
-  buildings: { count: number; online: number }
+  groups: { count: number; online: number }
   devices: { count: number; online: number; verified: number }
   totalRevenue: number
   latestOTAUpdates: {
@@ -44,7 +44,7 @@ export const loader: LoaderFunction = async ({ request }) => {
       online: d.users.online,
       grouped: d.users.grouped,
     },
-    buildings: { count: d.buildings.count, online: d.buildings.online },
+    groups: { count: d.groups.count, online: d.groups.online },
     devices: {
       count: d.devices.count,
       online: d.devices.online,
@@ -69,7 +69,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 }
 
 export const AdminIndex = () => {
-  const { user, users, buildings, devices, totalRevenue, latestOTAUpdates } =
+  const { user, users, groups, devices, totalRevenue, latestOTAUpdates } =
     useLoaderData<LoaderData>() // <typeof loader>
 
   const cards = [
@@ -82,8 +82,8 @@ export const AdminIndex = () => {
     {
       color: "sky",
       icon: <HomeModernIcon />,
-      title: "Buildings",
-      text: buildings.count.toLocaleString(),
+      title: "Groups",
+      text: groups.count.toLocaleString(),
     },
     {
       color: "pink",

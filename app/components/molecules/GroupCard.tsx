@@ -1,4 +1,4 @@
-import type { Building } from "~/types/Building"
+import type { Group } from "~/types/Group"
 import { OnlinePulse } from "../atoms/Pulse"
 import {
   CpuChipIcon,
@@ -20,7 +20,7 @@ import { ReadyState } from "react-use-websocket"
 import { SimpleDeviceCard } from "./SimpleDeviceCard"
 
 export interface Props extends HTMLAttributes<HTMLElement> {
-  data: Building
+  data: Group
   // updateHandler: Function
   socketToken: string
   // connected?: number
@@ -49,13 +49,13 @@ export const WS_STATUS_BADGES = {
   },
 }
 
-export const BuildingCard = ({
+export const GroupCard = ({
   data: b,
   socketToken,
   className,
   ...props
 }: Props) => {
-  const [building, setBuilding] = useState<Building>(b)
+  const [group, setGroup] = useState<Group>(b)
   const { sendJsonMessage, sendMessage, readyState } = useWebSocket(
     `${process.env.NODE_ENV === "production" ? "wss" : "ws"}://${
       ENV.CORE_ADDR
@@ -79,7 +79,7 @@ export const BuildingCard = ({
         const msg = JSON.parse(e.data) as Message
         if (msg.message) console.log("🔽 MESSAGE: ", msg.message)
         if (msg.update) {
-          setBuilding(prev => ({
+          setGroup(prev => ({
             ...prev,
             devices: prev.devices?.map(d =>
               d.id === msg.id
@@ -94,7 +94,7 @@ export const BuildingCard = ({
 
           /* Initial Data */
           if (msg.signal === Signal.USER_INITIAL_DATA) {
-            setBuilding(prev => ({
+            setGroup(prev => ({
               ...prev,
               devices: prev.devices?.map(d =>
                 msg.payload?.onlineDevices?.includes(d.id)
@@ -109,7 +109,7 @@ export const BuildingCard = ({
             msg.signal === Signal.DEVICE_CONNECTED ||
             msg.signal === Signal.DEVICE_DISCONNECTED
           ) {
-            setBuilding(prev => ({
+            setGroup(prev => ({
               ...prev,
               devices: prev.devices?.map(d =>
                 d.id === msg.id
@@ -127,7 +127,7 @@ export const BuildingCard = ({
           if (msg.signal === Signal.REFRESH_LATENCIES) {
             if (!msg.payload) return
             if (msg.payload.devices) {
-              setBuilding(prev => ({
+              setGroup(prev => ({
                 ...prev,
                 devices: prev.devices?.map(d =>
                   d.id in msg.payload?.devices!
@@ -153,11 +153,11 @@ export const BuildingCard = ({
     return true
   }
 
-  const buildingActionIconClassNames = "w-5 h-5 sm:w-4 sm:h-4"
+  const groupActionIconClassNames = "w-5 h-5 sm:w-4 sm:h-4"
 
   return (
     <div
-      className={`BuildingCard ${connected ? "online" : ""} ${className}`}
+      className={`GroupCard ${connected ? "online" : ""} ${className}`}
       {...props}
     >
       {connected && (
@@ -171,7 +171,7 @@ export const BuildingCard = ({
       <div
         className={`name font-semibold flex flex-row items-center justify-start gap-2 text-lg`}
       >
-        <span>{building.name}</span>
+        <span>{group.name}</span>
         <div className="plan-badge rounded-full shadow bg-primary text-white text-xs px-1.5">
           Pro
         </div>
@@ -183,9 +183,9 @@ export const BuildingCard = ({
         {connected && <OnlinePulse />}
       </div>
       <div className="body flex flex-col gap-2 text-sm">
-        {building.devices && (
+        {group.devices && (
           <div className="devices">
-            {building.devices?.map(d => (
+            {group.devices?.map(d => (
               <SimpleDeviceCard key={d.id} data={d} onUpdate={handleUpdate} />
               // <DetailedDeviceCard
               //   key={d.id}
@@ -201,47 +201,47 @@ export const BuildingCard = ({
           title="address"
         >
           <MapPinIcon className="w-6 h-6" />
-          {building.address}
+          {group.address}
         </div>
         <div className="id font-mono text-slate-600 hover:text-emerald-600 row">
           <HashtagIcon className="w-6 h-6" />
-          {building.id}
+          {group.id}
         </div>
         <div className="device-count row">
           <CpuChipIcon className="w-6 h-6" />
-          {building.devices?.length || 0} Devices
+          {group.devices?.length || 0} Devices
         </div>
         <div className="plugin-count row">
           {/* <SquaresPlusIcon className="w-6 h-6" /> */}
           <PuzzlePieceIcon className="w-6 h-6" />
-          {building.plugins?.length || 0} Plugins
+          {group.plugins?.length || 0} Plugins
         </div>
         <div className="options flex flex-row gap-2 justify-end items-center text-base">
           <Button
             className="p-2 rounded-xl sm:rounded-lg sm:px-3 sm:py-1
                  !bg-emerald-500 shadow-emerald-300 sm:shadow-emerald-200"
-            title="Add New Device to the Building"
+            title="Add New Device to the Group"
           >
-            <SquaresPlusIcon className={buildingActionIconClassNames} />
+            <SquaresPlusIcon className={groupActionIconClassNames} />
             <span className="text hidden sm:block">Add Device</span>
           </Button>
 
           <Button
             className="p-2 rounded-xl sm:rounded-lg sm:px-3 sm:py-1
                  !bg-blue-500 shadow-blue-300 sm:shadow-blue-200"
-            title="Edit the Building"
+            title="Edit the Group"
           >
-            <PencilIcon className={buildingActionIconClassNames} />
-            <span className="text hidden sm:block">Edit Building</span>
+            <PencilIcon className={groupActionIconClassNames} />
+            <span className="text hidden sm:block">Edit Group</span>
           </Button>
 
           <Button
             className="p-2 rounded-xl sm:rounded-lg sm:px-3 sm:py-1
                  !bg-red-500 shadow-red-300 sm:shadow-red-200"
-            title="Disable the Building"
+            title="Disable the Group"
           >
-            <TrashIcon className={buildingActionIconClassNames} />
-            <span className="text hidden sm:block">Disable Building</span>
+            <TrashIcon className={groupActionIconClassNames} />
+            <span className="text hidden sm:block">Disable Group</span>
           </Button>
         </div>
       </div>

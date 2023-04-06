@@ -68,8 +68,8 @@ const initialUserNavItems: FixedNavItem[] = [
   },
   {
     icon: <BuildingOffice2Icon className={iconClassNames} />,
-    label: "Buildings",
-    to: `${prefix}/buildings`,
+    label: "Groups",
+    to: `${prefix}/groups`,
   },
   {
     icon: <Cog6ToothIcon className={iconClassNames} />,
