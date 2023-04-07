@@ -18,12 +18,13 @@ export const action: ActionFunction = async ({ request }) => {
   const name = form.get("name")
   const typ = form.get("type")
 
+  console.log("RESULT", typ, Object.values(GroupType).includes(typ))
+
   let errors = {
     name: typeof name !== "string" && "Name must be string!",
-    // TODO: check this out! Doesn't work!
     typ:
       (typeof typ !== "string" && "Type must be string!") ||
-      (typ && typ?.toString() in GroupType && "Invalid group type!"),
+      (!Object.values(GroupType).includes(typ) && "Invalid group type!"),
   }
 
   if (Object.values(errors).some(Boolean)) return json({ errors }, 400)
