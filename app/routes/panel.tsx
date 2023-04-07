@@ -171,7 +171,7 @@ const initialAdminNavItems: FixedNavItem[] = [
   {
     icon: <RectangleGroupIcon className={iconClassNames} />,
     label: "Dashboard",
-    to: `/dashboard`,
+    to: `/app`,
     permission: { context: PERMISSION_CONTEXT.NETWORK, access: ACCESS.VIEW },
   },
   {

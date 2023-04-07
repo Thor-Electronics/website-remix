@@ -9,7 +9,7 @@ import type {
   ErrorBoundaryComponent,
 } from "@remix-run/node"
 import { json } from "@remix-run/node"
-import { Link, Outlet, useLoaderData } from "@remix-run/react"
+import { Link, Outlet, useLoaderData, useRouteError } from "@remix-run/react"
 import { Copyright } from "~/components/atoms/Copyright"
 import { LogoIcon } from "~/components/atoms/LogoIcon"
 import type { FixedNavItem } from "~/components/organisms/FixedNav"
@@ -43,7 +43,8 @@ export const Dashboard = () => {
   )
 }
 
-export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
+export const ErrorBoundary: ErrorBoundaryComponent = () => {
+  const error = useRouteError()
   console.error("Error in dashboard: ", error)
   return (
     <div className="h-screen bg-rose-100 shadow-lg text-rose-600 p-4">
@@ -58,7 +59,7 @@ export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
   )
 }
 
-const prefix = "/dashboard"
+const prefix = "/app"
 const iconClassNames = "w-8 h-8"
 const initialUserNavItems: FixedNavItem[] = [
   {

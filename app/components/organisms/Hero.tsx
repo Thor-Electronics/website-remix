@@ -24,7 +24,7 @@ export const Hero = ({ user, ...props }: Props) => (
           <p className="italic text-blue-100">
             Welcome <b>{user.name}</b>!
           </p>
-          <Link to="/dashboard">
+          <Link to="/app">
             <TextButton className="!bg-white !text-blue-500 !rounded-lg py-1.5 px-4 font-semibold">
               Dashboard
             </TextButton>

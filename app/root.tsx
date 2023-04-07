@@ -49,7 +49,7 @@ function Document({
         <title>{title}</title>
         <Links />
       </head>
-      <body className="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200">
+      <body className="min-h-screen bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200">
         {/* <NavigatingScreen /> */}
         {children}
         <ScrollRestoration />
@@ -90,17 +90,25 @@ export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
   if (isRouteErrorResponse(error)) {
     console.log("Is Route Error Response: ", error)
     return (
-      <div className="error">
-        <h2>Oops</h2>
-        <p>Status: {error.status}</p>
-        <p>{error.data.message}</p>
-      </div>
+      <Document title="Oops!">
+        <div className="error-container h-screen error bg-rose-100 text-rose-600 flex flex-col gap-6 items-center justify-center text-center">
+          <LogoIcon className="w-32" />
+          <h2 className="text-2xl font-bold">Something Went Wrong!</h2>
+          <p className="font-lg font-semibold">
+            {error.status} | {error.statusText}
+          </p>
+          <p className="text-sm">
+            There was an error loading this page!{" "}
+            {error.data?.message ?? error.data}
+          </p>
+        </div>
+      </Document>
     )
   }
 
   let errMsg = "Unknown Error"
   // TODO: detect error type check
-  // if (error.message !== undefined) {
+  // if (error && error.message && error.message !== undefined) {
   //   errMsg = error.message
   // }
   return (

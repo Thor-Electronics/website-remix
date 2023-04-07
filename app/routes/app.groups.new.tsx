@@ -25,7 +25,7 @@ export const action: ActionFunction = async ({ request }) => {
     .createGroup(await (await getSessionData(request)).token, {
       name,
     })
-    .then(data => redirect(`/dashboard/groups/${data.id}/`))
+    .then(data => redirect(`/app/groups/${data.id}/`))
     .catch(err =>
       json<ActionData>(
         { errors: { name: err.response?.data.message } },

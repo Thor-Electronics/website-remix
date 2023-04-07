@@ -48,7 +48,7 @@ export const action: ActionFunction = async ({ request }) => {
         token,
         // getClientIPAddress(request) ?? "",
         "",
-        "/dashboard"
+        "/app"
       )
       return redirect
     })
@@ -62,7 +62,7 @@ export const action: ActionFunction = async ({ request }) => {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  if (await getUserId(request)) return redirect("/dashboard")
+  if (await getUserId(request)) return redirect("/app")
   return null
 }
 

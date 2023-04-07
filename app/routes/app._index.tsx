@@ -42,37 +42,41 @@ const WS_STATUS_BADGES = {
 type LoaderData = {
   groups: Group[]
   socketToken: string
-  group: Group
+  // userSettings
+  // group: Group
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
+  console.log("app._index.tsx")
   return json<LoaderData>({
     groups: await getUserGroups(await getSessionToken(request)),
     socketToken: await getSessionToken(request),
-    group: await getGroupDetails(
-      (
-        await getUserGroups(await getSessionToken(request))
-      )[0]?.id,
-      await getSessionToken(request)
-    ),
+    // User Settings
+    // group: await getGroupDetails(
+    //   (
+    //     await getUserGroups(await getSessionToken(request))
+    //   )[0]?.id,
+    //   await getSessionToken(request)
+    // ),
   })
 }
 
 export const DashboardIndex = () => {
-  const { groups, socketToken, group: b } = useLoaderData<LoaderData>()
+  const { groups, socketToken /*, group: b*/ } = useLoaderData<LoaderData>()
+  // Default group from user settings
 
-  let mostAccessedGroupId = groups[0]?.id
-  let mostAccessedGroup: Group = groups[0] as Group
+  // let mostAccessedGroupId = groups[0]?.id
+  // let mostAccessedGroup: Group = groups[0] as Group
 
-  if (typeof window !== "undefined") {
-    mostAccessedGroupId =
-      localStorage.getItem(DASHBOARD_GROUP_ID_KEY) ?? groups[0]?.id
-  }
-  groups.map(b => {
-    if (b.id === mostAccessedGroupId) {
-      mostAccessedGroup = b as Group
-    }
-  })
+  // if (typeof window !== "undefined") {
+  //   mostAccessedGroupId =
+  //     localStorage.getItem(DASHBOARD_GROUP_ID_KEY) ?? groups[0]?.id
+  // }
+  // groups.map(b => {
+  //   if (b.id === mostAccessedGroupId) {
+  //     mostAccessedGroup = b as Group
+  //   }
+  // })
 
   return (
     <div className="DashboardIndex text-center">
@@ -99,9 +103,9 @@ export const DashboardIndex = () => {
           ))}
         </div>
       </div> */}
-      {b ? (
+      {groups.length > 0 ? (
         <GroupCard
-          data={b as Group}
+          data={groups[0] as Group}
           socketToken={socketToken}
           className="dashboard-friendly"
         />
