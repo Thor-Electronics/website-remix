@@ -1,6 +1,11 @@
-import type { ErrorBoundaryComponent, LoaderFunction } from "@remix-run/node"
-import { json } from "@remix-run/node"
-import { useLoaderData } from "@remix-run/react"
+import type { LoaderFunction } from "@remix-run/node"
+import { Response, json } from "@remix-run/node"
+import {
+  isRouteErrorResponse,
+  useLoaderData,
+  useRouteError,
+} from "@remix-run/react"
+import type { V2_ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules"
 import invariant from "tiny-invariant"
 import { GroupCard } from "~/components/molecules/GroupCard"
 import { getSessionToken } from "~/models/session.server"
@@ -15,7 +20,11 @@ type LoaderData = {
 export const loader: LoaderFunction = async ({ request, params }) => {
   invariant(params.groupId, "Group not found")
   const token = await getSessionToken(request)
-  const group = await api.getGroupDetails(params.groupId, token)
+  const group = await api.getGroupDetails(params.groupId, token).catch(err => {
+    if (err.response?.status === 404) {
+      throw new Response("Group Not Found", { status: 404 })
+    }
+  })
   return json<LoaderData>({ group, socketToken: token })
 }
 
@@ -33,14 +42,25 @@ export const GroupDetails = () => {
   )
 }
 
-export const ErrorBoundary: ErrorBoundaryComponent = ({ error }) => {
+export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
+  const error = useRouteError()
   console.error("Error in $groupId: ", error)
   return (
     <div className="GroupDetails bg-rose-100 shadow-lg text-rose-600 p-4 rounded-xl">
       <h1 className="text-lg font-bold mb-4">Error Loading Group Details!</h1>
       <p className="error">
-        Something happened when we tried to show you the group details.{" "}
-        {error.message}
+        {isRouteErrorResponse(error) ? (
+          <span>
+            {error.status === 404
+              ? "404 | Group Not Found"
+              : `${error.status} | ${error.statusText}`}
+          </span>
+        ) : (
+          <span>
+            Something happened when we tried to show you the group details.{" "}
+            {error.message}
+          </span>
+        )}
       </p>
     </div>
   )

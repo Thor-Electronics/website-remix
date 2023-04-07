@@ -1,6 +1,6 @@
 import type { ActionFunction } from "@remix-run/node"
 import { json, redirect } from "@remix-run/node"
-import { useActionData, useNavigation, useTransition } from "@remix-run/react"
+import { useActionData, useNavigation } from "@remix-run/react"
 import Button, { TextButton } from "~/components/atoms/Button"
 import { getSessionData } from "~/models/session.server"
 import { GroupType } from "~/types/Group"

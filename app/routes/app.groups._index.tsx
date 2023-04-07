@@ -1,3 +1,14 @@
+import type { LoaderFunction } from "@remix-run/node"
+import { redirect } from "@remix-run/node"
+import { getSessionToken } from "~/models/session.server"
+import api from "~/utils/core.server"
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const groups = await api.getUserGroups(await getSessionToken(request))
+  if (groups.length === 0) return redirect("new")
+  return
+}
+
 export const DashboardGroupsIndex = () => {
   return (
     <div className="DashboardGroupsIndex">
