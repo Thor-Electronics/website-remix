@@ -8,3 +8,10 @@ export interface Group {
   devices?: Device[]
   plugins: object[] // Plugin[]
 }
+
+export enum GroupType {
+  Building = "BUILDING",
+  Factory = "FACTORY",
+  Vehicle = "VEHICLE",
+  Farm = "FARM",
+}

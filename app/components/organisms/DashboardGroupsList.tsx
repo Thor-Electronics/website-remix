@@ -24,10 +24,10 @@ export const DashboardGroupsList = ({ items: groups }: Props) => (
         {b.name}
       </Link>
     ))}
-    <Link to="./new" prefetch="intent">
+    <Link to="./new" prefetch="intent" className="grow">
       <TextButton
         className="group bg-primary h-full rounded-lg
-        shadow-lg whitespace-nowrap !bg-blue-500"
+        shadow-lg whitespace-nowrap !bg-blue-500 w-full"
       >
         <BuildingOfficeIcon className="h-5 w-5" />
         Create New Group

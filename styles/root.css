@@ -9,6 +9,23 @@
   * {
     box-sizing: border-box;
   }
+
+  /* So that we can override in component layer */
+  .btn {
+    @apply py-1 px-3;
+
+    &:disabled {
+      filter: blur(0.75px) grayscale(60%);
+    }
+  }
+
+  a {
+    color: var(--links-color);
+
+    &.link {
+      @apply hover:underline;
+    }
+  }
 }
 
 @layer components {
@@ -25,20 +42,6 @@ html {
   --links-color: #2563eb;
   scroll-behaviour: smooth;
   /* scroll-snap-type: y mandatory; */
-}
-
-a {
-  color: var(--links-color);
-
-  &.link {
-    @apply hover:underline;
-  }
-}
-
-.btn {
-  &:disabled {
-    filter: blur(0.75px) grayscale(60%);
-  }
 }
 
 .card {

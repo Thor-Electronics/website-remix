@@ -1,6 +1,6 @@
 import { HomeModernIcon } from "@heroicons/react/24/solid"
 import type { LoaderFunction } from "@remix-run/node"
-import { json } from "@remix-run/node"
+import { json, redirect } from "@remix-run/node"
 import { useLoaderData } from "@remix-run/react"
 import { useState } from "react"
 import { ReadyState } from "react-use-websocket"
@@ -13,6 +13,7 @@ import type { Device } from "~/types/Device"
 import type { Message } from "~/types/Message"
 import { Signal } from "~/types/Message"
 import { getGroupDetails, getUserGroups } from "~/utils/core.server"
+import { DASHBOARD_PREFIX } from "./app"
 
 const DASHBOARD_GROUP_ID_KEY = ""
 let WS_URI = "" // "ws://localhost:3993/api/v1/control/echo"
@@ -47,10 +48,15 @@ type LoaderData = {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  console.log("app._index.tsx")
+  const token = await getSessionToken(request)
+  const groups = await getUserGroups(token)
+  if (groups.length === 0) {
+    console.log("User has no groups, redirecting to create page")
+    return redirect(DASHBOARD_PREFIX + "/groups/new")
+  }
   return json<LoaderData>({
-    groups: await getUserGroups(await getSessionToken(request)),
-    socketToken: await getSessionToken(request),
+    groups,
+    socketToken: token,
     // User Settings
     // group: await getGroupDetails(
     //   (

@@ -1,22 +1,29 @@
 import type { ActionFunction } from "@remix-run/node"
 import { json, redirect } from "@remix-run/node"
-import { useActionData, useTransition } from "@remix-run/react"
+import { useActionData, useNavigation, useTransition } from "@remix-run/react"
 import Button, { TextButton } from "~/components/atoms/Button"
 import { getSessionData } from "~/models/session.server"
+import { GroupType } from "~/types/Group"
 import api from "~/utils/core.server"
 
 type ActionData = {
   errors: {
     name?: string
+    typ?: string
   }
 }
 
 export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData()
   const name = form.get("name")
+  const typ = form.get("type")
 
   let errors = {
     name: typeof name !== "string" && "Name must be string!",
+    // TODO: check this out! Doesn't work!
+    typ:
+      (typeof typ !== "string" && "Type must be string!") ||
+      (typ && typ?.toString() in GroupType && "Invalid group type!"),
   }
 
   if (Object.values(errors).some(Boolean)) return json({ errors }, 400)
@@ -24,6 +31,7 @@ export const action: ActionFunction = async ({ request }) => {
   return await api
     .createGroup(await (await getSessionData(request)).token, {
       name,
+      type: typ,
     })
     .then(data => redirect(`/app/groups/${data.id}/`))
     .catch(err =>
@@ -36,12 +44,14 @@ export const action: ActionFunction = async ({ request }) => {
 
 export const NewGroup = () => {
   const actionData = useActionData<ActionData>()
-  const transition = useTransition()
+  const navigation = useNavigation()
 
   return (
     <div>
       <form className="flex flex-col gap-4" method="post">
-        <h1 className="title font-bold text-2xl text-center">New Group</h1>
+        <h1 className="title font-bold text-2xl text-center">
+          Create New Group
+        </h1>
         <div className="inputs flex flex-col gap-4">
           <label className="label">
             Name:{" "}
@@ -55,13 +65,26 @@ export const NewGroup = () => {
               required
             />
           </label>
+          <label className="label">
+            Type:{" "}
+            {actionData?.errors.typ && (
+              <span className="error">{actionData.errors.typ}</span>
+            )}
+            <select name="type" required className="mt-2 bg-white">
+              {Object.entries(GroupType).map(([k, v]) => (
+                <option key={k} value={v}>
+                  {k}
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
         <div className="buttons">
           <TextButton
             className="w-full !bg-primary"
-            disabled={transition.state === "submitting"}
+            disabled={navigation.state === "submitting"}
           >
-            {transition.state === "submitting"
+            {navigation.state === "submitting"
               ? "Creating ..."
               : "Create New Group"}
           </TextButton>

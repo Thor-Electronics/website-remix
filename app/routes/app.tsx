@@ -3,11 +3,7 @@ import {
   BuildingOffice2Icon,
   ArrowRightOnRectangleIcon,
 } from "@heroicons/react/24/solid"
-import type {
-  LoaderFunction,
-  LinksFunction,
-  ErrorBoundaryComponent,
-} from "@remix-run/node"
+import type { LoaderFunction, LinksFunction } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { Link, Outlet, useLoaderData, useRouteError } from "@remix-run/react"
 import { Copyright } from "~/components/atoms/Copyright"
@@ -17,6 +13,9 @@ import { DashboardNav } from "~/components/organisms/DashboardNav"
 import { requireUser } from "~/models/session.server"
 import dashboardStyles from "~/styles/dashboard.css"
 import type { User } from "~/types/User"
+import type { V2_ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules"
+
+export const DASHBOARD_PREFIX = "/app"
 
 type LoaderData = {
   user: User
@@ -43,7 +42,7 @@ export const Dashboard = () => {
   )
 }
 
-export const ErrorBoundary: ErrorBoundaryComponent = () => {
+export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
   const error = useRouteError()
   console.error("Error in dashboard: ", error)
   return (
@@ -59,23 +58,22 @@ export const ErrorBoundary: ErrorBoundaryComponent = () => {
   )
 }
 
-const prefix = "/app"
 const iconClassNames = "w-8 h-8"
 const initialUserNavItems: FixedNavItem[] = [
   {
     icon: <LogoIcon className={iconClassNames} />,
     label: "Dashboard",
-    to: `${prefix}/`,
+    to: `${DASHBOARD_PREFIX}/`,
   },
   {
     icon: <BuildingOffice2Icon className={iconClassNames} />,
     label: "Groups",
-    to: `${prefix}/groups`,
+    to: `${DASHBOARD_PREFIX}/groups`,
   },
   {
     icon: <Cog6ToothIcon className={iconClassNames} />,
     label: "Settings",
-    to: `${prefix}/settings`,
+    to: `${DASHBOARD_PREFIX}/settings`,
   },
   {
     icon: <ArrowRightOnRectangleIcon className={iconClassNames} />,
