@@ -4,6 +4,8 @@ export type User = {
   email: string
   phone?: string
   username?: string
+  emailVerifiedAt?: Date
+  phoneVerifiedAt?: Date
   created_at?: Date
   updated_at?: Date
   permissions?: Permission[]

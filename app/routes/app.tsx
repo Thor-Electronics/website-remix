@@ -2,6 +2,7 @@ import {
   Cog6ToothIcon,
   BuildingOffice2Icon,
   ArrowRightOnRectangleIcon,
+  UserCircleIcon,
 } from "@heroicons/react/24/solid"
 import type { LoaderFunction, LinksFunction } from "@remix-run/node"
 import { json } from "@remix-run/node"
@@ -45,14 +46,24 @@ export const Dashboard = () => {
 export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
   const error = useRouteError()
   console.error("Error in dashboard: ", error)
+
   return (
-    <div className="h-screen bg-rose-100 shadow-lg text-rose-600 p-4">
+    <div className="h-screen bg-rose-100 shadow-lg text-rose-600 p-4 flex items-center justify-center flex-col">
+      <LogoIcon className="w-24" />
       <h1 className="text-lg font-bold mb-4">Error Loading Dashboard!</h1>
-      <p className="error">
-        Something happened when we tried to show your dashboard. {error.message}
+      <p className="font-lg font-semibold">
+        {error.status} | {error.statusText}
       </p>
-      <Link to="/" className="font-semibold !underline" prefetch="render">
-        Back to home
+      <p className="error">
+        Something happened when we tried to show your dashboard.{" "}
+        {error.data?.message ?? error.data}
+      </p>
+      <Link
+        to={DASHBOARD_PREFIX}
+        className="font-semibold !underline"
+        prefetch="render"
+      >
+        Back to the app
       </Link>
     </div>
   )
@@ -74,6 +85,11 @@ const initialUserNavItems: FixedNavItem[] = [
     icon: <Cog6ToothIcon className={iconClassNames} />,
     label: "Settings",
     to: `${DASHBOARD_PREFIX}/settings`,
+  },
+  {
+    icon: <UserCircleIcon className={iconClassNames} />,
+    label: "Account",
+    to: `${DASHBOARD_PREFIX}/profile`,
   },
   {
     icon: <ArrowRightOnRectangleIcon className={iconClassNames} />,

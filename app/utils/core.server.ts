@@ -25,6 +25,8 @@ export const healthCheck = () => ax.get("/health/")
 export const checkAuth = (token: string) => ax.get(`${v1}/auth/`, h(token))
 export const login = (data: object) => ax.post(`${v1}/auth/`, data)
 export const signup = (data: object) => ax.post(`${v1}/auth/signup/`, data)
+export const getUserProfile = (token: string) => ax.get(`${v1}/auth/profile`, h(token))
+export const updateUserProfile = (token: string) => ax.patch(`${v1}/auth/profile`, h(token))
 
 export const getUserGroups = (token: string) =>
   ax.get(`${v1}/groups/`, h(token)).then(extractResponseData)
@@ -68,6 +70,8 @@ const api = {
   checkAuth,
   login,
   signup,
+  getUserProfile,
+  updateUserProfile,
   getUserGroups,
   createGroup,
   getGroupDetails,
