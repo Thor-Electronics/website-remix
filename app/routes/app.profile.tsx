@@ -8,7 +8,7 @@ import {
 } from "@heroicons/react/24/solid"
 import type { ActionFunction, LoaderFunction } from "@remix-run/node"
 import { Response, json } from "@remix-run/node"
-import { Link, useLoaderData } from "@remix-run/react"
+import { Form, Link, useLoaderData } from "@remix-run/react"
 import Badge, { SuccessBadge } from "~/components/atoms/Badge"
 import { TextButton } from "~/components/atoms/Button"
 import { getSessionToken, requireUser } from "~/models/session.server"
@@ -58,12 +58,14 @@ export default function DashboardProfile() {
           <AtSymbolIcon />
           {u.email}
           {!isEmailVerified ? (
-            <Link to="/auth/send-email-verification" prefetch="render">
-              <Badge>
-                <ShieldExclamationIcon />
-                Not Verified
-              </Badge>
-            </Link>
+            <Form action="/send-email-verification" method="POST">
+              <button type="submit">
+                <Badge>
+                  <ShieldExclamationIcon />
+                  Not Verified
+                </Badge>
+              </button>
+            </Form>
           ) : (
             <SuccessBadge>
               <ShieldCheckIcon />
@@ -77,12 +79,14 @@ export default function DashboardProfile() {
           <PhoneIcon />
           {u.phone}
           {!isPhoneVerified ? (
-            <Link to="/auth/send-phone-verification" prefetch="render">
-              <Badge>
-                <ShieldExclamationIcon />
-                Not Verified
-              </Badge>
-            </Link>
+            <Form action="/send-phone-verification" method="POST">
+              <button type="submit">
+                <Badge>
+                  <ShieldExclamationIcon />
+                  Not Verified
+                </Badge>
+              </button>
+            </Form>
           ) : (
             <SuccessBadge>
               <ShieldCheckIcon />

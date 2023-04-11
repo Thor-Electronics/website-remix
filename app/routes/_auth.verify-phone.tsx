@@ -36,7 +36,7 @@ export const action: ActionFunction = async ({ request }) => {
     .verifyPhone(await getSessionToken(request), { code })
     .then(async res => {
       const { message } = res.data
-      console.log("Sent phone verification code: ", message)
+      console.log("Success fully verified user's phone!: ", message)
       return redirect(DASHBOARD_PREFIX)
     })
     .catch(err => {
