@@ -41,6 +41,8 @@ export const verifyEmail = (token: string, data: object) =>
   ax.post(`${v1}/auth/verify-email`, data, h(token))
 export const resetPassword = (data: object) =>
   ax.post(`${v1}/auth/reset-password`, data) // TODO: could take token instead of passing data?
+export const updateProfile = (token: string, data: object) =>
+  ax.patch(`${v1}/auth/profile`, data, h(token))
 
 export const getUserGroups = (token: string) =>
   ax.get(`${v1}/groups/`, h(token)).then(extractResponseData)
@@ -92,6 +94,7 @@ const api = {
   verifyPhone,
   verifyEmail,
   resetPassword,
+  updateProfile,
   getUserGroups,
   createGroup,
   getGroupDetails,

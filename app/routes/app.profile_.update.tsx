@@ -1,20 +1,28 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node"
-import { Response, json } from "@remix-run/node"
-import { Link, useLoaderData } from "@remix-run/react"
-import Badge from "~/components/atoms/Badge"
+import { json, redirect } from "@remix-run/node"
+import { Link, useActionData, useLoaderData } from "@remix-run/react"
 import { TextButton } from "~/components/atoms/Button"
-import { requireUser } from "~/models/session.server"
+import { getSessionToken, requireUser } from "~/models/session.server"
 import type { User } from "~/types/User"
 import { DASHBOARD_PREFIX } from "./app"
-import { useState } from "react"
 import {
   AtSymbolIcon,
   PhoneIcon,
   UserCircleIcon,
 } from "@heroicons/react/24/solid"
+import api from "~/utils/core.server"
 
 type LoaderData = {
   user: User
+}
+
+type ActionData = {
+  errors?: {
+    message?: string
+    name?: string
+    email?: string
+    phone?: string
+  }
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -25,31 +33,71 @@ export const loader: LoaderFunction = async ({ request }) => {
 }
 
 export const action: ActionFunction = async ({ request }) => {
-  throw new Response("Not Implemented!", {
-    status: 501,
-    statusText: "Method Not Implemented",
-  })
+  const user = await requireUser(request)
+  const form = await request.formData()
+  const name = form.get("name")
+  const email = form.get("email")
+  const phone = form.get("phone")
+
+  let errors = {
+    name: typeof name !== "string" && "Name must be string",
+    email: typeof email !== "string" && "Email must be string",
+    phone: typeof phone !== "string" && "Phone must be string",
+  }
+
+  if (Object.values(errors).some(Boolean)) return json({ errors }, 400)
+
+  return await api
+    .updateProfile(await getSessionToken(request), { name, email, phone })
+    .then(res => {
+      console.log("RES: ", res.data)
+      console.log(
+        `Successfully updated user ${user.name} ${
+          res.data?.id ?? user.id
+        } profile: ${res.status}`
+      )
+      return redirect(DASHBOARD_PREFIX + "/profile")
+    })
+    .catch(err => {
+      const msg =
+        err.response?.data?.message ?? err.response?.data ?? err.response ?? err
+      console.error(`Failed to update user ${user.id} profile: ${msg}`)
+      return json<ActionData>({ errors: { message: msg } })
+    })
 }
 
 export default function DashboardProfile() {
   const { user } = useLoaderData()
+  const actionData = useActionData<ActionData>()
   const u: User = user
-  // const [data, setData] = useState<User>(u)
 
   return (
     <div className="UserProfileUpdate">
       <form method="POST">
+        {actionData?.errors?.message && (
+          <p className="text-rose-600">Error: {actionData.errors.message}</p>
+        )}
         <div className="form-row">
           <UserCircleIcon />
           <label>
-            Name:
+            Name:{" "}
+            {actionData?.errors?.name && (
+              <span className="error text-rose-600">
+                {actionData.errors.name}
+              </span>
+            )}
             <input name="name" defaultValue={u.name} required maxLength={63} />
           </label>
         </div>
         <div className="form-row">
           <AtSymbolIcon />
           <label>
-            Email:
+            Email:{" "}
+            {actionData?.errors?.email && (
+              <span className="error text-rose-600">
+                {actionData.errors.email}
+              </span>
+            )}
             <input
               name="email"
               defaultValue={u.email}
@@ -62,7 +110,12 @@ export default function DashboardProfile() {
         <div className="form-row">
           <PhoneIcon />
           <label>
-            Phone Number:
+            Phone Number:{" "}
+            {actionData?.errors?.phone && (
+              <span className="error text-rose-600">
+                {actionData.errors.phone}
+              </span>
+            )}
             <input
               name="phone"
               defaultValue={u.phone}
