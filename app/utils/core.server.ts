@@ -25,14 +25,22 @@ export const healthCheck = () => ax.get("/health/")
 export const checkAuth = (token: string) => ax.get(`${v1}/auth/`, h(token))
 export const login = (data: object) => ax.post(`${v1}/auth/`, data)
 export const signup = (data: object) => ax.post(`${v1}/auth/signup/`, data)
-export const getUserProfile = (token: string) => ax.get(`${v1}/auth/profile`, h(token))
-export const updateUserProfile = (token: string) => ax.patch(`${v1}/auth/profile`, h(token))
-export const sendPhoneVerification = (data: object) => ax.post(`${v1}/auth/send-phone-verification`, data)
-export const sendEmailVerification = (data: object) => ax.post(`${v1}/auth/send-email-verification`, data)
-export const sendPasswordReset = (data: object) => ax.post(`${v1}/auth/send-password-reset`, data)
-export const verifyPhone = (data: object) => ax.post(`${v1}/auth/verify-phone`, data)
-export const verifyEmail = (data: object) => ax.post(`${v1}/auth/verify-email`, data)
-export const resetPassword = (data: object) => ax.post(`${v1}/auth/reset-password`, data)
+export const getUserProfile = (token: string) =>
+  ax.get(`${v1}/auth/profile`, h(token))
+export const updateUserProfile = (token: string) =>
+  ax.patch(`${v1}/auth/profile`, h(token))
+export const sendPhoneVerification = (token: string) =>
+  ax.post(`${v1}/auth/send-phone-verification`, h(token))
+export const sendEmailVerification = (token: string) =>
+  ax.post(`${v1}/auth/send-email-verification`, h(token))
+export const sendPasswordReset = (data: object) =>
+  ax.post(`${v1}/auth/send-password-reset`, data) // TODO: could take token instead of passing data?
+export const verifyPhone = (token: string, data: object) =>
+  ax.post(`${v1}/auth/verify-phone`, data, h(token))
+export const verifyEmail = (token: string, data: object) =>
+  ax.post(`${v1}/auth/verify-email`, data, h(token))
+export const resetPassword = (data: object) =>
+  ax.post(`${v1}/auth/reset-password`, data) // TODO: could take token instead of passing data?
 
 export const getUserGroups = (token: string) =>
   ax.get(`${v1}/groups/`, h(token)).then(extractResponseData)
