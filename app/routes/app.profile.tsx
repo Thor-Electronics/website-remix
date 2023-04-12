@@ -58,7 +58,11 @@ export default function DashboardProfile() {
           <AtSymbolIcon />
           {u.email}
           {!isEmailVerified ? (
-            <Form action="/send-email-verification" method="POST">
+            <Form
+              action="/send-email-verification"
+              method="POST"
+              reloadDocument
+            >
               <button type="submit">
                 <Badge>
                   <ShieldExclamationIcon />
@@ -67,10 +71,11 @@ export default function DashboardProfile() {
               </button>
             </Form>
           ) : (
-            <SuccessBadge>
+            <Badge className="bg-green-500">
+              {/* SuccessBadge */}
               <ShieldCheckIcon />
               Verified
-            </SuccessBadge>
+            </Badge>
           )}
         </h3>
       )}
@@ -79,8 +84,12 @@ export default function DashboardProfile() {
           <PhoneIcon />
           {u.phone}
           {!isPhoneVerified ? (
-            <Form action="/send-phone-verification" method="POST">
-              <button type="submit">
+            <Form
+              action="/send-phone-verification"
+              method="POST"
+              reloadDocument
+            >
+              <button type="submit" name="submission">
                 <Badge>
                   <ShieldExclamationIcon />
                   Not Verified
@@ -88,10 +97,11 @@ export default function DashboardProfile() {
               </button>
             </Form>
           ) : (
-            <SuccessBadge>
+            <Badge className="bg-green-500">
+              {/* SuccessBadge */}
               <ShieldCheckIcon />
               Verified
-            </SuccessBadge>
+            </Badge>
           )}
         </h3>
       )}

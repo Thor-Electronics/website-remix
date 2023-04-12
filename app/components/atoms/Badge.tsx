@@ -1,16 +1,15 @@
-import type { HTMLAttributes } from "react"
+import type { DetailedHTMLProps, HTMLAttributes } from "react"
 
-interface IProps extends HTMLAttributes<HTMLSpanElement> {
-  //
-}
+interface IProps
+  extends DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement> {}
 
-export default function Badge({ children, ...props }: IProps) {
+export default function Badge({ className, children, ...props }: IProps) {
   return (
-    <span className={`Badge ${props.className}`} {...props}>
+    <span className={`Badge ${className ?? ""}`} {...props}>
       {children}
     </span>
   )
 }
 
 export const SuccessBadge = (props: IProps) =>
-  Badge({ className: "bg-green-500" + props.className, ...props })
+  Badge({ ...props, className: "bg-green-500" + props.className ?? "" })

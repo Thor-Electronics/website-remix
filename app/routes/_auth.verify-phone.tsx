@@ -37,7 +37,7 @@ export const action: ActionFunction = async ({ request }) => {
     .then(async res => {
       const { message } = res.data
       console.log("Success fully verified user's phone!: ", message)
-      return redirect(DASHBOARD_PREFIX)
+      return redirect(DASHBOARD_PREFIX + "/profile")
     })
     .catch(err => {
       console.error(

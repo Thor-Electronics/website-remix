@@ -30,7 +30,7 @@ export const getUserProfile = (token: string) =>
 export const updateUserProfile = (token: string) =>
   ax.patch(`${v1}/auth/profile`, h(token))
 export const sendPhoneVerification = (token: string) =>
-  ax.post(`${v1}/auth/send-phone-verification`, h(token))
+  ax.post(`${v1}/auth/send-phone-verification`, {}, h(token))
 export const sendEmailVerification = (token: string) =>
   ax.post(`${v1}/auth/send-email-verification`, h(token))
 export const sendPasswordReset = (data: object) =>

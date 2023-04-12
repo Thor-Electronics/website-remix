@@ -9,13 +9,14 @@ type ActionData = {
 }
 
 export const action: ActionFunction = async ({ request }) => {
-  await requireUser(request)
+  const user = await requireUser(request)
+  console.log(`Sending phone verification ${user.name} ${user.phone}`)
   return await api
     .sendPhoneVerification(await getSessionToken(request))
     .then(async res => {
       const { message } = res.data
       console.log("Sent phone verification code: ", message)
-      return redirect(DASHBOARD_PREFIX)
+      return redirect("/verify-phone")
     })
     .catch(err => {
       console.error(
