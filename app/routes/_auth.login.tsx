@@ -36,7 +36,7 @@ export const action: ActionFunction = async ({ request }) => {
         token,
         // getClientIPAddress(request) ?? "",
         "",
-        !user.roles ? "/app" : "/admin"
+        !user.roles ? "/app" : "/panel"
       )
       return redirect
     })

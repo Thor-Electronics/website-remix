@@ -97,48 +97,48 @@ export const CatchBoundary = () => {
   )
 }
 
-const prefix = "/admin"
+export const PANEL_PREFIX = "/panel"
 const iconClassNames = "w-8 h-8"
 const initialAdminNavItems: FixedNavItem[] = [
   {
     icon: <LogoIcon className={iconClassNames} />,
     label: "Overview",
-    to: `${prefix}/`,
+    to: `${PANEL_PREFIX}/`,
   },
   {
     icon: <UsersIcon className={iconClassNames} />,
     label: "Users",
-    to: `${prefix}/users`,
+    to: `${PANEL_PREFIX}/users`,
     permission: { context: PERMISSION_CONTEXT.USERS, access: ACCESS.VIEW },
   },
   {
     icon: <ShieldCheckIcon className={iconClassNames} />,
     label: "Access Management", // manufacturers
-    to: `${prefix}/access-management`,
+    to: `${PANEL_PREFIX}/access-management`,
     permission: { context: PERMISSION_CONTEXT.ACCESS, access: ACCESS.VIEW },
   },
   {
     icon: <BuildingOffice2Icon className={iconClassNames} />,
     label: "Groups",
-    to: `${prefix}/groups`,
+    to: `${PANEL_PREFIX}/groups`,
     permission: { context: PERMISSION_CONTEXT.GROUPS, access: ACCESS.VIEW },
   },
   {
     icon: <CpuChipIcon className={iconClassNames} />,
     label: "Devices",
-    to: `${prefix}/devices`,
+    to: `${PANEL_PREFIX}/devices`,
     permission: { context: PERMISSION_CONTEXT.DEVICES, access: ACCESS.VIEW },
   },
   {
     icon: <MapIcon className={iconClassNames} />,
     label: "Areas",
-    to: `${prefix}/areas`,
+    to: `${PANEL_PREFIX}/areas`,
     permission: { context: PERMISSION_CONTEXT.AREAS, access: ACCESS.VIEW },
   },
   {
     icon: <CubeTransparentIcon className={iconClassNames} />, // ArrowPathIcon
     label: "OTA Updates",
-    to: `${prefix}/ota-updates`,
+    to: `${PANEL_PREFIX}/ota-updates`,
     permission: {
       context: PERMISSION_CONTEXT.FIRMWARE_UPDATE,
       access: ACCESS.VIEW,
@@ -147,25 +147,25 @@ const initialAdminNavItems: FixedNavItem[] = [
   {
     icon: <QrCodeIcon className={iconClassNames} />, // FingerPrintIcon,BanknotesIcon
     label: "Tokens", // subscriptions?
-    to: `${prefix}/tokens`,
+    to: `${PANEL_PREFIX}/tokens`,
     permission: { context: PERMISSION_CONTEXT.TOKENS, access: ACCESS.VIEW },
   },
   {
     icon: <BanknotesIcon className={iconClassNames} />,
     label: "Plans",
-    to: `${prefix}/plans`,
+    to: `${PANEL_PREFIX}/plans`,
     permission: { context: PERMISSION_CONTEXT.ACCESS, access: ACCESS.VIEW },
   },
   {
     icon: <CreditCardIcon className={iconClassNames} />,
     label: "Invoices",
-    to: `${prefix}/invoices`,
+    to: `${PANEL_PREFIX}/invoices`,
     permission: { context: PERMISSION_CONTEXT.PAYMENTS, access: ACCESS.VIEW },
   },
   {
     icon: <SignalIcon className={iconClassNames} />,
     label: "Network",
-    to: `${prefix}/network`,
+    to: `${PANEL_PREFIX}/network`,
     permission: { context: PERMISSION_CONTEXT.NETWORK, access: ACCESS.VIEW },
   },
   {
