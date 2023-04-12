@@ -52,9 +52,19 @@ export default function DashboardProfile() {
   return (
     <div className="UserProfile">
       <UserCircleIcon className="w-32" />
-      <h1 className="name">{u.name}</h1>
+      <h1 className="name flex items-center justify-center gap-2">
+        {u.name}
+        {u.roles && (
+          <div
+            className="roles bg-teal-500 text-white p-0.5 rounded-full"
+            title={u.roles.map(r => r.name).join(", ")}
+          >
+            <UserCircleIcon className="w-6" />
+          </div>
+        )}
+      </h1>
       {u.email && (
-        <h3 className="email">
+        <h3 className="email flex items-center justify-center gap-4">
           <AtSymbolIcon />
           {u.email}
           {!isEmailVerified ? (
@@ -117,9 +127,13 @@ export default function DashboardProfile() {
         </Link>
       </div>
       {u.roles && (
-        <div className="roles">
+        <div className="roles text-xs">
           {u.roles.map(r => (
-            <span key={r.name} className="role">
+            <span
+              key={r.name}
+              className="role bg-teal-500 text-white rounded-md py-0.5 px-2 flex items-center gap-1"
+            >
+              <ShieldCheckIcon className="w-4" />
               {r.name}
             </span>
           ))}
