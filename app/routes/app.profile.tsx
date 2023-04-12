@@ -64,7 +64,7 @@ export default function DashboardProfile() {
         )}
       </h1>
       {u.email && (
-        <h3 className="email flex items-center justify-center gap-4">
+        <h3 className="email flex flex-col items-center justify-center gap-4 sm:flex-row">
           <AtSymbolIcon />
           {u.email}
           {!isEmailVerified ? (
