@@ -6,7 +6,7 @@ import api from "~/utils/core.server"
 export const loader: LoaderFunction = async ({ request }) => {
   const groups = await api.getUserGroups(await getSessionToken(request))
   if (groups.length === 0) return redirect("new")
-  return
+  return ""
 }
 
 export const DashboardGroupsIndex = () => {
