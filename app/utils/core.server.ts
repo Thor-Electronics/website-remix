@@ -32,7 +32,7 @@ export const updateUserProfile = (token: string) =>
 export const sendPhoneVerification = (token: string) =>
   ax.post(`${v1}/auth/send-phone-verification`, {}, h(token))
 export const sendEmailVerification = (token: string) =>
-  ax.post(`${v1}/auth/send-email-verification`, h(token))
+  ax.post(`${v1}/auth/send-email-verification`, {}, h(token))
 export const sendPasswordReset = (data: object) =>
   ax.post(`${v1}/auth/send-password-reset`, data) // TODO: could take token instead of passing data?
 export const verifyPhone = (token: string, data: object) =>
