@@ -15,16 +15,13 @@ export const Hero = ({ user, ...props }: Props) => (
       Thor Electronics
     </h1>
     {/* <h3 className="slogan">Live Smart</h3> */}
-    {/* <div className="tmp">
-      <Link to="/">About</Link>
-    </div> */}
-    {/* <div className="buttons mt-4">
+    <div className="buttons mt-4">
       {user ? (
         <div className="flex flex-col items-center justify-center gap-2">
           <p className="italic text-blue-100">
             Welcome <b>{user.name}</b>!
           </p>
-          <Link to="/dashboard">
+          <Link to="/app">
             <TextButton className="!bg-white !text-blue-500 !rounded-lg py-1.5 px-4 font-semibold">
               Dashboard
             </TextButton>
@@ -32,7 +29,7 @@ export const Hero = ({ user, ...props }: Props) => (
         </div>
       ) : (
         <div className="flex gap-2">
-          <Link to="/login">
+          {/* <Link to="/login">
             <TextButton className="!bg-transparent border border-white !rounded-lg py-1.5 px-4 font-semibold">
               Login
             </TextButton>
@@ -41,10 +38,10 @@ export const Hero = ({ user, ...props }: Props) => (
             <TextButton className="!bg-white !text-blue-500 border !rounded-lg py-1.5 px-4 font-semibold">
               Sign Up
             </TextButton>
-          </Link>
+          </Link> */}
         </div>
       )}
-    </div> */}
+    </div>
     <div className="absolute bottom-4 w-full">
       <Copyright />
     </div>

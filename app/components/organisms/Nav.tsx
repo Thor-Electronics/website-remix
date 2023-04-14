@@ -12,7 +12,7 @@ export const Nav = ({ user, ...props }: Props) => {
     <div className="buttons flex gap-2">
       {user ? (
         <>
-          <Link to="/dashboard" prefetch="render">
+          <Link to="/app" prefetch="render">
             <TextButton className="!bg-primary">Dashboard</TextButton>
           </Link>
           <LogoutButton />

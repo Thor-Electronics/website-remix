@@ -6,15 +6,15 @@
   /*  */
 }
 
-.DashboardBuildings {
+.DashboardGroups {
   /* */
 }
 
-.DashboardBuildingsList {
+.DashboardGroupsList {
   /*  */
 }
 
-.BuildingCard {
+.GroupCard {
   @apply text-slate-700 gap-3 relative bg-white
   rounded-xl px-2 py-3 shadow-md;
   display: grid;
@@ -162,4 +162,42 @@
 .KeyControl {
   display: flex;
   flex-direction: column;
+}
+
+.UserProfile {
+  @apply flex flex-col items-center justify-center gap-8;
+  min-height: 95vh;
+
+  h3 {
+    @apply flex items-center justify-between gap-4;
+    & > svg {
+      @apply w-12;
+    }
+  }
+  .name {
+    @apply text-2xl font-bold;
+  }
+}
+
+.UserProfileUpdate {
+  @apply flex flex-col items-center justify-center;
+  min-height: 95vh;
+
+  form {
+    @apply flex flex-col gap-8 items-stretch justify-center
+    max-w-sm mx-auto;
+    .form-row {
+      @apply flex justify-center items-center gap-4;
+      svg {
+        @apply w-12 h-12 text-slate-500;
+      }
+      label {
+        @apply grow;
+      }
+    }
+    .options {
+      @apply flex flex-row-reverse items-center justify-start
+      gap-2;
+    }
+  }
 }

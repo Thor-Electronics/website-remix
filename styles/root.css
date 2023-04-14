@@ -1,12 +1,42 @@
+@import "./components/Badge.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* https://tailwindcss.com/docs/functions-and-directives */
 
 /* Light Color Palette */
 
-* {
-  box-sizing: border-box;
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  /* So that we can override in component layer */
+  .btn {
+    @apply py-1 px-3;
+
+    &:disabled {
+      filter: blur(0.75px) grayscale(60%);
+    }
+  }
+
+  a {
+    color: var(--links-color);
+
+    &.link {
+      @apply hover:underline;
+    }
+  }
 }
+
+@layer components {
+}
+
+@layer utilities {
+}
+/* theme(), screen() */
+
 html {
   --primary-color: #3b82f6;
   --secondary-color: #6366f1;
@@ -14,20 +44,6 @@ html {
   --links-color: #2563eb;
   scroll-behaviour: smooth;
   /* scroll-snap-type: y mandatory; */
-}
-
-a {
-  color: var(--links-color);
-
-  &.link {
-    @apply hover:underline;
-  }
-}
-
-.btn {
-  &:disabled {
-    filter: blur(0.75px) grayscale(60%);
-  }
 }
 
 .card {
@@ -46,21 +62,26 @@ a {
 
 input,
 select {
-  @apply w-full border border-slate-400 rounded-md py-1 px-2 shadow;
+  @apply w-full border border-slate-400 rounded-lg py-1.5 px-2.5 shadow;
+}
+
+select {
+  @apply bg-white;
 }
 
 label {
   .error {
     @apply text-red-600 italic font-bold;
   }
-  input {
+  input,
+  select {
     @apply mt-2;
   }
 }
 
 .NavigatingScreen {
-  @apply fixed top-0 left-0 bottom-0 right-0 
-    text-white text-2xl bg-emerald-400 flex 
+  @apply fixed top-0 left-0 bottom-0 right-0
+    text-white text-2xl bg-emerald-400 flex
     flex-col items-center justify-center font-bold italic; //pointer-events-none
   /* display: none; */
   /* opacity: 0; */

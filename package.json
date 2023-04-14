@@ -24,7 +24,6 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.6.0",
     "react-use-websocket": "^4.2.0",
-    "remix-utils": "^3.3.0",
     "tiny-invariant": "^1.2.0"
   },
   "devDependencies": {

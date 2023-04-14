@@ -1,0 +1,9 @@
+.Badge {
+  @apply bg-slate-500 text-xs py-0.5 px-2 text-white
+  rounded-full whitespace-nowrap flex-nowrap flex
+  items-center justify-center gap-1;
+
+  svg {
+    @apply w-4;
+  }
+}

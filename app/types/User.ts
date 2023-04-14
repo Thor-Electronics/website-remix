@@ -4,6 +4,8 @@ export type User = {
   email: string
   phone?: string
   username?: string
+  emailVerifiedAt?: Date
+  phoneVerifiedAt?: Date
   created_at?: Date
   updated_at?: Date
   permissions?: Permission[]
@@ -35,7 +37,7 @@ export enum ACCESS {
 export enum PERMISSION_CONTEXT {
   TOKENS = "TOKENS",
   DEVICES = "DEVICES",
-  BUILDINGS = "BUILDINGS",
+  GROUPS = "GROUPS",
   USERS = "USERS",
   PAYMENTS = "PAYMENTS",
   NETWORK = "NETWORK",

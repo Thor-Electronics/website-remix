@@ -10,7 +10,7 @@ export interface Device {
   id: string
   cpuId: string
   name: string
-  buildingId: string
+  groupId: string
   type: DeviceTypes
   state: DeviceState
   isOnline?: boolean // could be connected timestamp to calculate uptime

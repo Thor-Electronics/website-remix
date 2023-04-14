@@ -1,5 +1,5 @@
 import { Form } from "@remix-run/react"
-import { User } from "~/models/session.server"
+import type { User } from "~/types/User"
 
 type Props = {
   user: User

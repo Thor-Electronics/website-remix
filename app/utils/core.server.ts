@@ -25,13 +25,33 @@ export const healthCheck = () => ax.get("/health/")
 export const checkAuth = (token: string) => ax.get(`${v1}/auth/`, h(token))
 export const login = (data: object) => ax.post(`${v1}/auth/`, data)
 export const signup = (data: object) => ax.post(`${v1}/auth/signup/`, data)
+export const getUserProfile = (token: string) =>
+  ax.get(`${v1}/auth/profile`, h(token))
+export const updateUserProfile = (token: string) =>
+  ax.patch(`${v1}/auth/profile`, h(token))
+export const sendPhoneVerification = (token: string) =>
+  ax.post(`${v1}/auth/send-phone-verification`, {}, h(token))
+export const sendEmailVerification = (token: string) =>
+  ax.post(`${v1}/auth/send-email-verification`, {}, h(token))
+export const sendPasswordReset = (data: object) =>
+  ax.post(`${v1}/auth/send-password-reset`, data) // TODO: could take token instead of passing data?
+export const verifyPhone = (token: string, data: object) =>
+  ax.post(`${v1}/auth/verify-phone`, data, h(token))
+export const verifyEmail = (token: string, data: object) =>
+  ax.post(`${v1}/auth/verify-email`, data, h(token))
+export const resetPassword = (data: object) =>
+  ax.post(`${v1}/auth/reset-password`, data) // TODO: could take token instead of passing data?
+export const updateProfile = (token: string, data: object) =>
+  ax.patch(`${v1}/auth/profile`, data, h(token))
 
-export const getUserBuildings = (token: string) =>
-  ax.get(`${v1}/buildings/`, h(token)).then(extractResponseData)
-export const createBuilding = (token: string, data: object) =>
-  ax.post(`${v1}/buildings/`, data, h(token)).then(extractResponseData)
-export const getBuildingDetails = (id: string, token: string) =>
-  ax.get(`${v1}/buildings/${id}/`, h(token)).then(extractResponseData)
+export const getUserGroups = (token: string) =>
+  ax.get(`${v1}/groups/`, h(token)).then(extractResponseData)
+export const createGroup = (token: string, data: object) =>
+  ax.post(`${v1}/groups/`, data, h(token)).then(extractResponseData)
+export const getGroupDetails = (id: string, token: string) =>
+  ax.get(`${v1}/groups/${id}/`, h(token)).then(extractResponseData)
+export const createDevice = (token: string, data: object) =>
+  ax.post(`${v1}/devices`, data, h(token)).then(extractResponseData)
 export const getDeviceDetails = (id: string, token: string) =>
   ax.get(`${v1}/devices/${id}/`, h(token)).then(extractResponseData)
 export const deleteDevice = (id: string, token: string) =>
@@ -68,9 +88,19 @@ const api = {
   checkAuth,
   login,
   signup,
-  getUserBuildings,
-  createBuilding,
-  getBuildingDetails,
+  getUserProfile,
+  updateUserProfile,
+  sendPhoneVerification,
+  sendEmailVerification,
+  sendPasswordReset,
+  verifyPhone,
+  verifyEmail,
+  resetPassword,
+  updateProfile,
+  getUserGroups,
+  createGroup,
+  getGroupDetails,
+  createDevice,
   getDeviceDetails,
   deleteDevice,
   delay,
