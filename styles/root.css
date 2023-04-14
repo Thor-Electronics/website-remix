@@ -62,14 +62,19 @@ html {
 
 input,
 select {
-  @apply w-full border border-slate-400 rounded-md py-1 px-2 shadow;
+  @apply w-full border border-slate-400 rounded-lg py-1.5 px-2.5 shadow;
+}
+
+select {
+  @apply bg-white;
 }
 
 label {
   .error {
     @apply text-red-600 italic font-bold;
   }
-  input {
+  input,
+  select {
     @apply mt-2;
   }
 }

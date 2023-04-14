@@ -18,6 +18,7 @@ import type { Message } from "~/types/Message"
 import { Signal } from "~/types/Message"
 import { ReadyState } from "react-use-websocket"
 import { SimpleDeviceCard } from "./SimpleDeviceCard"
+import { Link } from "@remix-run/react"
 
 export interface Props extends HTMLAttributes<HTMLElement> {
   data: Group
@@ -217,14 +218,16 @@ export const GroupCard = ({
           {group.plugins?.length || 0} Plugins
         </div>
         <div className="options flex flex-row gap-2 justify-end items-center text-base">
-          <Button
-            className="p-2 rounded-xl sm:rounded-lg sm:px-3 sm:py-1
+          <Link to="devices/new" prefetch="render">
+            <Button
+              className="p-2 rounded-xl sm:rounded-lg sm:px-3 sm:py-1
                  !bg-emerald-500 shadow-emerald-300 sm:shadow-emerald-200"
-            title="Add New Device to the Group"
-          >
-            <SquaresPlusIcon className={groupActionIconClassNames} />
-            <span className="text hidden sm:block">Add Device</span>
-          </Button>
+              title="Add New Device to the Group"
+            >
+              <SquaresPlusIcon className={groupActionIconClassNames} />
+              <span className="text hidden sm:block">Add Device</span>
+            </Button>
+          </Link>
 
           <Button
             className="p-2 rounded-xl sm:rounded-lg sm:px-3 sm:py-1
