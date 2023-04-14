@@ -1,6 +1,12 @@
 import type { ActionFunction } from "@remix-run/node"
 import { json, redirect, type LoaderFunction } from "@remix-run/node"
-import { Form, Link, useActionData, useLoaderData } from "@remix-run/react"
+import {
+  Form,
+  Link,
+  useActionData,
+  useLoaderData,
+  useNavigation,
+} from "@remix-run/react"
 import invariant from "tiny-invariant"
 import { getSessionToken, requireUser } from "~/models/session.server"
 import { DeviceTypes } from "~/types/Device"
@@ -82,6 +88,7 @@ export const action: ActionFunction = async ({ request, params }) => {
 export default function NewDevicePage() {
   const { user: u, group: g } = useLoaderData<LoaderData>()
   const actionData = useActionData<ActionData>()
+  const navigation = useNavigation()
 
   return (
     <div className="NewDevicePage">
@@ -130,8 +137,14 @@ export default function NewDevicePage() {
           <input name="cpuId" />
         </label>
         <div className="btns">
-          <Button className="!bg-primary w-full" type="submit">
-            Add Device
+          <Button
+            className="!bg-primary w-full"
+            type="submit"
+            disabled={navigation.state === "submitting"}
+          >
+            {navigation.state === "submitting"
+              ? "Creating New Device ..."
+              : "Add New Device"}
           </Button>
         </div>
       </Form>

@@ -1,6 +1,12 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node"
 import { json, redirect } from "@remix-run/node"
-import { Link, useActionData, useLoaderData } from "@remix-run/react"
+import {
+  Form,
+  Link,
+  useActionData,
+  useLoaderData,
+  useNavigation,
+} from "@remix-run/react"
 import { TextButton } from "~/components/atoms/Button"
 import { getSessionToken, requireUser } from "~/models/session.server"
 import type { User } from "~/types/User"
@@ -70,10 +76,11 @@ export default function DashboardProfile() {
   const { user } = useLoaderData()
   const actionData = useActionData<ActionData>()
   const u: User = user
+  const navigation = useNavigation()
 
   return (
     <div className="UserProfileUpdate">
-      <form method="POST">
+      <Form method="POST">
         {actionData?.errors?.message && (
           <p className="text-rose-600">Error: {actionData.errors.message}</p>
         )}
@@ -130,8 +137,12 @@ export default function DashboardProfile() {
           <input name="username" defaultValue={u.username} />
         </label> */}
         <div className="options">
-          <TextButton type="submit" className="!bg-primary">
-            Save
+          <TextButton
+            type="submit"
+            className="!bg-primary"
+            disabled={navigation.state === "submitting"}
+          >
+            {navigation.state === "submitting" ? "Saving ..." : "Save"}
           </TextButton>
           <Link to={DASHBOARD_PREFIX + "/profile"} prefetch="render">
             <TextButton>Cancel</TextButton>
@@ -141,7 +152,7 @@ export default function DashboardProfile() {
             <TextButton className="!bg-rose-400">Reset Password</TextButton>
           </Link>
         </div>
-      </form>
+      </Form>
     </div>
   )
 }

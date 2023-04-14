@@ -1,6 +1,12 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node"
 import { json, redirect } from "@remix-run/node"
-import { Form, Link, useActionData, useTransition } from "@remix-run/react"
+import {
+  Form,
+  Link,
+  useActionData,
+  useNavigation,
+  useTransition,
+} from "@remix-run/react"
 import Button, { TextButton } from "~/components/atoms/Button"
 import { createSession, getUserId } from "~/models/session.server"
 import type { User } from "~/types/User"
@@ -55,11 +61,15 @@ export const loader: LoaderFunction = async ({ request }) => {
 }
 
 export const Login = () => {
-  const transition = useTransition()
+  const navigation = useNavigation()
   const actionData = useActionData<ActionData>()
 
   return (
-    <Form className="LoginCard card flex flex-col gap-4" method="post">
+    <Form
+      className="LoginCard card flex flex-col gap-4"
+      method="POST"
+      // reloadDocument
+    >
       <h1 className="title font-bold text-2xl text-center">LOGIN</h1>
       <div className="inputs flex flex-col gap-4">
         <label className="label">
@@ -87,9 +97,9 @@ export const Login = () => {
       <div className="buttons">
         <TextButton
           className="w-full !bg-primary"
-          disabled={transition.state === "submitting"}
+          disabled={navigation.state === "submitting"}
         >
-          {transition.state === "submitting" ? "Logging In ..." : "Login"}
+          {navigation.state === "submitting" ? "Logging In ..." : "Login"}
         </TextButton>
       </div>
       <p className="switch text-sm text-center">

@@ -55,11 +55,11 @@ export const action: ActionFunction = async ({ request }) => {
 
 export const VerifyEmail = () => {
   const { user } = useLoaderData<LoaderData>()
-  const transition = useNavigation()
+  const navigation = useNavigation()
   const actionData = useActionData<ActionData>()
 
   return (
-    <Form className="LoginCard card flex flex-col gap-4" method="post">
+    <Form className="LoginCard card flex flex-col gap-4" method="POST">
       <h1 className="title font-bold text-2xl text-center">Verify Email</h1>
       <p>A verification code has been sent to {user.email}</p>
       <div className="inputs flex flex-col gap-4">
@@ -74,9 +74,9 @@ export const VerifyEmail = () => {
       <div className="buttons">
         <TextButton
           className="w-full !bg-primary"
-          disabled={transition.state === "submitting"}
+          disabled={navigation.state === "submitting"}
         >
-          {transition.state === "submitting"
+          {navigation.state === "submitting"
             ? `Verifying ${user.email} ...`
             : "Verify"}
         </TextButton>

@@ -19,6 +19,7 @@ import { Signal } from "~/types/Message"
 import { ReadyState } from "react-use-websocket"
 import { SimpleDeviceCard } from "./SimpleDeviceCard"
 import { Link } from "@remix-run/react"
+import { DASHBOARD_PREFIX } from "~/routes/app"
 
 export interface Props extends HTMLAttributes<HTMLElement> {
   data: Group
@@ -218,7 +219,10 @@ export const GroupCard = ({
           {group.plugins?.length || 0} Plugins
         </div>
         <div className="options flex flex-row gap-2 justify-end items-center text-base">
-          <Link to="devices/new" prefetch="render">
+          <Link
+            to={`${DASHBOARD_PREFIX}/groups/${group.id}/devices/new`}
+            prefetch="render"
+          >
             <Button
               className="p-2 rounded-xl sm:rounded-lg sm:px-3 sm:py-1
                  !bg-emerald-500 shadow-emerald-300 sm:shadow-emerald-200"

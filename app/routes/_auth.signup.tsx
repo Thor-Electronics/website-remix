@@ -5,6 +5,7 @@ import {
   Link,
   useActionData,
   useLoaderData,
+  useNavigation,
   useTransition,
 } from "@remix-run/react"
 // import { getClientIPAddress } from "remix-utils"
@@ -68,11 +69,15 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export const Signup = () => {
   // const loaderData = useLoaderData()
-  const transition = useTransition()
+  const navigation = useNavigation()
   const actionData = useActionData<ActionData>()
 
   return (
-    <Form className="SignupCard card flex flex-col gap-4" method="post">
+    <Form
+      className="SignupCard card flex flex-col gap-4"
+      method="POST"
+      // reloadDocument
+    >
       <h1 className="title font-bold text-2xl text-center">SIGNUP</h1>
       <div className="inputs flex flex-col gap-4">
         <label className="label">
@@ -118,9 +123,9 @@ export const Signup = () => {
       <div className="buttons">
         <TextButton
           className="w-full !bg-primary"
-          disabled={transition.state === "submitting"}
+          disabled={navigation.state === "submitting"}
         >
-          {transition.state === "submitting" ? "Signing Up ..." : "Signup"}
+          {navigation.state === "submitting" ? "Signing Up ..." : "Signup"}
         </TextButton>
       </div>
       <p className="switch text-sm text-center">

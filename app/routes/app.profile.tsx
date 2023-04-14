@@ -8,7 +8,7 @@ import {
 } from "@heroicons/react/24/solid"
 import type { ActionFunction, LoaderFunction } from "@remix-run/node"
 import { Response, json } from "@remix-run/node"
-import { Form, Link, useLoaderData } from "@remix-run/react"
+import { Form, Link, useLoaderData, useNavigation } from "@remix-run/react"
 import Badge, { SuccessBadge } from "~/components/atoms/Badge"
 import { TextButton } from "~/components/atoms/Button"
 import { getSessionToken, requireUser } from "~/models/session.server"
@@ -33,6 +33,7 @@ export const action: ActionFunction = async ({ request }) => {
 export default function DashboardProfile() {
   const { user } = useLoaderData()
   const u: User = user
+  const navigation = useNavigation()
 
   const isEmailVerified: Boolean =
     Date.parse(
@@ -73,10 +74,15 @@ export default function DashboardProfile() {
               method="POST"
               reloadDocument
             >
-              <button type="submit">
+              <button
+                type="submit"
+                disabled={navigation.state === "submitting"}
+              >
                 <Badge>
                   <ShieldExclamationIcon />
-                  Not Verified
+                  {navigation.state === "submitting"
+                    ? "Sending ..."
+                    : "Not Verified"}
                 </Badge>
               </button>
             </Form>
@@ -99,10 +105,16 @@ export default function DashboardProfile() {
               method="POST"
               reloadDocument
             >
-              <button type="submit" name="submission">
+              <button
+                type="submit"
+                name="submission"
+                disabled={navigation.state === "submitting"}
+              >
                 <Badge>
                   <ShieldExclamationIcon />
-                  Not Verified
+                  {navigation.state === "submitting"
+                    ? "Sending ..."
+                    : "Not Verified"}
                 </Badge>
               </button>
             </Form>

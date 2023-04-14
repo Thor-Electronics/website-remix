@@ -44,7 +44,7 @@ type LoaderData = {
   groups: Group[]
   socketToken: string
   // userSettings
-  // group: Group
+  group: Group
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -54,9 +54,11 @@ export const loader: LoaderFunction = async ({ request }) => {
     console.log("User has no groups, redirecting to create page")
     return redirect(DASHBOARD_PREFIX + "/groups/new")
   }
+  const group = await getGroupDetails((groups[0] as Group).id, token)
   return json<LoaderData>({
     groups,
     socketToken: token,
+    group,
     // User Settings
     // group: await getGroupDetails(
     //   (
@@ -68,7 +70,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 }
 
 export const DashboardIndex = () => {
-  const { groups, socketToken /*, group: b*/ } = useLoaderData<LoaderData>()
+  const { group, socketToken /*, group: b*/ } = useLoaderData<LoaderData>()
   // Default group from user settings
 
   // let mostAccessedGroupId = groups[0]?.id
@@ -109,9 +111,10 @@ export const DashboardIndex = () => {
           ))}
         </div>
       </div> */}
-      {groups.length > 0 ? (
+      {/* {groups.length > 0 ? ( */}
+      {group ? (
         <GroupCard
-          data={groups[0] as Group}
+          data={group as Group}
           socketToken={socketToken}
           className="dashboard-friendly"
         />

@@ -1,5 +1,5 @@
-import { Form } from "@remix-run/react"
-import Button, { Props, TextButton } from "./Button"
+import type { Props } from "./Button"
+import { TextButton } from "./Button"
 
 export const LogoutButton = ({ children = "Logout", ...props }: Props) => (
   <form action="/logout" method="post">
