@@ -20,6 +20,7 @@ import { ReadyState } from "react-use-websocket"
 import { SimpleDeviceCard } from "./SimpleDeviceCard"
 import { Link } from "@remix-run/react"
 import { DASHBOARD_PREFIX } from "~/routes/app"
+import type { DeviceState } from "~/types/Device"
 
 export interface Props extends HTMLAttributes<HTMLElement> {
   data: Group
@@ -80,12 +81,18 @@ export const GroupCard = ({
       onMessage: e => {
         const msg = JSON.parse(e.data) as Message
         if (msg.message) console.log("🔽 MESSAGE: ", msg.message)
-        if (msg.update) {
+        if (msg.update && msg.update !== undefined) {
           setGroup(prev => ({
             ...prev,
             devices: prev.devices?.map(d =>
               d.id === msg.id
-                ? { ...d, state: { ...d.state, ...msg.update } }
+                ? {
+                    ...d,
+                    state: recursivelyUpdateState(
+                      d.state,
+                      msg.update!
+                    ) as DeviceState,
+                  }
                 : d
             ),
           }))
@@ -254,4 +261,15 @@ export const GroupCard = ({
       </div>
     </div>
   )
+}
+
+export const recursivelyUpdateState = (
+  src: { [key: string]: any },
+  newState: object
+): object => {
+  const result = src
+  Object.entries(newState).forEach(([k, v]) => {
+    result[k] = typeof v === "object" ? recursivelyUpdateState(src[k], v) : v
+  })
+  return result
 }

@@ -19,8 +19,8 @@ export interface Device {
 }
 
 export type DeviceState = {
-  [x: string]: string | number | boolean | object
-  power: number | boolean | { [x: string]: number | boolean }
+  [x: string]: string | number | boolean | object | undefined
+  power?: number | boolean | { [x: string]: number | boolean }
   // volume?: number // TV, Radio, Speaker
   // channel?: number // TV, Radio
   // [key: string]: object
