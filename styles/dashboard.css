@@ -112,6 +112,10 @@
           @apply bg-red-700;
         }
       }
+
+      .options {
+        @apply flex gap-1;
+      }
     }
 
     &:hover > .details {
@@ -198,6 +202,20 @@
     .options {
       @apply flex flex-row-reverse items-center justify-start
       gap-2;
+    }
+  }
+}
+
+.DeleteDeviceCard {
+  @apply flex items-center justify-center;
+  height: 70vh;
+
+  .card {
+    @apply mx-auto p-8 rounded-xl shadow-lg shadow-rose-100
+    border border-rose-400 text-center flex flex-col gap-8;
+
+    .buttons {
+      @apply flex justify-start flex-row-reverse gap-4;
     }
   }
 }

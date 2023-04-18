@@ -8,6 +8,10 @@ import type {
 import { OnlinePulse } from "../atoms/Pulse"
 import KeyControl from "./KeyControl"
 import TVControl from "./TVControl"
+import { Link } from "@remix-run/react"
+import { DASHBOARD_PREFIX } from "~/routes/app"
+import { IconButton } from "../atoms/Button"
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid"
 
 interface IProps extends HTMLAttributes<HTMLElement> {
   data: Device
@@ -65,6 +69,18 @@ export const SimpleDeviceCard = ({
             {d.latency ?? "?"}ms
           </span>
         )}
+        <div className="options">
+          <Link to={`${DASHBOARD_PREFIX}/devices/${d.id}/delete`}>
+            <IconButton className="!bg-rose-400">
+              <TrashIcon className="w-4" />
+            </IconButton>
+          </Link>
+          <Link to={`${DASHBOARD_PREFIX}/devices/${d.id}/edit`}>
+            <IconButton>
+              <PencilIcon className="w-4" />
+            </IconButton>
+          </Link>
+        </div>
       </div>
     </div>
   )

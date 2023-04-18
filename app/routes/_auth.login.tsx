@@ -97,9 +97,15 @@ export const Login = () => {
       <div className="buttons">
         <TextButton
           className="w-full !bg-primary"
-          disabled={navigation.state === "submitting"}
+          disabled={
+            navigation.state === "submitting" || navigation.state === "loading"
+          }
         >
-          {navigation.state === "submitting" ? "Logging In ..." : "Login"}
+          {navigation.state === "submitting"
+            ? "Logging In ..."
+            : navigation.state === "loading"
+            ? "Continuing..."
+            : "Login"}
         </TextButton>
       </div>
       <p className="switch text-sm text-center">
