@@ -16,6 +16,14 @@ export interface Device {
   isOnline?: boolean // could be connected timestamp to calculate uptime
   uptime?: Date
   latency?: number
+  token?: {
+    deviceId: string
+    code: string
+  }
+  createdAt?: Date // todo: they are actually strings!
+  updatedAt?: Date // todo: they are actually strings!
+  verifiedAt?: Date // todo: they are actually strings!
+  activatedAt?: Date // todo: they are actually strings!
 }
 
 export type DeviceState = {

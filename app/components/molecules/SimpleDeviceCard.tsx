@@ -31,6 +31,7 @@ export const SimpleDeviceCard = ({
   }
 
   const ControlPanel = DeviceControlPanels[d.type]
+  console.log("DEVICE: ", d)
 
   return (
     <div
