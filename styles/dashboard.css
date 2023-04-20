@@ -80,6 +80,12 @@
     > .head {
       display: flex;
       justify-content: space-between;
+
+      > .name {
+        > code {
+          @apply text-white bg-primary rounded-full py-1 px-3 text-lg;
+        }
+      }
     }
 
     > .details {

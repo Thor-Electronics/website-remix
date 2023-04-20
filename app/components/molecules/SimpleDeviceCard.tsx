@@ -31,17 +31,24 @@ export const SimpleDeviceCard = ({
   }
 
   const ControlPanel = DeviceControlPanels[d.type]
-  console.log("DEVICE: ", d)
 
   return (
     <div
-      className={`SimpleDeviceCard ${d.isOnline ? "online" : ""}`}
+      className={`SimpleDeviceCard ${d.isOnline ? "online" : ""} ${
+        d.activatedAt ? "" : "inactive"
+      }`}
       {...props}
     >
       <div className="head">
         <h4 className="name font-medium text-start flex items-center gap-2">
           {d.name}
           {d.isOnline && <OnlinePulse />}
+          {d.token && (
+            <code title="Use this code to connect the device to this group">
+              {/* cursor pointer copy on click material component? */}
+              {d.token.code}
+            </code>
+          )}
         </h4>
         <ControlPanel
           type={d.type}
@@ -82,6 +89,11 @@ export const SimpleDeviceCard = ({
             </IconButton>
           </Link>
         </div>
+        {d.token && (
+          <div className="activation">
+            Use the code <code>{d.token?.code}</code> to activate the device
+          </div>
+        )}
       </div>
     </div>
   )

@@ -5,6 +5,7 @@ import {
 } from "@heroicons/react/24/solid"
 import type { ReactNode } from "react"
 import type { CommandMessage, Message } from "./Message"
+import { parseDeviceToken, type DeviceToken } from "./DeviceToken"
 
 export interface Device {
   id: string
@@ -16,14 +17,25 @@ export interface Device {
   isOnline?: boolean // could be connected timestamp to calculate uptime
   uptime?: Date
   latency?: number
-  token?: {
-    deviceId: string
-    code: string
+  token?: DeviceToken
+  created_at?: Date
+  updated_at?: Date
+  verifiedAt?: Date
+  activatedAt?: Date
+}
+
+export const parseDevice = (d: any): Device => {
+  if ([d.id, d.cpuId, d.name, d.type].some(v => v === undefined)) {
+    throw new Error("Invalid input to parse device")
   }
-  createdAt?: Date // todo: they are actually strings!
-  updatedAt?: Date // todo: they are actually strings!
-  verifiedAt?: Date // todo: they are actually strings!
-  activatedAt?: Date // todo: they are actually strings!
+  return {
+    ...d,
+    token: d.token && parseDeviceToken(d.token),
+    created_at: new Date(d.created_at),
+    updated_at: new Date(d.updated_at),
+    verifiedAt: new Date(d.verifiedAt),
+    activatedAt: new Date(d.activatedAt),
+  }
 }
 
 export type DeviceState = {
