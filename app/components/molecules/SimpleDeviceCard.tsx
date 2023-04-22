@@ -32,6 +32,8 @@ export const SimpleDeviceCard = ({
 
   const ControlPanel = DeviceControlPanels[d.type]
 
+  if (d.latency) d.latency = Math.floor(d.latency / 20)
+
   return (
     <div
       className={`SimpleDeviceCard ${d.isOnline ? "online" : ""} ${
@@ -74,7 +76,7 @@ export const SimpleDeviceCard = ({
             }`}
             title="Ping"
           >
-            {d.latency ?? "?"}ms
+            ~{d.latency ?? "?"}ms
           </span>
         )}
         <div className="options">
