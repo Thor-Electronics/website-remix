@@ -253,14 +253,16 @@ export const GroupCard = ({
             <span className="text hidden sm:block">Edit Group</span>
           </Button>
 
-          <Button
-            className="p-2 rounded-xl sm:rounded-lg sm:px-3 sm:py-1
+          <Link to={`${DASHBOARD_PREFIX}/groups/${group.id}/delete`}>
+            <Button
+              className="p-2 rounded-xl sm:rounded-lg sm:px-3 sm:py-1
                  !bg-red-500 shadow-red-300 sm:shadow-red-200"
-            title="Disable the Group"
-          >
-            <TrashIcon className={groupActionIconClassNames} />
-            <span className="text hidden sm:block">Disable Group</span>
-          </Button>
+              title="Disable the Group"
+            >
+              <TrashIcon className={groupActionIconClassNames} />
+              <span className="text hidden sm:block">Disable Group</span>
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
