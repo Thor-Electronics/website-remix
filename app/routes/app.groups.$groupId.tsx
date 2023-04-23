@@ -1,6 +1,7 @@
 import type { LoaderFunction } from "@remix-run/node"
 import { Response, json } from "@remix-run/node"
 import {
+  Outlet,
   isRouteErrorResponse,
   useLoaderData,
   useRouteError,
@@ -39,6 +40,7 @@ export const GroupDetails = () => {
         data={group as Group}
         socketToken={socketToken}
       />
+      <Outlet />
     </div>
   )
 }
