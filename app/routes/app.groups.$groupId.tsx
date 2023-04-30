@@ -26,7 +26,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
       throw new Response("Group Not Found", { status: 404 })
     }
   })
-  console.log("GROUP: ", group)
+  // console.log("GROUP: ", group)
   return json<LoaderData>({ group, socketToken: token })
 }
 
