@@ -13,7 +13,7 @@ import { DASHBOARD_PREFIX } from "~/routes/app"
 import { IconButton } from "../atoms/Button"
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid"
 
-interface IProps extends HTMLAttributes<HTMLElement> {
+export interface ISimpleDeviceCardProps extends HTMLAttributes<HTMLElement> {
   data: Device
   onUpdate?: DeviceStateUpdateSender
 }
@@ -23,7 +23,7 @@ export const SimpleDeviceCard = ({
   className,
   onUpdate: updateHandler,
   ...props
-}: IProps) => {
+}: ISimpleDeviceCardProps) => {
   const handleControlUpdate: DeviceControlPanelStateUpdateHandler = cmd => {
     if (!updateHandler) return false
     // Attach ID to the command before sending it to the server

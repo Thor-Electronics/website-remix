@@ -1,0 +1,11 @@
+.Switch {
+  @apply rounded-2xl w-12 h-6 p-1 cursor-pointer shadow-md flex bg-slate-300;
+
+  &.checked {
+    @apply bg-green-400 justify-end;
+  }
+
+  .circle {
+    @apply w-4 h-4 rounded-2xl shadow-md;
+  }
+}

@@ -1,4 +1,4 @@
-import { HTMLAttributes } from "react"
+import type { HTMLAttributes } from "react"
 
 interface IProps extends HTMLAttributes<HTMLInputElement> {
   checked?: boolean
@@ -9,16 +9,10 @@ interface IProps extends HTMLAttributes<HTMLInputElement> {
 export const Switch = ({ checked, className, ...props }: IProps) => {
   return (
     <div
-      className={`Switch rounded-2xl w-12 h-6 p-1 cursor-pointer shadow-md flex ${
-        checked ? "bg-green-400 justify-end" : "bg-slate-300"
-      } ${className}`}
+      className={`Switch ${checked ? "checked" : ""} ${className}`}
       {...props}
     >
-      <div
-        className={`circle w-4 h-4 rounded-2xl shadow-md ${
-          checked ? "bg-white" : "bg-slate-50"
-        }`}
-      ></div>
+      <div className={`circle ${checked ? "bg-white" : "bg-slate-50"}`}></div>
     </div>
   )
 }
