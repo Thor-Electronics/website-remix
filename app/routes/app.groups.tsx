@@ -2,7 +2,7 @@ import type { ErrorBoundaryComponent, LoaderFunction } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import { Outlet, useLoaderData } from "@remix-run/react"
 import { DashboardGroupsList } from "~/components/organisms/DashboardGroupsList"
-import { getSessionData } from "~/models/session.server"
+import { getSessionToken } from "~/models/session.server"
 import type { Group } from "~/types/Group"
 import { getUserGroups } from "~/utils/core.server"
 
@@ -12,7 +12,7 @@ type LoaderData = {
 
 export const loader: LoaderFunction = async ({ request }) => {
   return json<LoaderData>({
-    groups: await getUserGroups((await getSessionData(request)).token),
+    groups: await getUserGroups(await getSessionToken(request)),
   })
 }
 
