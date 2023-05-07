@@ -15,6 +15,7 @@ import { requireUser } from "~/models/session.server"
 import dashboardStyles from "~/styles/dashboard.css"
 import type { User } from "~/types/User"
 import type { V2_ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules"
+import { IoCarSport } from "react-icons/io5"
 
 export const DASHBOARD_PREFIX = "/app"
 
@@ -80,6 +81,11 @@ const initialUserNavItems: FixedNavItem[] = [
     icon: <BuildingOffice2Icon className={iconClassNames} />,
     label: "Groups",
     to: `${DASHBOARD_PREFIX}/groups`,
+  },
+  {
+    icon: <IoCarSport className={iconClassNames} />,
+    label: "Vehicles",
+    to: `${DASHBOARD_PREFIX}/vehicles`,
   },
   {
     icon: <Cog6ToothIcon className={iconClassNames} />,
