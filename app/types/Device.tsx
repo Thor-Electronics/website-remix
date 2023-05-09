@@ -59,6 +59,7 @@ export enum DeviceTypes {
   IRHUB = "IRHUB",
   BLINDS = "BLINDS",
   DOOR = "DOOR",
+  VEHICLE = "VEHICLE",
 }
 
 export type DeviceActionCallbackReturnType =
