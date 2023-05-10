@@ -1,6 +1,7 @@
 import type { LoaderFunction } from "@remix-run/node"
 import { json } from "@remix-run/node"
-import { Outlet, useLoaderData } from "@remix-run/react"
+import { Outlet, useLoaderData, useRouteError } from "@remix-run/react"
+import type { V2_ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules"
 import { DashboardGroupsList } from "~/components/organisms/DashboardGroupsList"
 import { getSessionToken } from "~/models/session.server"
 import { DeviceTypes } from "~/types/Device"
@@ -30,6 +31,17 @@ export const DashboardVehicles = () => {
       <h1 className="title text-center font-bold">Smart Transportation</h1>
       <DashboardGroupsList items={vehicles as Group[]} />
       <Outlet />
+    </div>
+  )
+}
+
+export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
+  const error = useRouteError()
+  console.error("Error in vehicles: ", error)
+
+  return (
+    <div className="DashboardVehicles bg-rose-200 text-rose-600">
+      <h1>Something went wrong while showing the vehicles</h1>
     </div>
   )
 }
