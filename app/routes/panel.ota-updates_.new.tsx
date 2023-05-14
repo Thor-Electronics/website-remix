@@ -160,7 +160,9 @@ export const AdminOTAUpdatesNew = () => {
         </label>
         <Button
           className={`${
-            error ? "bg-rose-500 shadow-rose-300" : "bg-primary shadow-blue-300"
+            error
+              ? "!bg-rose-500 shadow-rose-300"
+              : "!bg-primary shadow-blue-300"
           } py-1 px-3  flex items-center justify-center gap-2.5`}
           disabled={navigation.state === "submitting"}
         >

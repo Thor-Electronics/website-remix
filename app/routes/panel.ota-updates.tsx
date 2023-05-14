@@ -25,7 +25,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 export const AdminOTAUpdates = () => {
   const { firmwares } = useLoaderData<LoaderData>() // <typeof loader>
 
-  // console.log("FIRMWARES: ", firmwares)
+  console.log("FIRMWARES: ", firmwares)
 
   const refinedFirmwares = firmwares.map((f, i) => ({ id: i, ...f }))
 
@@ -33,19 +33,21 @@ export const AdminOTAUpdates = () => {
     <div className="AdminFirmwares admin-page">
       <h2 className="page-title">Firmware Updates(OTA)</h2>
       <Link to="new" prefetch="render">
-        <Button className="bg-primary py-1 px-3 shadow-blue-300 mb-4 mx-auto flex items-center gap-2.5">
+        <Button className="!bg-primary py-1 px-3 shadow-blue-300 mb-4 mx-auto flex items-center gap-2.5">
           <FolderPlusIcon className="w-5 h-5" />
           Upload New Firmware
         </Button>
       </Link>
       <div className="data-container">
-        <DataGrid
-          rows={refinedFirmwares}
-          columns={gridColumns}
-          autoHeight
-          checkboxSelection
-          isRowSelectable={() => true}
-        />
+        {refinedFirmwares.length > 0 && (
+          <DataGrid
+            rows={refinedFirmwares}
+            columns={gridColumns}
+            autoHeight
+            checkboxSelection
+            isRowSelectable={() => true}
+          />
+        )}
       </div>
     </div>
   )
@@ -58,10 +60,15 @@ const gridColumns: GridColDef[] = [
     width: 200,
     cellClassName: "text-xs font-mono",
   },
-  { field: "fileName", headerName: "File Name", width: 400 },
-  { field: "fileSize", headerName: "File Size", width: 200 },
   {
-    field: "modifiedAt",
+    field: "file",
+    headerName: "File",
+    width: 400,
+    valueGetter: params =>
+      `${params.value["size"]} bytes - ${params.value["name"]}`,
+  },
+  {
+    field: "updated_at",
     headerName: "Modification Date",
     width: 150,
     valueGetter: params => timeAgo(new Date(params.value)),
