@@ -11,6 +11,14 @@ export default function Key4({
   const handleUpdate = (k: string, v: number | boolean) => {
     if (!handleUpdate)
       return console.warn("Update handler is not configured for this key!")
+    if (!state.power) {
+      state.power = {
+        "0": false,
+        "1": false,
+        "2": false,
+        "3": false,
+      }
+    }
     updateHandler({
       command: {
         power: {
@@ -28,8 +36,9 @@ export default function Key4({
   }
 
   // Fix state if empty
+  if (!state || typeof state !== "object") state = {}
   if (t !== DeviceTypes.KEY && t !== DeviceTypes.KEY1) {
-    if (typeof state.power !== "object") {
+    if (!state.power || typeof state.power !== "object") {
       state.power =
         t === DeviceTypes.KEY2
           ? { 0: false, 1: false }
