@@ -10,10 +10,11 @@ import { useState } from "react"
 import Button from "~/components/atoms/Button"
 import { getSessionToken } from "~/models/session.server"
 import api from "~/utils/core.server"
+import { PANEL_PREFIX } from "./panel"
 
-type ActionData = {
-  errors: string[]
-}
+// type ActionData = {
+//   errors: string[]
+// }
 
 type LoaderData = {
   sessionToken: string
@@ -70,6 +71,12 @@ export const AdminOTAUpdatesNew = () => {
     e.preventDefault()
     console.log("Submitting ...")
     const formData = new FormData(e.currentTarget)
+    Array.from(formData).forEach(([k, v]) => {
+      console.log("Checking: ", k, v)
+      if (!v) formData.delete(k)
+    })
+    console.log("ENTRIES: ", formData.entries())
+    // [...formData.entries()].foreach
     // we can't use the API since it's a server file :)
     fetch(`${ENV.CORE_URL}/api/v1/admin/firmware-updates`, {
       method: "POST",
@@ -86,7 +93,7 @@ export const AdminOTAUpdatesNew = () => {
           return setError(
             `Error uploading firmware to core(${res.status} ${res.statusText}): ${body.message}`
           )
-        window.location.href = "/admin/ota-updates"
+        window.location.href = `${PANEL_PREFIX}/ota-updates`
       })
       .catch(err => {
         console.error("ERROR: ", err)
