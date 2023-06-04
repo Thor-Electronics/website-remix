@@ -7,8 +7,9 @@ module.exports = {
     v2_meta: true,
     v2_normalizeFormMethod: true,
   },
+  serverModuleFormat: "esm",
   // appDirectory: "app",
   // assetsBuildDirectory: "public/build",
   // serverBuildPath: "build/index.js",
   // publicPath: "/build/",
-};
+}
