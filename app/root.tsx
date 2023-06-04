@@ -1,11 +1,8 @@
 import type {
-  ErrorBoundaryComponent,
   LinksFunction,
   LoaderFunction,
-  MetaFunction,
   V2_MetaFunction,
 } from "@remix-run/node"
-import { Response } from "@remix-run/node"
 import { json } from "@remix-run/node"
 import {
   Link,
