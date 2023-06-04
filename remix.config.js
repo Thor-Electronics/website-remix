@@ -7,7 +7,7 @@ module.exports = {
     v2_meta: true,
     v2_normalizeFormMethod: true,
   },
-  serverModuleFormat: "esm",
+  serverModuleFormat: "cjs", // "esm"
   // appDirectory: "app",
   // assetsBuildDirectory: "public/build",
   // serverBuildPath: "build/index.js",

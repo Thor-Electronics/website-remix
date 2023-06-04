@@ -58,6 +58,10 @@ export const getDeviceDetails = (id: string, token: string) =>
   ax.get(`${v1}/devices/${id}/`, h(token)).then(extractResponseData)
 export const deleteDevice = (id: string, token: string) =>
   ax.delete(`${v1}/devices/${id}/`, h(token)).then(extractResponseData)
+export const updateDevice = (id: string, token: string, data: object) =>
+  ax.patch(`${v1}/devices/${id}/`, data, h(token)).then(extractResponseData)
+export const detachDevice = (id: string, token: string) =>
+  ax.post(`${v1}/devices/${id}/detach/`, {}, h(token)).then(extractResponseData)
 
 export const delay = (time: number) => ax.get(`${v1}/dev/delay?time=${time}`)
 export const dly = (t: number) =>
@@ -106,6 +110,8 @@ const api = {
   createDevice,
   getDeviceDetails,
   deleteDevice,
+  updateDevice,
+  detachDevice,
   delay,
   dly,
   adminGetInitialData,

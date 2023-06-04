@@ -80,7 +80,7 @@ export const SimpleDeviceCard = ({
           </span>
         )}
         <div className="options">
-          <Link to={`${DASHBOARD_PREFIX}/devices/${d.id}/delete`}>
+          <Link to={`${DASHBOARD_PREFIX}/devices/${d.id}/remove?intent=detach`}>
             <IconButton className="!bg-rose-400">
               <TrashIcon className="w-4" />
             </IconButton>
