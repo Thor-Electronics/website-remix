@@ -1,4 +1,5 @@
 import { createCookieSessionStorage, redirect } from "@remix-run/node"
+import type { User } from "~/types/User"
 import api from "~/utils/core.server"
 import { db } from "~/utils/db.server"
 
@@ -65,6 +66,7 @@ export async function getSessionData(request: Request) {
   }
 }
 
+// todo: optimize this to avoid calling DB use the data in the user session without calling DB for details!
 export const getSessionToken = async (request: Request) =>
   (await getSessionData(request)).token
 
@@ -72,7 +74,7 @@ export const getSessionToken = async (request: Request) =>
 export const getOptionalUser = async (request: Request) =>
   await api
     .checkAuth((await getSessionData(request)).token)
-    .then(res => res.data.user)
+    .then(res => res.data.user as User)
     .catch(err => null)
 
 export const requireUser = async (request: Request) => {
@@ -93,7 +95,11 @@ export const requireUserId = async (
   return userId
 }
 
-export const logout = async (request: Request) => {
+// TODO: set redirectTo cookie or something when redirecting to login
+export const logout = async (
+  request: Request,
+  redirectTo: string = "/login"
+) => {
   const session = await getUserSession(request)
   try {
     await db.session.delete({ where: { ID: session.get("id") } })

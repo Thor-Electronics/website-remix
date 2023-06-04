@@ -7,6 +7,8 @@ export const getEnv = () => {
     CORE_ADDR: process.env.CORE_ADDR,
     CORE_URL: `${production ? "https" : "http"}://${process.env.CORE_ADDR}`,
     CORE_SOCKET: `${production ? "wss" : "ws"}://${process.env.CORE_ADDR}`,
+    NODE_ENV: process.env.NODE_ENV,
+    PRODUCTION: production,
   }
 }
 

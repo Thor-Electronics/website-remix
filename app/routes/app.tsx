@@ -3,29 +3,52 @@ import {
   BuildingOffice2Icon,
   ArrowRightOnRectangleIcon,
   UserCircleIcon,
+  CpuChipIcon,
 } from "@heroicons/react/24/solid"
 import type { LoaderFunction, LinksFunction } from "@remix-run/node"
 import { json } from "@remix-run/node"
-import { Link, Outlet, useLoaderData, useRouteError } from "@remix-run/react"
+import {
+  Link,
+  Outlet,
+  useLoaderData,
+  useRouteError,
+  useRouteLoaderData,
+} from "@remix-run/react"
 import { Copyright } from "~/components/atoms/Copyright"
 import { LogoIcon } from "~/components/atoms/LogoIcon"
 import type { FixedNavItem } from "~/components/organisms/FixedNav"
 import { DashboardNav } from "~/components/organisms/DashboardNav"
-import { requireUser } from "~/models/session.server"
+import { getSessionToken, requireUser } from "~/models/session.server"
 import dashboardStyles from "~/styles/dashboard.css"
 import type { User } from "~/types/User"
 import type { V2_ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules"
 import { IoCarSport } from "react-icons/io5"
+import api from "~/utils/core.server"
+import type { Device } from "~/types/Device"
 
 export const DASHBOARD_PREFIX = "/app"
 
 type LoaderData = {
   user: User
+  orphanDevices: Device[]
+  token: string
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const user = await requireUser(request)
-  return json<LoaderData>({ user })
+  const token = await getSessionToken(request)
+  const user = await requireUser(request) // todo: optimize it by getting the token once? or getAuth to get both token and user?
+  console.log(`app.tsx -- ${user.name}(${user.id}) is using the app`)
+  const orphanDevices = await api
+    .getOrphanDevices(token)
+    .then(data => {
+      console.log("Orphan Devices: ", data)
+      return data
+    })
+    .catch(err => {
+      console.error("Error fetching orphan devices: ", err)
+      return []
+    })
+  return json<LoaderData>({ user, orphanDevices, token })
 }
 
 export const links: LinksFunction = () => [
@@ -33,11 +56,19 @@ export const links: LinksFunction = () => [
 ]
 
 export const Dashboard = () => {
-  const { user } = useLoaderData<LoaderData>()
+  const { user, orphanDevices } = useLoaderData<LoaderData>()
+
+  const navItems = initialUserNavItems
+  if (
+    orphanDevices.length !== 0 &&
+    navItems.indexOf(orphanDeviceNavItem) === -1
+  ) {
+    navItems.push(orphanDeviceNavItem)
+  }
 
   return (
     <div className="Dashboard bg-slate-200 min-h-screen p-2 relative pb-20 sm:pb-2 sm:pt-28 xl:pt-2 xl:pl-36">
-      <DashboardNav user={user as User} items={initialUserNavItems} />
+      <DashboardNav user={user as User} items={navItems} />
       <Outlet />
       <Copyright />
     </div>
@@ -70,7 +101,18 @@ export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
   )
 }
 
+export const useAppLoaderData = () =>
+  useRouteLoaderData("routes/app") as LoaderData
+
 const iconClassNames = "w-8 h-8"
+const orphanDeviceNavItem = {
+  icon: <CpuChipIcon className={iconClassNames} />,
+  label: "Devices",
+  to: `${DASHBOARD_PREFIX}/orphan-devices`,
+  props: {
+    className: "!bg-orange-100 !text-orange-400",
+  },
+}
 const initialUserNavItems: FixedNavItem[] = [
   {
     icon: <LogoIcon className={iconClassNames} />,

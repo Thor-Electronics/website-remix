@@ -22,6 +22,12 @@ import { LogoIcon } from "./components/atoms/LogoIcon"
 import { getEnv } from "./env.server"
 import type { V2_ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules"
 
+// TODO: https://www.wking.dev/library/remix-route-helpers-a-better-way-to-use-parent-data
+// use matches
+// TODO: https://jankraus.net/2022/04/16/access-remix-route-data-in-other-routes/
+// use route data
+// TODO: Good utils: https://www.npmjs.com/package/remix-utils
+
 // TODO: MetaFunction after upgrade to v2
 export const meta: V2_MetaFunction = () => [
   { title: "Thor Electronics" },
@@ -46,9 +52,10 @@ function Document({
         <title>{title}</title>
         <Links />
         {/* Hotjar Tracking Code for https://thor-electronics.ir */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
+        {ENV.NODE_ENV === "production" && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
               (function(h,o,t,j,a,r){
                   h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
                   h._hjSettings={hjid:3479118,hjsv:6};
@@ -58,8 +65,9 @@ function Document({
                   a.appendChild(r);
               })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
             `,
-          }}
-        />
+            }}
+          />
+        )}
       </head>
       <body className="min-h-screen bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200">
         {/* <NavigatingScreen /> */}

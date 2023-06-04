@@ -11,6 +11,7 @@ type LoaderData = {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
+  console.log("app.groups.tsx -- SessionToken, UserGroups")
   return json<LoaderData>({
     groups: await getUserGroups(await getSessionToken(request)),
   })

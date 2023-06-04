@@ -19,6 +19,7 @@ type LoaderData = {
 }
 
 export const loader: LoaderFunction = async ({ request, params }) => {
+  console.log("app.groups.$groupId.tsx -- SessionToken, GroupDetails")
   invariant(params.groupId, "Group not found")
   const token = await getSessionToken(request)
   const group = await api.getGroupDetails(params.groupId, token).catch(err => {

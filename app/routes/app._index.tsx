@@ -1,7 +1,7 @@
 import { HomeModernIcon } from "@heroicons/react/24/solid"
 import type { LoaderFunction } from "@remix-run/node"
 import { json, redirect } from "@remix-run/node"
-import { useLoaderData } from "@remix-run/react"
+import { Link, useLoaderData, useRouteLoaderData } from "@remix-run/react"
 import { useState } from "react"
 import { ReadyState } from "react-use-websocket"
 import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket"
@@ -13,7 +13,9 @@ import type { Device } from "~/types/Device"
 import type { Message } from "~/types/Message"
 import { Signal } from "~/types/Message"
 import { getGroupDetails, getUserGroups } from "~/utils/core.server"
-import { DASHBOARD_PREFIX } from "./app"
+import { DASHBOARD_PREFIX, useAppLoaderData } from "./app"
+import { Alert, AlertTitle } from "@mui/material"
+import { TextButton } from "~/components/atoms/Button"
 
 const DASHBOARD_GROUP_ID_KEY = ""
 let WS_URI = "" // "ws://localhost:3993/api/v1/control/echo"
@@ -48,6 +50,7 @@ type LoaderData = {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
+  console.log("app._index.tsx -- SessionToken, UserGroups, GroupDetails")
   const token = await getSessionToken(request)
   const groups = await getUserGroups(token)
   if (groups.length === 0) {
@@ -69,49 +72,36 @@ export const loader: LoaderFunction = async ({ request }) => {
   })
 }
 
-export const DashboardIndex = () => {
+export const DashboardIndexRoute = () => {
   const { group, socketToken /*, group: b*/ } = useLoaderData<LoaderData>()
-  // Default group from user settings
-
-  // let mostAccessedGroupId = groups[0]?.id
-  // let mostAccessedGroup: Group = groups[0] as Group
-
-  // if (typeof window !== "undefined") {
-  //   mostAccessedGroupId =
-  //     localStorage.getItem(DASHBOARD_GROUP_ID_KEY) ?? groups[0]?.id
-  // }
-  // groups.map(b => {
-  //   if (b.id === mostAccessedGroupId) {
-  //     mostAccessedGroup = b as Group
-  //   }
-  // })
+  // todo: Default group from user settings
+  const { orphanDevices, token, user } = useAppLoaderData()
 
   return (
     <div className="DashboardIndex text-center">
       <h1 className="text-2xl font-bold mb-3 text-slate-400">Smart Home</h1>
-      {/* <div className="group-card">
-        <div className="group-head flex items-center gap-2 mb-4 text-slate-700">
-          <HomeModernIcon className="w-12 h-12" />
-          <h3 className="group-name font-semibold text-xl">
-            {group.name}
-          </h3>
-          <span
-            className={`status text-xs px-2 py-0.5 rounded-full text-white shadow-md ${connectionStatus.className}`}
-          >
-            {connectionStatus.text}
-          </span>
-        </div>
-        <div className="devices-card bg-slate-50 rounded-2xl mx-[-0.5em] p-2 shadow flex flex-col items-stretch gap-2">
-          {group.devices?.map(d => (
-            <SimpleDeviceCard
-              key={d.id}
-              data={d as Device}
-              onUpdate={handleUpdate}
-            />
-          ))}
-        </div>
-      </div> */}
-      {/* {groups.length > 0 ? ( */}
+      {orphanDevices.length !== 0 && (
+        <Alert
+          severity="warning"
+          // variant="outlined"
+          className="mb-4"
+          action={
+            <Link to="orphan-devices">
+              <TextButton className="!bg-orange-500">Configure</TextButton>
+            </Link>
+          }
+        >
+          {/* <AlertTitle>Orphan Devices</AlertTitle> */}
+          There{" "}
+          {orphanDevices.length > 1
+            ? `are ${orphanDevices.length} devices`
+            : `is 1 device`}{" "}
+          that {orphanDevices.length > 1 ? "are" : "is"} not connected to any
+          building or group. Click here to assign{" "}
+          {orphanDevices.length > 1 ? "them" : "it"} to a group to make{" "}
+          {orphanDevices.length > 1 ? "them" : "it"} functional.
+        </Alert>
+      )}
       {group ? (
         <GroupCard
           data={group as Group}
@@ -125,51 +115,4 @@ export const DashboardIndex = () => {
   )
 }
 
-export default DashboardIndex
-
-// const [group, setGroup] = useState<Group>(b as Group)
-// // console.log("Most Accessed Group is: ", mostAccessedGroup.name)
-// WS_URI = `${process.env.NODE_ENV === "production" ? "wss" : "ws"}://${
-//   ENV.CORE_ADDR
-// }/api/v1/control/manage/${mostAccessedGroup.id}`
-
-// // https://www.npmjs.com/package/react-use-websocket
-// const { sendJsonMessage, sendMessage, readyState } = useWebSocket(WS_URI, {
-//   onOpen: e => {
-//     console.log("WS Connected: ", e)
-//     const authSignal: Message = {
-//       signal: Signal.AUTHENTICATE_CLIENT,
-//       payload: {
-//         token: socketToken,
-//       },
-//       id: "authentication message doesn't have an id",
-//     }
-//     sendMessage(JSON.stringify(authSignal))
-//     console.log("Sent the authentication signal with payload")
-//   },
-//   onClose: e => console.warn("WS Closed: ", e),
-//   onError: e => console.warn("WS ERROR: ", e),
-//   onMessage: e => {
-//     const msg = JSON.parse(e.data) as Message
-//     if (msg.message) console.log("🔽 MESSAGE: ", msg.message)
-//     if (msg.update) {
-//       setGroup(prev => ({
-//         ...prev,
-//         devices: prev.devices?.map(d =>
-//           d.id === msg.id ? { ...d, state: { ...d.state, ...msg.update } } : d
-//         ),
-//       }))
-//     }
-//   },
-//   share: true,
-//   // filter: () => false,
-//   shouldReconnect: e => true,
-//   // protocols: socketToken, // FIXME: this causes the connection error on chrome, use a better way!
-// })
-
-// const connectionStatus = WS_STATUS_BADGES[readyState]
-
-// const handleUpdate = (message: object): boolean => {
-//   sendJsonMessage(message)
-//   return true
-// }
+export default DashboardIndexRoute
