@@ -80,6 +80,9 @@ export default function AppOrphanDevicesRoute() {
               <TextButton className="!bg-primary" type="submit">
                 Move
               </TextButton>
+              <Link to={`${DASHBOARD_PREFIX}/devices/${d.id}/transfer`}>
+                <TextButton className="!bg-teal-500">Transfer</TextButton>
+              </Link>
               <Link
                 to={`${DASHBOARD_PREFIX}/devices/${d.id}/remove?intent=delete`}
               >

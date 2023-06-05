@@ -72,6 +72,8 @@ export const detachDevice = (id: string, token: string) =>
   ax.post(`${devices}/${id}/detach/`, {}, h(token)).then(extractResponseData)
 export const getOrphanDevices = (token: string) =>
   ax.get(`${devices}/`, h(token)).then(extractResponseData)
+export const transferDevice = (id: string, token: string, data: object) =>
+  ax.post(`${devices}/${id}/transfer`, data, h(token)).then(extractResponseData)
 
 /* =-=-=-=-=-=-=-=-=-=-=-=-=-=- UTILS =-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 export const delay = (time: number) => ax.get(`${v1}/dev/delay?time=${time}`)
@@ -123,6 +125,7 @@ const api = {
   updateDevice,
   detachDevice,
   getOrphanDevices,
+  transferDevice,
 
   delay,
   dly,
