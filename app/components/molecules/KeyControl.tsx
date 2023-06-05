@@ -1,7 +1,7 @@
 import { Switch } from "@mui/material"
 import type { ReactNode } from "react"
 import type { DeviceControlProps } from "~/types/Device"
-import { DeviceTypes } from "~/types/Device"
+import { DeviceType } from "~/types/DeviceType"
 
 export default function Key4({
   type: t,
@@ -37,12 +37,12 @@ export default function Key4({
 
   // Fix state if empty
   if (!state || typeof state !== "object") state = {}
-  if (t !== DeviceTypes.KEY && t !== DeviceTypes.KEY1) {
+  if (t !== DeviceType.KEY && t !== DeviceType.KEY1) {
     if (!state.power || typeof state.power !== "object") {
       state.power =
-        t === DeviceTypes.KEY2
+        t === DeviceType.KEY2
           ? { 0: false, 1: false }
-          : t === DeviceTypes.KEY3
+          : t === DeviceType.KEY3
           ? { 0: false, 1: false, 2: false }
           : { 0: false, 1: false, 2: false, 3: false } // it's probably 4
     }
@@ -50,7 +50,7 @@ export default function Key4({
 
   return (
     <div className={`KeyControl`}>
-      {t === DeviceTypes.KEY || t === DeviceTypes.KEY1 ? (
+      {t === DeviceType.KEY || t === DeviceType.KEY1 ? (
         <Switch checked={!!state.power} onChange={toggleSinglePower} />
       ) : (
         Object.entries(state.power).map(([k, v]) => {

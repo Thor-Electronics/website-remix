@@ -5,7 +5,7 @@ import axios from "axios"
 
 export const ax = axios.create({
   baseURL: ENV.CORE_URL,
-  timeout: 9000,
+  // timeout: 9000,
   headers: { "X-Request-From": "Website" },
   // transformRequest: axios.defaults.transformRequest,
   // transformResponse: axios.defaults.transformResponse,

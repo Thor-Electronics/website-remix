@@ -6,14 +6,18 @@ import {
 import type { ReactNode } from "react"
 import type { CommandMessage, Message } from "./Message"
 import { parseDeviceToken, type DeviceToken } from "./DeviceToken"
+import { DeviceType } from "./DeviceType"
+import type { DeviceChip } from "./DeviceChip"
 
 export interface Device {
   id: string
   cpuId: string
   name: string
   groupId: string
-  type: DeviceTypes
+  type: DeviceType
+  chip: DeviceChip
   state: DeviceState
+  manufacturerId?: string
   isOnline?: boolean // could be connected timestamp to calculate uptime
   uptime?: Date
   latency?: number
@@ -44,22 +48,6 @@ export type DeviceState = {
   // volume?: number // TV, Radio, Speaker
   // channel?: number // TV, Radio
   // [key: string]: object
-}
-
-export enum DeviceTypes {
-  KEY = "KEY",
-  KEY1 = "KEY1",
-  KEY2 = "KEY2",
-  KEY3 = "KEY3",
-  KEY4 = "KEY4",
-  LOCK = "LOCK",
-  BELL = "BELL",
-  TV = "TV",
-  LIGHT = "LIGHT",
-  IRHUB = "IRHUB",
-  BLINDS = "BLINDS",
-  DOOR = "DOOR",
-  VEHICLE = "VEHICLE",
 }
 
 export type DeviceActionCallbackReturnType =
@@ -94,7 +82,7 @@ export type DeviceStateUpdaterGenerator = () => DeviceStateUpdater
 // Generates device actions for the device to be used in the device control
 export type DeviceActionGenerator = (
   id: string,
-  type: DeviceTypes,
+  type: DeviceType,
   state: DeviceState,
   onUpdate: Function
 ) => ReactNode
@@ -108,7 +96,7 @@ export type DeviceStateEntryActionGenerator = (
 ) => DeviceAction
 
 export type DeviceControlProps = {
-  type: DeviceTypes
+  type: DeviceType
   state: DeviceState
   onUpdate: DeviceControlPanelStateUpdateHandler
 }
@@ -131,12 +119,12 @@ export const commonActions: { [key: string]: LegacyDeviceAction } = {
 }
 
 export const deviceActions: { [key: string]: LegacyDeviceAction[] } = {
-  [DeviceTypes.KEY]: [commonActions.powerAction, commonActions.restartAction],
-  [DeviceTypes.KEY1]: [commonActions.powerAction, commonActions.restartAction],
-  [DeviceTypes.KEY2]: [commonActions.powerAction, commonActions.restartAction],
-  [DeviceTypes.KEY3]: [commonActions.powerAction, commonActions.restartAction],
-  [DeviceTypes.KEY4]: [commonActions.powerAction, commonActions.restartAction],
-  [DeviceTypes.BELL]: [
+  [DeviceType.KEY]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceType.KEY1]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceType.KEY2]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceType.KEY3]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceType.KEY4]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceType.BELL]: [
     commonActions.powerAction,
     commonActions.restartAction,
     {
@@ -145,7 +133,7 @@ export const deviceActions: { [key: string]: LegacyDeviceAction[] } = {
       callback: () => "BUZZ",
     },
   ],
-  [DeviceTypes.TV]: [
+  [DeviceType.TV]: [
     commonActions.powerAction,
     commonActions.restartAction,
     {
@@ -169,7 +157,7 @@ export const deviceActions: { [key: string]: LegacyDeviceAction[] } = {
       callback: () => "CHANNEL_DOWN",
     },
   ],
-  [DeviceTypes.LIGHT]: [
+  [DeviceType.LIGHT]: [
     commonActions.powerAction,
     commonActions.restartAction,
     {
@@ -178,11 +166,8 @@ export const deviceActions: { [key: string]: LegacyDeviceAction[] } = {
       callback: () => "SET_COLOR",
     },
   ],
-  [DeviceTypes.IRHUB]: [commonActions.powerAction, commonActions.restartAction],
-  [DeviceTypes.LOCK]: [commonActions.powerAction, commonActions.restartAction],
-  [DeviceTypes.DOOR]: [commonActions.powerAction, commonActions.restartAction],
-  [DeviceTypes.BLINDS]: [
-    commonActions.powerAction,
-    commonActions.restartAction,
-  ],
+  [DeviceType.IRHUB]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceType.LOCK]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceType.DOOR]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceType.BLINDS]: [commonActions.powerAction, commonActions.restartAction],
 }

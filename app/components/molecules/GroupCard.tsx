@@ -20,7 +20,8 @@ import { ReadyState } from "react-use-websocket"
 import { SimpleDeviceCard } from "./SimpleDeviceCard"
 import { Link } from "@remix-run/react"
 import { DASHBOARD_PREFIX } from "~/routes/app"
-import { parseDevice, type DeviceState, DeviceTypes } from "~/types/Device"
+import { parseDevice, type DeviceState } from "~/types/Device"
+import { DeviceType } from "~/types/DeviceType"
 
 export interface Props extends HTMLAttributes<HTMLElement> {
   data: Group
@@ -196,7 +197,7 @@ export const GroupCard = ({
           <div className="devices">
             {group.devices?.map(d => {
               switch (d.type) {
-                case DeviceTypes.KEY1:
+                case DeviceType.KEY1:
                 // return
                 // break
 

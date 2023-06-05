@@ -3,7 +3,6 @@ import type {
   Device,
   DeviceControlPanelStateUpdateHandler,
   DeviceStateUpdateSender,
-  DeviceTypes,
 } from "~/types/Device"
 import { OnlinePulse } from "../atoms/Pulse"
 import KeyControl from "./KeyControl"
@@ -12,6 +11,7 @@ import { Link } from "@remix-run/react"
 import { DASHBOARD_PREFIX } from "~/routes/app"
 import { IconButton } from "../atoms/Button"
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid"
+import { DeviceType } from "~/types/DeviceType"
 
 export interface ISimpleDeviceCardProps extends HTMLAttributes<HTMLElement> {
   data: Device
@@ -101,7 +101,7 @@ export const SimpleDeviceCard = ({
   )
 }
 
-export const DeviceControlPanels: Record<DeviceTypes, Function> = {
+export const DeviceControlPanels: Record<DeviceType, Function> = {
   KEY: KeyControl,
   KEY1: KeyControl,
   KEY2: KeyControl,

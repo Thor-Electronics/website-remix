@@ -5,7 +5,6 @@ import { useState } from "react"
 import invariant from "tiny-invariant"
 import { getSessionToken, requireUser } from "~/models/session.server"
 import type { Device } from "~/types/Device"
-import { DeviceTypes } from "~/types/Device"
 import type { User } from "~/types/User"
 import api from "~/utils/core.server"
 

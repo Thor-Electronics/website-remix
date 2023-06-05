@@ -37,13 +37,10 @@ type LoaderData = {
 export const loader: LoaderFunction = async ({ request }) => {
   const token = await getSessionToken(request)
   const user = await requireUser(request) // todo: optimize it by getting the token once? or getAuth to get both token and user?
-  console.log(`app.tsx -- ${user.name}(${user.id}) is using the app`)
+  // console.log(`app.tsx -- ${user.name}(${user.id}) is using the app`)
   const orphanDevices = await api
     .getOrphanDevices(token)
-    .then(data => {
-      console.log("Orphan Devices: ", data)
-      return data
-    })
+    .then(data => data)
     .catch(err => {
       console.error("Error fetching orphan devices: ", err)
       return []

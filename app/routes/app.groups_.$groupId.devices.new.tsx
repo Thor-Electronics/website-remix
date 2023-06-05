@@ -9,7 +9,7 @@ import {
 } from "@remix-run/react"
 import invariant from "tiny-invariant"
 import { getSessionToken, requireUser } from "~/models/session.server"
-import { DeviceTypes } from "~/types/Device"
+import { DeviceType } from "~/types/DeviceType"
 import type { Group } from "~/types/Group"
 import type { User } from "~/types/User"
 import api, { getGroupDetails } from "~/utils/core.server"
@@ -113,7 +113,7 @@ export default function NewDevicePage() {
             <span className="error">{actionData.errors.type}</span>
           )}
           <select name="type" required>
-            {Object.entries(DeviceTypes).map(([k, v]) => (
+            {Object.entries(DeviceType).map(([k, v]) => (
               <option key={k} value={v}>
                 {v}
               </option>

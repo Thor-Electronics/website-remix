@@ -1,0 +1,15 @@
+export enum DeviceType {
+  KEY = "KEY",
+  KEY1 = "KEY1",
+  KEY2 = "KEY2",
+  KEY3 = "KEY3",
+  KEY4 = "KEY4",
+  LOCK = "LOCK",
+  BELL = "BELL",
+  TV = "TV",
+  LIGHT = "LIGHT",
+  IRHUB = "IRHUB",
+  BLINDS = "BLINDS",
+  DOOR = "DOOR",
+  VEHICLE = "VEHICLE",
+}

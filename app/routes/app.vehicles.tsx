@@ -4,7 +4,7 @@ import { Outlet, useLoaderData, useRouteError } from "@remix-run/react"
 import type { V2_ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules"
 import { DashboardGroupsList } from "~/components/organisms/DashboardGroupsList"
 import { getSessionToken } from "~/models/session.server"
-import { DeviceTypes } from "~/types/Device"
+import { DeviceType } from "~/types/DeviceType"
 import type { Group } from "~/types/Group"
 import { getUserGroups } from "~/utils/core.server"
 
@@ -51,7 +51,7 @@ export const sampleVehicle = {
   cpuId: "ECU_18328193140",
   name: "911 Turbo",
   groupId: "0",
-  type: DeviceTypes.VEHICLE,
+  type: DeviceType.VEHICLE,
   state: {
     speed: 60, // KMpH
     rpm: 2000, // RPM

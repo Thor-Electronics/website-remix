@@ -50,7 +50,7 @@ type LoaderData = {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
-  console.log("app._index.tsx -- SessionToken, UserGroups, GroupDetails")
+  // console.log("app._index.tsx -- SessionToken, UserGroups, GroupDetails")
   const token = await getSessionToken(request)
   const groups = await getUserGroups(token)
   if (groups.length === 0) {
