@@ -16,7 +16,13 @@ import {
 } from "@heroicons/react/24/solid"
 import type { LinksFunction, LoaderFunction } from "@remix-run/node"
 import { json, Response } from "@remix-run/node"
-import { Link, Outlet, useCatch, useLoaderData } from "@remix-run/react"
+import {
+  Link,
+  Outlet,
+  useCatch,
+  useLoaderData,
+  useRouteError,
+} from "@remix-run/react"
 import { Copyright } from "~/components/atoms/Copyright"
 import { LogoIcon } from "~/components/atoms/LogoIcon"
 import type { FixedNavItem } from "~/components/organisms/FixedNav"
@@ -29,6 +35,7 @@ import {
 } from "~/types/User"
 import adminStyles from "~/styles/admin.css"
 import { requireUser } from "~/models/session.server"
+import type { V2_ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules"
 
 type LoaderData = {
   user: User
@@ -79,16 +86,18 @@ export const Admin = () => {
   )
 }
 
-export const CatchBoundary = () => {
-  const caught = useCatch()
+export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
+  const error = useRouteError()
+  console.log("panel.tsx ERROR: ", error)
+
   return (
-    <div className="caught h-screen bg-rose-200 text-rose-600 flex flex-col gap-6 items-center justify-center text-center">
+    <div className="error h-screen bg-rose-200 text-rose-600 flex flex-col gap-6 items-center justify-center text-center">
       <LogoIcon className="w-32" />
       <h2 className="status flex items-center justify-center gap-2 text-3xl font-bold">
-        <span className="code">{caught.status}</span>|
-        <span className="text">{caught.statusText}</span>
+        <span className="code">{error.status}</span>|
+        <span className="text">{error.statusText}</span>
       </h2>
-      <div className="error text-3xl font-bold uppercase">{caught.data}</div>
+      <div className="error text-3xl font-bold uppercase">{error.data}</div>
       {/* <p className="description">There was an error handling your request</p> */}
       <Link to="/" className="font-semibold !underline" prefetch="render">
         Back to home

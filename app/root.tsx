@@ -105,7 +105,7 @@ export default function App() {
 
 export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
   const error = useRouteError()
-  console.error("ERROR: ", error)
+  console.error("root.tsx ERROR: ", error)
 
   if (isRouteErrorResponse(error)) {
     console.log("Is Route Error Response: ", error)
