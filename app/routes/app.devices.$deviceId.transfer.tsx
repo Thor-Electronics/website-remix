@@ -1,6 +1,12 @@
 import type { LoaderFunction } from "@remix-run/node"
 import { json, redirect } from "@remix-run/node"
-import { Form, Link, useActionData, useLoaderData } from "@remix-run/react"
+import {
+  Form,
+  Link,
+  useActionData,
+  useLoaderData,
+  useNavigation,
+} from "@remix-run/react"
 import type { ActionFunction } from "react-router"
 import invariant from "tiny-invariant"
 import { getSessionToken, requireUser } from "~/models/session.server"
@@ -42,7 +48,8 @@ export const action: ActionFunction = async ({ request, params }) => {
     .catch(err => {
       const message =
         err.response?.data?.message || err.response?.data || err.response
-      console.error("Error transferring device: ", message, err)
+      !err.response?.data?.message &&
+        console.error("Error transferring device: ", message, err)
       return json<ActionData>({
         errors: { message: message || "Unknown Error" },
       })
@@ -52,10 +59,14 @@ export const action: ActionFunction = async ({ request, params }) => {
 export default function TransferDeviceRoute() {
   const { device } = useLoaderData<LoaderData>()
   const actionData = useActionData<ActionData>()
+  const navigation = useNavigation()
 
   return (
     <div className="TransferDeviceRoute">
       <Form method="POST" className="card flex flex-col gap-4">
+        {actionData?.errors && (
+          <Alert severity="error">{actionData.errors.message}</Alert>
+        )}
         <Alert severity="warning">
           You're about to transfer <b>{device.name}</b> ownership to another
           account. This action <b>CANNOT BE UNDONE</b>!
@@ -73,12 +84,21 @@ export default function TransferDeviceRoute() {
           User Phone Number:
           <input type="text" name="phone" placeholder="09123456789" required />
         </label>
+        {actionData?.errors && (
+          <Alert severity="error">{actionData.errors.message}</Alert>
+        )}
         <div className="buttons flex flex-row-reverse items-stretch gap-2">
-          <TextButton type="submit" className="!bg-teal-500">
+          <TextButton
+            type="submit"
+            className="!bg-teal-500"
+            disabled={navigation.state !== "idle"}
+          >
             Transfer Ownership
           </TextButton>
           <Link to={`${DASHBOARD_PREFIX}/groups/${device.groupId ?? ""}`}>
-            <TextButton>Cancel</TextButton>
+            <TextButton disabled={navigation.state !== "idle"}>
+              Cancel
+            </TextButton>
           </Link>
         </div>
       </Form>
