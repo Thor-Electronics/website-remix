@@ -21,6 +21,8 @@ import styles from "~/styles/root.css"
 import { LogoIcon } from "./components/atoms/LogoIcon"
 import { getEnv } from "./env.server"
 import type { V2_ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules"
+import fileSessionStorage from "./session/file.session.server"
+import * as crypto from "crypto"
 
 // TODO: https://www.wking.dev/library/remix-route-helpers-a-better-way-to-use-parent-data
 // use matches
@@ -84,10 +86,40 @@ type LoaderData = {
   ENV: ReturnType<typeof getEnv>
 }
 
-export const loader: LoaderFunction = () =>
-  json<LoaderData>({
-    ENV: getEnv(),
-  })
+export const loader: LoaderFunction = async ({ request }) => {
+  const url = new URL(request.url)
+  console.log("root.tsx: ", url.pathname)
+
+  // File Session of the Visitor
+  const fileSession = await fileSessionStorage.getSession(
+    request.headers.get("Cookie")
+  )
+  const now = new Date()
+  if (!fileSession.has("uuid")) {
+    console.log(
+      `FileSession doesn't exist. Creating new file session for visitor ${request.headers}`,
+      request.headers
+    ) // todo: get the IP
+    fileSession.set("uuid", crypto.randomUUID())
+    fileSession.set("history", [])
+    // fileSession.set("createdAt", now) // Redundant, we can check the first record's date
+  }
+  // fileSession.set("updatedAt", now) // Redundant, we can check the last record's date
+  const history = fileSession.get("history")
+  history?.push({ url: url.pathname, date: now })
+  console.log("File Session: ", fileSession.data)
+
+  return json<LoaderData>(
+    {
+      ENV: getEnv(),
+    },
+    {
+      headers: {
+        "Set-Cookie": await fileSessionStorage.commitSession(fileSession),
+      },
+    }
+  )
+}
 
 export default function App() {
   const { ENV } = useLoaderData<LoaderData>()
@@ -105,10 +137,10 @@ export default function App() {
 
 export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
   const error = useRouteError()
-  console.error("root.tsx ERROR: ", error)
+  // console.error("root.tsx ERROR: ", error)
 
   if (isRouteErrorResponse(error)) {
-    console.log("Is Route Error Response: ", error)
+    // console.log("Is Route Error Response: ", error)
     return (
       <Document title="Oops!">
         <div className="error-container h-screen error bg-rose-100 text-rose-600 flex flex-col gap-6 items-center justify-center text-center">

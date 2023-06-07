@@ -8,7 +8,7 @@ import {
   useTransition,
 } from "@remix-run/react"
 import Button, { TextButton } from "~/components/atoms/Button"
-import { createSession, getUserId } from "~/models/session.server"
+import { createDBSession, getUserId } from "~/models/session.server"
 import type { User } from "~/types/User"
 import api from "~/utils/core.server"
 
@@ -37,7 +37,7 @@ export const action: ActionFunction = async ({ request }) => {
     .then(async res => {
       const { user: u, token, message } = res.data
       const user: User = u
-      const { session, redirect } = await createSession(
+      const { cookieSession: session, redirect } = await createDBSession(
         user.id,
         token,
         // getClientIPAddress(request) ?? "",
