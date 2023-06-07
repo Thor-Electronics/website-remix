@@ -10,8 +10,12 @@ import TVControl from "./TVControl"
 import { Link } from "@remix-run/react"
 import { DASHBOARD_PREFIX } from "~/routes/app"
 import { IconButton } from "../atoms/Button"
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid"
-import { DeviceType } from "~/types/DeviceType"
+import {
+  ArrowSmallRightIcon,
+  PencilIcon,
+  TrashIcon,
+} from "@heroicons/react/24/solid"
+import type { DeviceType } from "~/types/DeviceType"
 
 export interface ISimpleDeviceCardProps extends HTMLAttributes<HTMLElement> {
   data: Device
@@ -90,6 +94,11 @@ export const SimpleDeviceCard = ({
               <PencilIcon className="w-4" />
             </IconButton>
           </Link>
+          <Link to={`${DASHBOARD_PREFIX}/devices/${d.id}/transfer`}>
+            <IconButton>
+              <ArrowSmallRightIcon className="w-4" />
+            </IconButton>
+          </Link>
         </div>
         {d.token && (
           <div className="activation">
@@ -114,4 +123,5 @@ export const DeviceControlPanels: Record<DeviceType, Function> = {
   IRHUB: () => "IR_HUB CONTROL",
   BLINDS: () => "BLINDS CONTROL",
   DOOR: () => "DOOR CONTROL",
+  VEHICLE: () => "VEHICLE CONTROL",
 }
