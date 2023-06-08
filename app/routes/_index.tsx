@@ -26,18 +26,18 @@ export const links: LinksFunction = () => [
 ]
 
 type LoaderData = {
-  user: User | null
+  user?: User
   session: Awaited<ReturnType<typeof getSessionData>>
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
   const user = await getOptionalUser(request)
   const session = await getSessionData(request)
-  console.log(
-    `_index.tsx -- ${user?.name ?? "Guest"}(${user?.id ?? "-"}) is visiting ${
-      request.url
-    }`
-  )
+  // console.log(
+  //   `_index.tsx -- ${user?.name ?? "Guest"}(${user?.id ?? "-"}) is visiting ${
+  //     request.url
+  //   }`
+  // )
   return json<LoaderData>({ user, session })
 }
 

@@ -3,7 +3,7 @@ import type {
   LoaderFunction,
   V2_MetaFunction,
 } from "@remix-run/node"
-import { json } from "@remix-run/node"
+import { json, redirect } from "@remix-run/node"
 import {
   Link,
   Links,
@@ -23,6 +23,7 @@ import { getEnv } from "./env.server"
 import type { V2_ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules"
 import fileSessionStorage from "./session/file.session.server"
 import * as crypto from "crypto"
+import cookieSessionStorage from "./session/cookie.session.server"
 
 // TODO: https://www.wking.dev/library/remix-route-helpers-a-better-way-to-use-parent-data
 // use matches
@@ -90,34 +91,52 @@ export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url)
   console.log("root.tsx: ", url.pathname)
 
-  // File Session of the Visitor
-  const fileSession = await fileSessionStorage.getSession(
-    request.headers.get("Cookie")
-  )
-  const now = new Date()
-  if (!fileSession.has("uuid")) {
-    console.log(
-      `FileSession doesn't exist. Creating new file session for visitor ${request.headers}`,
-      request.headers
-    ) // todo: get the IP
-    fileSession.set("uuid", crypto.randomUUID())
-    fileSession.set("history", [])
-    // fileSession.set("createdAt", now) // Redundant, we can check the first record's date
-  }
-  // fileSession.set("updatedAt", now) // Redundant, we can check the last record's date
-  const history = fileSession.get("history")
-  history?.push({ url: url.pathname, date: now })
-  console.log("File Session: ", fileSession.data)
+  // const cookieSession = await cookieSessionStorage.getSession(
+  //   request.headers.get("Cookie")
+  // )
+  // todo: has a problem with pre-fetches I think
+  // if (cookieSession.has("redirect")) {
+  //   const redirectTo = cookieSession.get("redirect")!
+  //   console.log(`Redirecting user '${url.pathname}' >>> '${redirectTo}'`)
+  //   return redirect(redirectTo, {
+  //     headers: {
+  //       "Set-Cookie": await cookieSessionStorage.commitSession(cookieSession),
+  //     },
+  //   })
+  // }
+
+  // console.log("ROOT HERE 1")
+  // // File Session of the Visitor
+  // const fileSession = await fileSessionStorage.getSession(
+  //   request.headers.get("Cookie")
+  // )
+  // console.log("ROOT HERE 2")
+  // const now = new Date()
+  // if (!fileSession.has("uuid")) {
+  //   console.log(
+  //     `FileSession doesn't exist. Creating new file session for visitor ${request.headers}`,
+  //     request.headers
+  //   ) // todo: get the IP
+  //   fileSession.set("uuid", crypto.randomUUID())
+  //   fileSession.set("history", [])
+  //   console.log("ROOT HERE 3")
+  //   // fileSession.set("createdAt", now) // Redundant, we can check the first record's date
+  // }
+  // // fileSession.set("updatedAt", now) // Redundant, we can check the last record's date
+  // const history = fileSession.get("history")
+  // history?.push({ url: url.pathname, date: now })
+  // console.log("File Session: ", fileSession.data)
+  // console.log("ROOT HERE 4")
 
   return json<LoaderData>(
     {
       ENV: getEnv(),
-    },
-    {
-      headers: {
-        "Set-Cookie": await fileSessionStorage.commitSession(fileSession),
-      },
     }
+    // {
+    //   headers: {
+    //     "Set-Cookie": await fileSessionStorage.commitSession(fileSession),
+    //   },
+    // }
   )
 }
 

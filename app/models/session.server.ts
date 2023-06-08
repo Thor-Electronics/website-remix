@@ -1,3 +1,4 @@
+// import type { Request } from "@remix-run/node"
 import { redirect } from "@remix-run/node"
 import type { User } from "~/types/User"
 import api from "~/utils/core.server"
@@ -37,6 +38,24 @@ export async function createDBSession(
   }
 }
 
+export const createCookieSession = async (
+  userId: string,
+  token: string,
+  request: Request,
+  redirectTo: string
+) => {
+  const cookieSession = await cookieSessionStorage.getSession()
+  cookieSession.set("token", token)
+  cookieSession.set("userId", userId)
+  return {
+    redirect: redirect(redirectTo, {
+      headers: {
+        "Set-Cookie": await cookieSessionStorage.commitSession(cookieSession),
+      },
+    }),
+  }
+}
+
 // Extracts user's cookie session from request
 export const getUserSession = async (request: Request) =>
   cookieSessionStorage.getSession(request.headers.get("Cookie"))
@@ -58,7 +77,6 @@ export async function getSessionData(request: Request) {
   }
 }
 
-// todo: optimize this to avoid calling DB use the data in the user session without calling DB for details!
 export const getSessionToken = async (request: Request) =>
   (await getSessionData(request)).token
 
@@ -75,7 +93,11 @@ export const getOptionalUser = async (request: Request) => {
 
 export const requireUser = async (request: Request) => {
   const user = await getOptionalUser(request)
-  if (!user) throw await logout(request)
+  if (!user) {
+    const url = new URL(request.url)
+    console.log("User is undefined. redirecting to: ", url.pathname)
+    throw await logout(request, url.pathname)
+  }
   return user
 }
 
@@ -85,26 +107,29 @@ export const requireUserId = async (
 ) => {
   const userId = getUserId(request)
   if (!userId) {
-    const searchParams = new URLSearchParams([["redirectTo", redirectTo]])
-    throw redirect(`/login?${searchParams}`)
+    // const searchParams = new URLSearchParams([["redirectTo", redirectTo]])
+    // throw redirect(`/login?${searchParams}`)
+    const url = new URL(request.url)
+    console.log("User ID is undefined. redirecting to: ", url.pathname)
+    throw await logout(request, url.pathname)
   }
   return userId
 }
 
 // TODO: set redirectTo cookie or something when redirecting to login
-export const logout = async (
-  request: Request,
-  redirectTo: string = "/login"
-) => {
-  const session = await getUserSession(request)
-  try {
-    await db.session.delete({ where: { ID: session.get("id") } })
-  } catch {
-    console.warn("Session doesn't exist")
-  }
-  return redirect("/login", {
+export const logout = async (request: Request, redirectTo: string = "/app") => {
+  const cookieAuthSession = await getUserSession(request)
+  console.log(`Logging out to ${redirectTo}...`)
+  // try {
+  //   await db.session.delete({ where: { ID: cookieAuthSession.get("id") } })
+  // } catch {
+  //   console.warn("Session doesn't exist to delete. Continuing...")
+  // }
+  return redirect(`/login?redirect=${redirectTo}`, {
     headers: {
-      "Set-Cookie": await cookieSessionStorage.destroySession(session),
+      "Set-Cookie": await cookieSessionStorage.destroySession(
+        cookieAuthSession
+      ),
     },
   })
 }
