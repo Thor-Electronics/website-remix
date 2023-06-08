@@ -4,13 +4,51 @@ import {
   Form,
   Link,
   useActionData,
+  useLoaderData,
   useNavigation,
-  useTransition,
 } from "@remix-run/react"
 import Button, { TextButton } from "~/components/atoms/Button"
-import { createSession, getUserId } from "~/models/session.server"
+import {
+  createCookieSession,
+  createDBSession,
+  getUserId,
+} from "~/models/session.server"
+import cookieSessionStorage from "~/session/cookie.session.server"
 import type { User } from "~/types/User"
 import api from "~/utils/core.server"
+
+type LoaderData = {
+  redirectTo?: string
+}
+
+export const loader: LoaderFunction = async ({ request }) => {
+  // console.log("HERE 0")
+  const url = new URL(request.url)
+  const redirectTo = url.searchParams.get("redirect") as string | undefined
+  // console.log("HERE 1")
+  if (await getUserId(request)) return redirect(redirectTo ?? "/app")
+  // console.log("HERE 2")
+  if (redirectTo) {
+    // console.log("HERE 3")
+    const cookieSession = await cookieSessionStorage.getSession(
+      request.headers.get("Cookie")
+    )
+    // console.log("HERE 4")
+    cookieSession.flash("redirect", redirectTo)
+    // cookieSession.flash("message", "Already logged in")
+    // console.log("HERE 5", redirectTo)
+    return json<LoaderData>(
+      { redirectTo },
+      {
+        headers: {
+          "Set-Cookie": await cookieSessionStorage.commitSession(cookieSession),
+        },
+      }
+    )
+  }
+  // console.log("HERE 6")
+  return json<LoaderData>({})
+}
 
 type ActionData = {
   errors: {
@@ -31,18 +69,32 @@ export const action: ActionFunction = async ({ request }) => {
 
   if (Object.values(errors).some(Boolean)) return json({ errors }, 400)
 
+  console.log(`${email} is logging in...`)
+  const startTime = new Date().getTime()
   // call the core service api
   return await api
     .login({ email, password })
     .then(async res => {
       const { user: u, token, message } = res.data
       const user: User = u
-      const { session, redirect } = await createSession(
+      let redirectTo = !user.roles ? "/app" : "/panel"
+      const cookieSession = await cookieSessionStorage.getSession(
+        request.headers.get("Cookie")
+      )
+      if (cookieSession.has("redirect")) {
+        const r = cookieSession.get("redirect")
+        redirectTo = r ?? redirectTo
+      }
+      const { redirect } = await createCookieSession(
         user.id,
         token,
-        // getClientIPAddress(request) ?? "",
-        "",
-        !user.roles ? "/app" : "/panel"
+        request,
+        redirectTo
+      )
+      console.log(
+        `${email} successfully logged in(${
+          new Date().getTime() - startTime
+        }ms). Redirecting them to ${redirectTo}...`
       )
       return redirect
     })
@@ -53,11 +105,6 @@ export const action: ActionFunction = async ({ request }) => {
         err.response?.status
       )
     })
-}
-
-export const loader: LoaderFunction = async ({ request }) => {
-  if (await getUserId(request)) return redirect("/app")
-  return null
 }
 
 export const Login = () => {

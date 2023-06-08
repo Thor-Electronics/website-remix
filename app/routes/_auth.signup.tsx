@@ -11,7 +11,7 @@ import {
 // import { getClientIPAddress } from "remix-utils"
 import Button, { TextButton } from "~/components/atoms/Button"
 import {
-  createSession,
+  createDBSession,
   getSessionData,
   getUserId,
 } from "~/models/session.server"
@@ -44,7 +44,7 @@ export const action: ActionFunction = async ({ request }) => {
     .signup({ email, name, password })
     .then(async res => {
       const { user, token, message } = res.data
-      const { session, redirect } = await createSession(
+      const { cookieSession: session, redirect } = await createDBSession(
         user.id,
         token,
         // getClientIPAddress(request) ?? "",
