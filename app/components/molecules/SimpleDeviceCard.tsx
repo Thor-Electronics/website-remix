@@ -1,4 +1,4 @@
-import type { HTMLAttributes } from "react"
+import { useState, type HTMLAttributes } from "react"
 import type {
   Device,
   DeviceControlPanelStateUpdateHandler,
@@ -9,13 +9,15 @@ import KeyControl from "./KeyControl"
 import TVControl from "./TVControl"
 import { Link } from "@remix-run/react"
 import { DASHBOARD_PREFIX } from "~/routes/app"
-import { IconButton } from "../atoms/Button"
 import {
   ArrowSmallRightIcon,
+  EllipsisVerticalIcon,
   PencilIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid"
 import type { DeviceType } from "~/types/DeviceType"
+import SimpleDeviceCardOptionsMenu from "./SimpleDeviceCardOptionsMenu"
+import { IconButton } from "@mui/material"
 
 export interface ISimpleDeviceCardProps extends HTMLAttributes<HTMLElement> {
   data: Device
@@ -38,6 +40,14 @@ export const SimpleDeviceCard = ({
 
   if (d.latency) d.latency = Math.floor(d.latency / 20)
 
+  /* Options Menu */
+  const [optionsMenuAnchorEl, setOptionsMenuAnchorEl] =
+    useState<null | HTMLElement>(null)
+  const optionsMenuOpen = Boolean(optionsMenuAnchorEl)
+  const handleOptionsClick = (event: React.MouseEvent<HTMLButtonElement>) =>
+    setOptionsMenuAnchorEl(event.currentTarget)
+  const handleCloseOptionsMenu = () => setOptionsMenuAnchorEl(null)
+
   return (
     <div
       className={`SimpleDeviceCard ${d.isOnline ? "online" : ""} ${
@@ -55,6 +65,17 @@ export const SimpleDeviceCard = ({
               {d.token.code}
             </code>
           )}
+          <div className="options">
+            <IconButton onClick={handleOptionsClick}>
+              <EllipsisVerticalIcon className="w-5" />
+            </IconButton>
+            <SimpleDeviceCardOptionsMenu
+              anchorEl={optionsMenuAnchorEl}
+              open={optionsMenuOpen}
+              onClose={handleCloseOptionsMenu}
+              deviceId={d.id}
+            />
+          </div>
         </h4>
         <ControlPanel
           type={d.type}
@@ -83,23 +104,6 @@ export const SimpleDeviceCard = ({
             ~{d.latency ?? "?"}ms
           </span>
         )}
-        <div className="options">
-          <Link to={`${DASHBOARD_PREFIX}/devices/${d.id}/remove?intent=detach`}>
-            <IconButton className="!bg-rose-400">
-              <TrashIcon className="w-4" />
-            </IconButton>
-          </Link>
-          <Link to={`${DASHBOARD_PREFIX}/devices/${d.id}/edit`}>
-            <IconButton>
-              <PencilIcon className="w-4" />
-            </IconButton>
-          </Link>
-          <Link to={`${DASHBOARD_PREFIX}/devices/${d.id}/transfer`}>
-            <IconButton>
-              <ArrowSmallRightIcon className="w-4" />
-            </IconButton>
-          </Link>
-        </div>
         {d.token && (
           <div className="activation">
             Use the code <code>{d.token?.code}</code> to activate the device
