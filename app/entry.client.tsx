@@ -1,3 +1,4 @@
+import { loadServiceWorker } from '@remix-pwa/sw';
 import { RemixBrowser } from "@remix-run/react"
 import { hydrateRoot } from "react-dom/client"
 import { useLocation, useMatches } from "@remix-run/react"
@@ -26,3 +27,5 @@ if (process.env.NODE_ENV === "production") {
 }
 
 hydrateRoot(document, <RemixBrowser />)
+
+loadServiceWorker();

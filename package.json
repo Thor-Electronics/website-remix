@@ -3,11 +3,14 @@
   "sideEffects": false,
   "scripts": {
     "dev": "run-p dev:*",
-    "dev:remix": "remix dev",
+    "dev:remix": "cross-env NODE_ENV=development remix dev",
     "dev:css": "postcss styles --base styles --dir app/styles -w",
-    "build": "npm run build:css && remix build",
+    "build": "run-s build:*",
     "build:css": "postcss styles --base styles --dir app/styles --env production",
-    "start": "remix-serve build"
+    "start": "remix-serve build",
+    "build:remix": "cross-env NODE_ENV=production remix build",
+    "build:worker": "esbuild ./app/entry.workbox.ts --outfile=./public/entry.workbox.js --minify --bundle --platform=node --format=esm --define:process.env.NODE_ENV='\"production\"'",
+    "dev:worker": "esbuild ./app/entry.workbox.ts --outfile=./public/entry.workbox.js --bundle --platform=node --format=esm --define:process.env.NODE_ENV='\"development\"' --watch"
   },
   "dependencies": {
     "@emotion/react": "^11.10.5",
@@ -26,7 +29,16 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.8.0",
     "react-use-websocket": "^4.2.0",
-    "tiny-invariant": "^1.2.0"
+    "tiny-invariant": "^1.2.0",
+    "npm-run-all": "^4.1.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.3",
+    "web-push": "^3.6.1",
+    "@remix-pwa/sw": "*",
+    "@remix-pwa/push": "*",
+    "workbox-background-sync": "^6.5.4",
+    "workbox-routing": "^6.5.4",
+    "workbox-strategies": "^6.5.4"
   },
   "devDependencies": {
     "@csstools/postcss-sass": "^5.0.1",
