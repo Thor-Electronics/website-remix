@@ -1,3 +1,4 @@
+import { loadServiceWorker } from "@remix-pwa/sw";
 import { RemixBrowser, useLocation, useMatches } from "@remix-run/react";
 import { hydrateRoot } from "react-dom/client";
 import * as Sentry from "@sentry/remix";
@@ -25,3 +26,5 @@ if (process.env.NODE_ENV === "production") {
 }
 
 hydrateRoot(document, <RemixBrowser />);
+
+loadServiceWorker({ serviceWorkerUrl: "/entry.workbox.js" });

@@ -36,7 +36,9 @@
     "web-push": "^3.6.1",
     "workbox-background-sync": "^6.5.4",
     "workbox-routing": "^6.5.4",
-    "workbox-strategies": "^6.5.4"
+    "workbox-strategies": "^6.5.4",
+    "@remix-pwa/sw": "*",
+    "@remix-pwa/push": "*"
   },
   "devDependencies": {
     "@csstools/postcss-sass": "^5.0.1",

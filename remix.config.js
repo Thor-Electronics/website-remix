@@ -8,6 +8,7 @@ module.exports = {
     v2_normalizeFormMethod: true,
   },
   serverModuleFormat: "cjs", // "esm"
+  serverDependenciesToBundle: ["@remix-pwa/sw", "@remix-pwa/push"],
   // appDirectory: "app",
   // assetsBuildDirectory: "public/build",
   // serverBuildPath: "build/index.js",
