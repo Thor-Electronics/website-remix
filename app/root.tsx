@@ -2,8 +2,8 @@ import type {
   LinksFunction,
   LoaderFunction,
   V2_MetaFunction,
-} from "@remix-run/node"
-import { json, redirect } from "@remix-run/node"
+} from "@remix-run/node";
+import { json } from "@remix-run/node";
 import {
   Link,
   Links,
@@ -15,15 +15,14 @@ import {
   isRouteErrorResponse,
   useLoaderData,
   useRouteError,
-} from "@remix-run/react"
+} from "@remix-run/react";
 // import NavigatingScreen from "./components/NavigatingScreen"
-import styles from "~/styles/root.css"
-import { LogoIcon } from "./components/atoms/LogoIcon"
-import { getEnv } from "./env.server"
-import type { V2_ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules"
-import fileSessionStorage from "./session/file.session.server"
-import * as crypto from "crypto"
-import cookieSessionStorage from "./session/cookie.session.server"
+import styles from "~/styles/root.css";
+import { LogoIcon } from "./components/atoms/LogoIcon";
+import { getEnv } from "./env.server";
+import type { V2_ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
+import { useSWEffect } from "@remix-pwa/sw";
+// import webmanifest from "~/routes/resources.manifest[.]webmanifest";
 
 // TODO: https://www.wking.dev/library/remix-route-helpers-a-better-way-to-use-parent-data
 // use matches
@@ -37,59 +36,20 @@ export const meta: V2_MetaFunction = () => [
   { charSet: "utf-8" },
   { name: "viewport", content: "width=device-width,initial-scale=1" },
   { name: "theme-color", content: "#3b82f6" },
-]
+];
 
-export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }]
-
-function Document({
-  children,
-  title = `Thor Electronics`,
-}: {
-  children: React.ReactNode
-  title?: string
-}) {
-  return (
-    <html lang="en">
-      <head>
-        <Meta />
-        <title>{title}</title>
-        <Links />
-        {/* Hotjar Tracking Code for https://thor-electronics.ir */}
-        {ENV.NODE_ENV === "production" && (
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-              (function(h,o,t,j,a,r){
-                  h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-                  h._hjSettings={hjid:3479118,hjsv:6};
-                  a=o.getElementsByTagName('head')[0];
-                  r=o.createElement('script');r.async=1;
-                  r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-                  a.appendChild(r);
-              })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-            `,
-            }}
-          />
-        )}
-      </head>
-      <body className="min-h-screen bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200">
-        {/* <NavigatingScreen /> */}
-        {children}
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
-      </body>
-    </html>
-  )
-}
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: styles },
+  // { rel: "manifest", href: "resources.manifest.webmanifest" },
+];
 
 type LoaderData = {
-  ENV: ReturnType<typeof getEnv>
-}
+  ENV: ReturnType<typeof getEnv>;
+};
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const url = new URL(request.url)
-  console.log("root.tsx: ", url.pathname)
+  const url = new URL(request.url);
+  console.log("root.tsx: ", url.pathname);
 
   // const cookieSession = await cookieSessionStorage.getSession(
   //   request.headers.get("Cookie")
@@ -137,11 +97,13 @@ export const loader: LoaderFunction = async ({ request }) => {
     //     "Set-Cookie": await fileSessionStorage.commitSession(fileSession),
     //   },
     // }
-  )
-}
+  );
+};
 
 export default function App() {
-  const { ENV } = useLoaderData<LoaderData>()
+  const { ENV } = useLoaderData<LoaderData>();
+  // useSWEffect();
+
   return (
     <Document>
       <Outlet />
@@ -151,11 +113,11 @@ export default function App() {
         }}
       />
     </Document>
-  )
+  );
 }
 
 export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
-  const error = useRouteError()
+  const error = useRouteError();
   // console.error("root.tsx ERROR: ", error)
 
   if (isRouteErrorResponse(error)) {
@@ -174,10 +136,10 @@ export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
           </p>
         </div>
       </Document>
-    )
+    );
   }
 
-  let errMsg = "Unknown Error"
+  let errMsg = "Unknown Error";
   // TODO: detect error type check
   // if (error && error.message && error.message !== undefined) {
   //   errMsg = error.message
@@ -196,5 +158,47 @@ export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
         </Link>
       </div>
     </Document>
-  )
+  );
+};
+
+function Document({
+  children,
+  title = `Thor Electronics`,
+}: {
+  children: React.ReactNode;
+  title?: string;
+}) {
+  return (
+    <html lang="en">
+      <head>
+        <Meta />
+        <title>{title}</title>
+        <Links />
+        {/* Hotjar Tracking Code for https://thor-electronics.ir */}
+        {ENV.NODE_ENV === "production" && (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+              (function(h,o,t,j,a,r){
+                  h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+                  h._hjSettings={hjid:3479118,hjsv:6};
+                  a=o.getElementsByTagName('head')[0];
+                  r=o.createElement('script');r.async=1;
+                  r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+                  a.appendChild(r);
+              })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+            `,
+            }}
+          />
+        )}
+      </head>
+      <body className="min-h-screen bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200">
+        {/* <NavigatingScreen /> */}
+        {children}
+        <ScrollRestoration />
+        <Scripts />
+        <LiveReload />
+      </body>
+    </html>
+  );
 }
