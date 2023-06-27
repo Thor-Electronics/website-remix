@@ -4095,15 +4095,19 @@ var PushHandler = class extends Push {
 };
 var pushHandler = new PushHandler();
 self.addEventListener("push", (event) => {
+  console.log("Pushing...");
   pushHandler.handlePush(event);
 });
 self.addEventListener("notificationclick", (event) => {
+  console.log("Notification Clicked...");
   pushHandler.handleNotificationClick(event);
 });
 self.addEventListener("notificationclose", (event) => {
+  console.log("Notification Closed...");
   pushHandler.handleNotificationClose(event);
 });
 self.addEventListener("error", (error) => {
+  console.log("Error...");
   pushHandler.handleError(error);
 });
 /*! Bundled license information:

@@ -81,17 +81,21 @@ class PushHandler extends Push {
 const pushHandler = new PushHandler()
 
 self.addEventListener("push", (event: PushEvent) => {
+  console.log("Pushing...")
   pushHandler.handlePush(event)
 })
 
 self.addEventListener("notificationclick", (event: NotificationEvent) => {
+  console.log("Notification Clicked...")
   pushHandler.handleNotificationClick(event)
 })
 
 self.addEventListener("notificationclose", (event: NotificationEvent) => {
+  console.log("Notification Closed...")
   pushHandler.handleNotificationClose(event)
 })
 
 self.addEventListener("error", (error: ErrorEvent) => {
+  console.log("Error...")
   pushHandler.handleError(error)
 })

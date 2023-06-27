@@ -8,6 +8,7 @@ export let loader: LoaderFunction = async () => {
       name: "Thor Electronics",
       start_url: "/",
       display: "standalone",
+      // description: "",
       background_color: "#fff",
       theme_color: "#3b82f6",
       shortcuts: [
