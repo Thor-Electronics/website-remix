@@ -53,9 +53,9 @@ export const loader: LoaderFunction = async ({ request }) =>
 // }
 
 const chips = [
-  { value: "esp8266", displayName: "ESP8266" },
+  { value: "ESP8266", displayName: "ESP8266" },
   {
-    value: "esp32",
+    value: "ESP32",
     displayName: "ESP32",
   },
 ]
