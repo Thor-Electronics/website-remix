@@ -7,3 +7,19 @@
     @apply w-4;
   }
 }
+
+.VersionBadge {
+  @apply bg-green-200 px-1 rounded-md text-green-800 font-mono;
+
+  &.alpha {
+    @apply !bg-sky-200;
+  }
+
+  &.beta {
+    @apply !bg-amber-200;
+  }
+
+  &.dev {
+    @apply !bg-rose-200;
+  }
+}
