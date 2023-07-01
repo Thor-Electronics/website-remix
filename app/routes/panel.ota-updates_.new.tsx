@@ -1,27 +1,27 @@
 import {
   ExclamationTriangleIcon,
   FolderPlusIcon,
-} from "@heroicons/react/24/solid"
-import type { LoaderFunction } from "@remix-run/node"
-import { ActionFunction, json, redirect } from "@remix-run/node"
-import { useActionData, useLoaderData, useNavigation } from "@remix-run/react"
-import type { FormEvent } from "react"
-import { useState } from "react"
-import Button from "~/components/atoms/Button"
-import { getSessionToken } from "~/models/session.server"
-import api from "~/utils/core.server"
-import { PANEL_PREFIX } from "./panel"
+} from "@heroicons/react/24/solid";
+import type { LoaderFunction } from "@remix-run/node";
+import { ActionFunction, json, redirect } from "@remix-run/node";
+import { useActionData, useLoaderData, useNavigation } from "@remix-run/react";
+import type { FormEvent } from "react";
+import { useState } from "react";
+import Button from "~/components/atoms/Button";
+import { getSessionToken } from "~/models/session.server";
+import api from "~/utils/core.server";
+import { PANEL_PREFIX } from "./panel";
 
 // type ActionData = {
 //   errors: string[]
 // }
 
 type LoaderData = {
-  sessionToken: string
-}
+  sessionToken: string;
+};
 
 export const loader: LoaderFunction = async ({ request }) =>
-  json<LoaderData>({ sessionToken: await getSessionToken(request) })
+  json<LoaderData>({ sessionToken: await getSessionToken(request) });
 
 // export const action: ActionFunction = async ({ request }) => {
 //   const form = await request.formData()
@@ -58,24 +58,24 @@ const chips = [
     value: "ESP32",
     displayName: "ESP32",
   },
-]
+];
 
 export const AdminOTAUpdatesNew = () => {
-  const { sessionToken } = useLoaderData<LoaderData>()
-  const navigation = useNavigation()
+  const { sessionToken } = useLoaderData<LoaderData>();
+  const navigation = useNavigation();
   // const actionData = useActionData<ActionData>()
   // console.log("ACTION DATA: ", actionData)
-  const [error, setError] = useState("")
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    console.log("Submitting ...")
-    const formData = new FormData(e.currentTarget)
+    e.preventDefault();
+    console.log("Submitting ...");
+    const formData = new FormData(e.currentTarget);
     Array.from(formData).forEach(([k, v]) => {
-      console.log("Checking: ", k, v)
-      if (!v) formData.delete(k)
-    })
-    console.log("ENTRIES: ", formData.entries())
+      console.log("Checking: ", k, v);
+      if (!v) formData.delete(k);
+    });
+    console.log("ENTRIES: ", formData.entries());
     // [...formData.entries()].foreach
     // we can't use the API since it's a server file :)
     fetch(`${ENV.CORE_URL}/api/v1/admin/firmware-updates`, {
@@ -86,20 +86,20 @@ export const AdminOTAUpdatesNew = () => {
       },
       body: formData,
     })
-      .then(async res => {
-        console.log("RES: ", res)
-        const body = await res.json()
+      .then(async (res) => {
+        console.log("RES: ", res);
+        const body = await res.json();
         if (res.status !== 201 || !res.ok)
           return setError(
             `Error uploading firmware to core(${res.status} ${res.statusText}): ${body.message}`
-          )
-        window.location.href = `${PANEL_PREFIX}/ota-updates`
+          );
+        window.location.href = `${PANEL_PREFIX}/ota-updates`;
       })
-      .catch(err => {
-        console.error("ERROR: ", err)
-        setError(`Error uploading firmware to core: ${err.toString()}`)
-      })
-  }
+      .catch((err) => {
+        console.error("ERROR: ", err);
+        setError(`Error uploading firmware to core: ${err.toString()}`);
+      });
+  };
 
   return (
     <div className="admin-page">
@@ -118,7 +118,7 @@ export const AdminOTAUpdatesNew = () => {
         <label className="label">
           Chip:
           <select className="input mt-2" name="chip">
-            {chips.map(ch => (
+            {chips.map((ch) => (
               <option value={ch.value} key={ch.value}>
                 {ch.displayName}
               </option>
@@ -183,7 +183,7 @@ export const AdminOTAUpdatesNew = () => {
         </Button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default AdminOTAUpdatesNew
+export default AdminOTAUpdatesNew;

@@ -27,4 +27,4 @@ if (process.env.NODE_ENV === "production") {
 
 hydrateRoot(document, <RemixBrowser />);
 
-loadServiceWorker({ serviceWorkerUrl: "/entry.workbox.js" });
+// loadServiceWorker({ serviceWorkerUrl: "/entry.workbox.js" });

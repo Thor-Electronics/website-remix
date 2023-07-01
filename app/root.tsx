@@ -101,7 +101,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function App() {
   const { ENV } = useLoaderData<LoaderData>();
-  useSWEffect();
+  // useSWEffect();
 
   return (
     <Document>

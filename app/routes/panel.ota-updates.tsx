@@ -1,33 +1,33 @@
-import { FolderPlusIcon, PlusCircleIcon } from "@heroicons/react/24/solid"
-import type { GridColDef } from "@mui/x-data-grid"
-import { DataGrid } from "@mui/x-data-grid"
-import { json, type LoaderFunction } from "@remix-run/node"
-import { Link, useLoaderData } from "@remix-run/react"
-import Button from "~/components/atoms/Button"
-import { getSessionToken, requireUser } from "~/models/session.server"
-import { type User } from "~/types/User"
-import { adminGetFirmwares } from "~/utils/core.server"
-import { timeAgo } from "~/utils/time"
+import { FolderPlusIcon, PlusCircleIcon } from "@heroicons/react/24/solid";
+import type { GridColDef } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
+import { json, type LoaderFunction } from "@remix-run/node";
+import { Link, useLoaderData } from "@remix-run/react";
+import Button from "~/components/atoms/Button";
+import { getSessionToken, requireUser } from "~/models/session.server";
+import { type User } from "~/types/User";
+import { adminGetFirmwares } from "~/utils/core.server";
+import { timeAgo } from "~/utils/time";
 
 type LoaderData = {
   firmwares: {
-    fileName: string
-    fileSize: string
-    modifiedAt: Date
-  }[]
-}
+    fileName: string;
+    fileSize: string;
+    modifiedAt: Date;
+  }[];
+};
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const firmwares = await adminGetFirmwares(await getSessionToken(request))
-  return json<LoaderData>({ firmwares })
-}
+  const firmwares = await adminGetFirmwares(await getSessionToken(request));
+  return json<LoaderData>({ firmwares });
+};
 
 export const AdminOTAUpdates = () => {
-  const { firmwares } = useLoaderData<LoaderData>() // <typeof loader>
+  const { firmwares } = useLoaderData<LoaderData>(); // <typeof loader>
 
-  console.log("FIRMWARES: ", firmwares)
+  console.log("FIRMWARES: ", firmwares);
 
-  const refinedFirmwares = firmwares.map((f, i) => ({ id: i, ...f }))
+  const refinedFirmwares = firmwares.map((f, i) => ({ id: i, ...f }));
 
   return (
     <div className="AdminFirmwares admin-page">
@@ -50,8 +50,8 @@ export const AdminOTAUpdates = () => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
 const gridColumns: GridColDef[] = [
   {
@@ -64,15 +64,15 @@ const gridColumns: GridColDef[] = [
     field: "file",
     headerName: "File",
     width: 400,
-    valueGetter: params =>
+    valueGetter: (params) =>
       `${params.value["size"]} bytes - ${params.value["name"]}`,
   },
   {
     field: "updated_at",
     headerName: "Modification Date",
     width: 150,
-    valueGetter: params => timeAgo(new Date(params.value)),
+    valueGetter: (params) => timeAgo(new Date(params.value)),
   },
-]
+];
 
-export default AdminOTAUpdates
+export default AdminOTAUpdates;
