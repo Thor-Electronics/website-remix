@@ -1,5 +1,5 @@
-import type { Group } from "~/types/Group"
-import { OnlinePulse } from "../atoms/Pulse"
+import type { Group } from "~/types/Group";
+import { OnlinePulse } from "../atoms/Pulse";
 import {
   CpuChipIcon,
   HashtagIcon,
@@ -9,24 +9,24 @@ import {
   PuzzlePieceIcon,
   SquaresPlusIcon,
   TrashIcon,
-} from "@heroicons/react/24/solid"
-import Button from "../atoms/Button"
-import type { HTMLAttributes } from "react"
-import { useState } from "react"
-import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket"
-import type { Message } from "~/types/Message"
-import { Signal } from "~/types/Message"
-import { ReadyState } from "react-use-websocket"
-import { SimpleDeviceCard } from "./SimpleDeviceCard"
-import { Link } from "@remix-run/react"
-import { DASHBOARD_PREFIX } from "~/routes/app"
-import { parseDevice, type DeviceState } from "~/types/Device"
-import { DeviceType } from "~/types/DeviceType"
+} from "@heroicons/react/24/solid";
+import Button from "../atoms/Button";
+import type { HTMLAttributes } from "react";
+import { useState } from "react";
+import { useWebSocket } from "react-use-websocket/dist/lib/use-websocket";
+import type { Message } from "~/types/Message";
+import { Signal } from "~/types/Message";
+import { ReadyState } from "react-use-websocket";
+import { SimpleDeviceCard } from "./SimpleDeviceCard";
+import { Link } from "@remix-run/react";
+import { DASHBOARD_PREFIX } from "~/routes/app";
+import { parseDevice, type DeviceState } from "~/types/Device";
+import { DeviceType } from "~/types/DeviceType";
 
 export interface Props extends HTMLAttributes<HTMLElement> {
-  data: Group
+  data: Group;
   // updateHandler: Function
-  socketToken: string
+  socketToken: string;
   // connected?: number
 }
 
@@ -51,7 +51,7 @@ export const WS_STATUS_BADGES = {
     text: "Uninstantiated",
     className: "bg-red-500",
   },
-}
+};
 
 export const GroupCard = ({
   data: b,
@@ -59,33 +59,33 @@ export const GroupCard = ({
   className,
   ...props
 }: Props) => {
-  const [group, setGroup] = useState<Group>(b)
+  const [group, setGroup] = useState<Group>(b);
   const { sendJsonMessage, sendMessage, readyState } = useWebSocket(
     `${process.env.NODE_ENV === "production" ? "wss" : "ws"}://${
       ENV.CORE_ADDR
     }/api/v1/control/manage/${b.id}`,
     {
-      onOpen: e => {
-        console.log("WS Connected: ", e)
+      onOpen: (e) => {
+        console.log("WS Connected: ", e);
         const authSignal: Message = {
-          signal: Signal.AUTHENTICATE_CLIENT,
+          signal: Signal.AUTHENTICATE,
           payload: {
             token: socketToken,
           },
           id: "authentication message doesn't have an id",
-        }
-        sendMessage(JSON.stringify(authSignal))
-        console.log("Sent the authentication signal with payload")
+        };
+        sendMessage(JSON.stringify(authSignal));
+        console.log("Sent the authentication signal with payload");
       },
-      onClose: e => console.warn("WS Closed: ", e),
-      onError: e => console.warn("WS ERROR: ", e),
-      onMessage: e => {
-        const msg = JSON.parse(e.data) as Message
-        if (msg.message) console.log("🔽 MESSAGE: ", msg.message)
+      onClose: (e) => console.warn("WS Closed: ", e),
+      onError: (e) => console.warn("WS ERROR: ", e),
+      onMessage: (e) => {
+        const msg = JSON.parse(e.data) as Message;
+        if (msg.message) console.log("🔽 MESSAGE: ", msg.message);
         if (msg.update && msg.update !== undefined) {
-          setGroup(prev => ({
+          setGroup((prev) => ({
             ...prev,
-            devices: prev.devices?.map(d =>
+            devices: prev.devices?.map((d) =>
               d.id === msg.id
                 ? {
                     ...d,
@@ -96,22 +96,22 @@ export const GroupCard = ({
                   }
                 : d
             ),
-          }))
+          }));
         }
         if (msg.signal) {
-          console.log("📡 Signal: ", msg.signal)
-          if (!msg.payload) console.warn("Signal with empty payload!")
+          console.log("📡 Signal: ", msg.signal);
+          if (!msg.payload) console.warn("Signal with empty payload!");
 
           /* Initial Data */
-          if (msg.signal === Signal.USER_INITIAL_DATA) {
-            setGroup(prev => ({
+          if (msg.signal === Signal.INITIAL_DATA) {
+            setGroup((prev) => ({
               ...prev,
-              devices: prev.devices?.map(d =>
+              devices: prev.devices?.map((d) =>
                 msg.payload?.onlineDevices?.includes(d.id)
                   ? { ...d, isOnline: true }
                   : d
               ),
-            }))
+            }));
           }
 
           /* Device connected / disconnected */
@@ -119,9 +119,9 @@ export const GroupCard = ({
             msg.signal === Signal.DEVICE_CONNECTED ||
             msg.signal === Signal.DEVICE_DISCONNECTED
           ) {
-            setGroup(prev => ({
+            setGroup((prev) => ({
               ...prev,
-              devices: prev.devices?.map(d =>
+              devices: prev.devices?.map((d) =>
                 d.id === msg.id
                   ? {
                       ...d,
@@ -130,40 +130,40 @@ export const GroupCard = ({
                     }
                   : d
               ),
-            }))
+            }));
           }
 
           /* Refresh Latencies */
           if (msg.signal === Signal.REFRESH_LATENCIES) {
-            if (!msg.payload) return
+            if (!msg.payload) return;
             if (msg.payload.devices) {
-              setGroup(prev => ({
+              setGroup((prev) => ({
                 ...prev,
-                devices: prev.devices?.map(d =>
+                devices: prev.devices?.map((d) =>
                   d.id in msg.payload?.devices!
                     ? { ...d, latency: msg.payload?.devices![d.id] }
                     : d
                 ),
-              }))
+              }));
             }
           }
         }
       },
       share: true,
-      shouldReconnect: e => true,
+      shouldReconnect: (e) => true,
     }
-  )
+  );
 
-  const connectionStatus = WS_STATUS_BADGES[readyState]
-  const connected = readyState === ReadyState.OPEN
+  const connectionStatus = WS_STATUS_BADGES[readyState];
+  const connected = readyState === ReadyState.OPEN;
 
   const handleUpdate = (message: object): boolean => {
-    console.log("Sending Update: ", message)
-    sendJsonMessage(message)
-    return true
-  }
+    console.log("Sending Update: ", message);
+    sendJsonMessage(message);
+    return true;
+  };
 
-  const groupActionIconClassNames = "w-5 h-5 sm:w-4 sm:h-4"
+  const groupActionIconClassNames = "w-5 h-5 sm:w-4 sm:h-4";
 
   return (
     <div
@@ -195,7 +195,7 @@ export const GroupCard = ({
       <div className="body flex flex-col gap-2 text-sm">
         {group.devices && (
           <div className="devices">
-            {group.devices?.map(d => {
+            {group.devices?.map((d) => {
               switch (d.type) {
                 case DeviceType.KEY1:
                 // return
@@ -214,7 +214,7 @@ export const GroupCard = ({
                     //   // link={`devices/${d.id}`}
                     //   updateHandler={handleUpdate}
                     // />
-                  )
+                  );
               }
             })}
           </div>
@@ -276,16 +276,16 @@ export const GroupCard = ({
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export const recursivelyUpdateState = (
   src: { [key: string]: any },
   newState: object
 ): object => {
-  const result = src
+  const result = src;
   Object.entries(newState).forEach(([k, v]) => {
-    result[k] = typeof v === "object" ? recursivelyUpdateState(src[k], v) : v
-  })
-  return result
-}
+    result[k] = typeof v === "object" ? recursivelyUpdateState(src[k], v) : v;
+  });
+  return result;
+};
