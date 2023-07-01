@@ -1,13 +1,19 @@
-import { FolderPlusIcon } from "@heroicons/react/24/solid";
+import {
+  CloudArrowDownIcon,
+  FolderPlusIcon,
+  PencilIcon,
+  TrashIcon,
+} from "@heroicons/react/24/solid";
 import type { GridColDef } from "@mui/x-data-grid";
 import { DataGrid } from "@mui/x-data-grid";
 import { json, type LoaderFunction } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { VersionBadge } from "~/components/atoms/Badge";
-import Button from "~/components/atoms/Button";
+import Button, { IconButton } from "~/components/atoms/Button";
 import { getSessionToken } from "~/models/session.server";
 import type { Firmware } from "~/types/Firmware";
-import { DistChannel, RefineFirmware } from "~/types/Firmware";
+import { DistChannel, refineFirmware } from "~/types/Firmware";
+import readableFileSize from "~/utils/bytes";
 import { adminGetFirmwares as adminGetFirmwareUpdates } from "~/utils/core.server";
 import { timeAgo } from "~/utils/time";
 
@@ -29,7 +35,7 @@ export const AdminOTAUpdates = () => {
   const { firmwareUpdates: fws } = useLoaderData<LoaderData>(); // <typeof loader>
 
   // console.log("FIRMWARE: ", fws);
-  const refinedFws = fws.map((f) => RefineFirmware(f));
+  const refinedFws = fws.map((f) => refineFirmware(f));
   console.log("REFINED FIRMWARE: ", refinedFws);
 
   return (
@@ -47,7 +53,7 @@ export const AdminOTAUpdates = () => {
             rows={refinedFws}
             columns={gridColumns}
             autoHeight
-            checkboxSelection
+            // checkboxSelection
             isRowSelectable={() => true}
           />
         )}
@@ -58,59 +64,82 @@ export const AdminOTAUpdates = () => {
 
 const gridColumns: GridColDef[] = [
   {
+    field: "actions",
+    headerName: "Actions",
+    renderCell: (params) => (
+      <div className="actions flex gap-1">
+        <Link to={`#`}>
+          <IconButton className="!bg-rose-100 !text-rose-400 border border-rose-300">
+            <TrashIcon className="w-4" />
+          </IconButton>
+        </Link>
+        <Link to={`#`}>
+          <IconButton className="!bg-blue-100 !text-blue-400 border border-blue-300">
+            <CloudArrowDownIcon className="w-4" />
+          </IconButton>
+        </Link>
+        <Link to={`#`}>
+          <IconButton className="!bg-amber-100 !text-amber-400 border border-amber-300">
+            <PencilIcon className="w-4" />
+          </IconButton>
+        </Link>
+      </div>
+    ),
+  },
+  {
     field: "id",
     headerName: "ID",
-    width: 200,
+    width: 210,
     cellClassName: "text-xs font-mono",
   },
   {
     field: "chip",
     headerName: "Chip",
     width: 100,
-    // cellClassName: ""
   },
   {
     field: "deviceType",
     headerName: "D Type",
     width: 100,
-    // cellClassName: ""
   },
   {
     field: "version",
     headerName: "Version",
-    width: 75,
-    // cellClassName: ""
+    align: "center",
+    width: 125,
     renderCell: (params) => {
       const { dist, str } = params.value;
-      let cls: string = "";
-      console.log("RENDERING", dist, dist === DistChannel.BETA);
-      // switch (dist) {
-      //   case DistChannel.BETA:
-      //     console.log("IT's beta");
-      //     cls += " !bg-beta-500";
-      //     break;
-
-      //   case DistChannel.STABLE:
-      //     console.log("IT's STABLE");
-      //     cls += " !bg-green-500";
-      //     break;
-      //   // default:
-      //   // cls = "";
-      // }
-      return <VersionBadge className={dist}>{str}</VersionBadge>;
+      return (
+        <VersionBadge className={dist} title={dist || "stable"}>
+          {str}
+        </VersionBadge>
+      );
     },
   },
-  // {
-  //   field: "fileName",
-  //   headerName: "File",
-  //   width: 400,
-  //   valueGetter: (params) =>
-  //     `${params.value["size"]} bytes - ${params.value["name"]}`,
-  // },
   {
-    field: "updated_at",
+    field: "fileSize",
+    headerName: "Size",
+    align: "center",
+    width: 125,
+    renderCell: (params) => (
+      <span
+        className="px-1 rounded-md font-mono border bg-slate-200 text-slate-500 border-slate-400"
+        title={"SI: " + readableFileSize(params.value, true)}
+      >
+        {readableFileSize(params.value)}
+      </span>
+    ),
+  },
+  {
+    field: "created_at",
     headerName: "Release Date",
     width: 150,
+    valueGetter: (params) => timeAgo(new Date(params.value)),
+  },
+  {
+    field: "updated_at",
+    headerName: "Modification Date",
+    width: 200,
     valueGetter: (params) => timeAgo(new Date(params.value)),
   },
 ];

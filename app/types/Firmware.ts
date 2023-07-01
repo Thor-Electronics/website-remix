@@ -1,5 +1,5 @@
-import { DeviceChip } from "./DeviceChip"
-import { DeviceType } from "./DeviceType"
+import type { DeviceChip } from "./DeviceChip"
+import type { DeviceType } from "./DeviceType"
 
 export type Firmware = {
   id: string
@@ -12,11 +12,11 @@ export type Firmware = {
 
 export type RefinedFirmware = {
   id: string
+  chip: DeviceChip
+  deviceType: DeviceType
   version: Version | { str: string }
   fileName: string
   fileSize: number
-  chip: DeviceChip
-  deviceType: DeviceType
   manufacturerId?: string
   groupId?: string
   deviceId?: string
@@ -51,7 +51,7 @@ export type FirmwareTarget = {
   deviceId?: string
 }
 
-export const RefineFirmware = (fw: Firmware): RefinedFirmware => ({
+export const refineFirmware = (fw: Firmware): RefinedFirmware => ({
   id: fw.id,
   version: {
     ...fw.version,
@@ -59,8 +59,8 @@ export const RefineFirmware = (fw: Firmware): RefinedFirmware => ({
       fw.version.dist ? "-" + fw.version.dist : ""
     }`,
   },
-  fileName: fw.file.name,
-  fileSize: fw.file.size,
+  fileName: fw.file?.name,
+  fileSize: fw.file?.size,
   chip: fw.target.chip,
   deviceType: fw.target.deviceType,
   manufacturerId: fw.target.manufacturerId,
