@@ -80,6 +80,18 @@ export async function getSessionData(request: Request) {
 export const getSessionToken = async (request: Request) =>
   (await getSessionData(request)).token
 
+export const requireSessionToken = async (
+  request: Request
+): Promise<string> => {
+  const token = await getSessionToken(request)
+  if (!token) {
+    const url = new URL(request.url)
+    console.log("Undefined token. Redirecting to: ", url.pathname)
+    throw await logout(request, url.pathname)
+  }
+  return token
+}
+
 /** Get user info from core service based on token saved in session(cookie) */
 export const getOptionalUser = async (request: Request) => {
   const cookieSessionData = await getSessionData(request)

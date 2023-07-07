@@ -96,6 +96,8 @@ export const adminGetDevices = (token: string) =>
   ax.get(`${admin}/devices`, h(token)).then(extractResponseData)
 export const adminGetAreas = (token: string) =>
   ax.get(`${admin}/areas`, h(token)).then(extractResponseData)
+export const adminGetNetwork = (token: string) =>
+  ax.get(`${admin}/network`, h(token)).then(extractResponseData)
 
 const api = {
   v1,
@@ -136,6 +138,7 @@ const api = {
   adminPostFirmware,
   adminGetDevices,
   adminGetAreas,
+  adminGetNetwork,
 }
 
 export default api
