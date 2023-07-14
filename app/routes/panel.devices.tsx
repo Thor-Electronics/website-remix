@@ -2,7 +2,7 @@ import {
   EllipsisVerticalIcon,
   PencilIcon,
   TrashIcon,
-} from "@heroicons/react/24/solid"
+} from "@heroicons/react/24/solid";
 import {
   Button,
   Dialog,
@@ -15,68 +15,68 @@ import {
   ListItemText,
   Menu,
   MenuItem,
-} from "@mui/material"
-import type { GridColDef } from "@mui/x-data-grid"
-import { DataGrid } from "@mui/x-data-grid"
-import { json, type LoaderFunction } from "@remix-run/node"
-import { Link, useLoaderData } from "@remix-run/react"
-import axios from "axios"
-import type { ReactNode } from "react"
-import { useState } from "react"
-import { getSessionToken, requireUser } from "~/models/session.server"
-import type { Device } from "~/types/Device"
-import { type User } from "~/types/User"
-import api from "~/utils/core.server"
-import { timeAgo } from "~/utils/time"
+} from "@mui/material";
+import type { GridColDef } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
+import { json, type LoaderFunction } from "@remix-run/node";
+import { Link, useLoaderData } from "@remix-run/react";
+import axios from "axios";
+import type { ReactNode } from "react";
+import { useState } from "react";
+import { requireSessionToken, requireUser } from "~/models/session.server";
+import type { Device } from "~/types/Device";
+import { type User } from "~/types/User";
+import api from "~/utils/core.server";
+import { timeAgo } from "~/utils/time";
 
 type LoaderData = {
-  user: User
-  token: string
-  devices: Device[]
-}
+  user: User;
+  token: string;
+  devices: Device[];
+};
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const user = await requireUser(request)
-  const token = await getSessionToken(request)
-  const devices = await api.adminGetDevices(token)
-  return json<LoaderData>({ user, token, devices })
-}
+  const user = await requireUser(request);
+  const token = await requireSessionToken(request);
+  const devices = await api.adminGetDevices(token);
+  return json<LoaderData>({ user, token, devices });
+};
 
 export const ManageDevices = () => {
-  const { user, token, devices } = useLoaderData<LoaderData>()
-  const [editOpen, setEditOpen] = useState<boolean>(false)
-  const [editId, setEditId] = useState<string>("")
-  const [deleteOpen, setDeleteOpen] = useState<boolean>(false)
-  const [deleteId, setDeleteId] = useState<string>("")
+  const { user, token, devices } = useLoaderData<LoaderData>();
+  const [editOpen, setEditOpen] = useState<boolean>(false);
+  const [editId, setEditId] = useState<string>("");
+  const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
+  const [deleteId, setDeleteId] = useState<string>("");
 
   const openEditDialog = (dId: string) => {
-    setEditOpen(true)
-    setEditId(dId)
+    setEditOpen(true);
+    setEditId(dId);
     // Set edit state so that the dialog knows what to load ...
-  }
+  };
   const openDeleteDialog = (dId: string) => {
-    setDeleteOpen(true)
-    setDeleteId(dId)
+    setDeleteOpen(true);
+    setDeleteId(dId);
     // Set delete state so that the dialog knows what to load?
-  }
-  const closeEditDialog = () => setEditOpen(false)
-  const closeDeleteDialog = () => setDeleteOpen(false)
+  };
+  const closeEditDialog = () => setEditOpen(false);
+  const closeDeleteDialog = () => setDeleteOpen(false);
 
   const deleteDevice = () => {
-    console.log("Device was deleted through API!")
+    console.log("Device was deleted through API!");
     axios
       .delete(`${ENV.CORE_URL}/api/v1/devices/${deleteId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then(res => {
-        console.log("Device was deleted")
-        alert(`Device(${deleteId}) was deleted successfully`)
-        closeDeleteDialog()
-        window.location.reload()
-      })
-  }
+      .then((res) => {
+        console.log("Device was deleted");
+        alert(`Device(${deleteId}) was deleted successfully`);
+        closeDeleteDialog();
+        window.location.reload();
+      });
+  };
 
-  const isUserAllowedToMutate = !!user.roles
+  const isUserAllowedToMutate = !!user.roles;
   const deviceOptions = {
     edit: true,
     onEdit: openEditDialog,
@@ -84,7 +84,7 @@ export const ManageDevices = () => {
     delete: true,
     onDelete: openDeleteDialog,
     onDeleteClose: closeDeleteDialog,
-  }
+  };
 
   return (
     <div className="ManageDevices admin-page">
@@ -154,24 +154,24 @@ export const ManageDevices = () => {
         </DialogActions>
       </Dialog>
     </div>
-  )
-}
+  );
+};
 
 const generateGridColumns = (options: {
   // todo: create a type for it!
-  edit: boolean
-  onEdit: (dId: string) => any
-  onEditClose: () => any
-  delete: boolean
-  onDelete: (dId: string) => any
-  onDeleteClose: () => any
+  edit: boolean;
+  onEdit: (dId: string) => any;
+  onEditClose: () => any;
+  delete: boolean;
+  onDelete: (dId: string) => any;
+  onDeleteClose: () => any;
 }): GridColDef[] => [
   {
     field: "action",
     headerName: "",
     width: 60,
     renderCell: ({ row }) => {
-      const dId = row.id
+      const dId = row.id;
       return (
         <OptionsMenu
           options={[
@@ -179,8 +179,8 @@ const generateGridColumns = (options: {
               title: "Edit",
               icon: <PencilIcon className="h-4 w-4" />,
               onClick: () => {
-                console.log("Editing: ", dId)
-                options.onEdit(dId)
+                console.log("Editing: ", dId);
+                options.onEdit(dId);
               },
             },
             {
@@ -188,13 +188,13 @@ const generateGridColumns = (options: {
               icon: <TrashIcon className="h-4 w-4" />,
               // className: "!text-rose-500",
               onClick: () => {
-                console.log("Deleting: ", dId)
-                options.onDelete(dId)
+                console.log("Deleting: ", dId);
+                options.onDelete(dId);
               },
             },
           ]}
         />
-      )
+      );
     },
   },
   {
@@ -215,7 +215,7 @@ const generateGridColumns = (options: {
     field: "created_at",
     headerName: "Creation Date",
     width: 125,
-    valueGetter: params => timeAgo(new Date(params.value)),
+    valueGetter: (params) => timeAgo(new Date(params.value)),
   },
   {
     field: "updated_at",
@@ -223,28 +223,28 @@ const generateGridColumns = (options: {
     width: 125,
     // headerAlign: "center",
     // align: "center",
-    valueGetter: params => timeAgo(new Date(params.value)),
+    valueGetter: (params) => timeAgo(new Date(params.value)),
   },
-]
+];
 
 type DeviceOptionsMenuProps = {
   options: {
-    title: string
-    icon?: ReactNode
-    className?: string
-    onClick: Function
-  }[]
-}
+    title: string;
+    icon?: ReactNode;
+    className?: string;
+    onClick: Function;
+  }[];
+};
 
 export const OptionsMenu = ({ options }: DeviceOptionsMenuProps) => {
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-  const open = Boolean(anchorEl)
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
+    setAnchorEl(event.currentTarget);
+  };
   const handleClose = () => {
-    setAnchorEl(null)
-  }
+    setAnchorEl(null);
+  };
 
   return (
     <div>
@@ -266,12 +266,12 @@ export const OptionsMenu = ({ options }: DeviceOptionsMenuProps) => {
           "aria-labelledby": "basic-button",
         }}
       >
-        {options.map(o => (
+        {options.map((o) => (
           <MenuItem
             key={o.title}
             onClick={() => {
-              o.onClick()
-              handleClose()
+              o.onClick();
+              handleClose();
             }}
             className={o.className}
           >
@@ -281,7 +281,7 @@ export const OptionsMenu = ({ options }: DeviceOptionsMenuProps) => {
         ))}
       </Menu>
     </div>
-  )
-}
+  );
+};
 
-export default ManageDevices
+export default ManageDevices;
