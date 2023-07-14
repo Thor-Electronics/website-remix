@@ -1,4 +1,5 @@
 import {
+  DocumentTextIcon,
   EllipsisVerticalIcon,
   PaperAirplaneIcon,
   PencilIcon,
@@ -52,6 +53,9 @@ export const ManageDevices = () => {
   const [messageOpen, setMessageOpen] = useState<boolean>(false);
   const [messageId, setMessageId] = useState<string>("");
   const [msgErr, setMsgErr] = useState<string>("");
+  const [logsOpen, setLogsOpen] = useState<boolean>(false);
+  const [logsId, setLogsId] = useState<string>("");
+  const [logsContent, setLogsContent] = useState<string[]>([]);
 
   const openEditDialog = (dId: string) => {
     setEditOpen(true);
@@ -67,9 +71,17 @@ export const ManageDevices = () => {
     setMessageOpen(true);
     setMessageId(dId);
   };
+  const openLogsDialog = async (dId: string) => {
+    console.log("Opening");
+    setLogsOpen(true);
+    setLogsId(dId);
+    setMessageId(dId); // to send logs signal
+    // getDeviceLogs(); // doesn't work!
+  };
   const closeEditDialog = () => setEditOpen(false);
   const closeDeleteDialog = () => setDeleteOpen(false);
   const closeMessageDialog = () => setMessageOpen(false);
+  const closeLogsDialog = () => setLogsOpen(false);
 
   const deleteDevice = () => {
     console.log("Device was deleted through API!");
@@ -111,6 +123,27 @@ export const ManageDevices = () => {
       });
   };
 
+  const getDeviceLogs = () => {
+    console.log(`Getting device logs for ${logsId}`);
+    axios
+      .get(`${ENV.CORE_URL}/api/v1/statistics/logs/${logsId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        console.log(`Got device(${logsId}) logs from the server`, res.data);
+        setLogsContent(res.data);
+      })
+      .catch((err) => {
+        const errMsg =
+          err.response?.data?.message ??
+          err.response?.data ??
+          err.response ??
+          err;
+        console.warn(`Error getting device logs: ${errMsg}`);
+        alert(`Error getting device logs: ${errMsg}`);
+      });
+  };
+
   // todo: find a better way check by their permission
   const isUserAllowedToMutate = !!user.roles; // todo: remove options from rows if user's not allowed
   const deviceOptions = {
@@ -123,6 +156,9 @@ export const ManageDevices = () => {
     message: true, // todo: based on permissions and access
     onMessage: openMessageDialog,
     onMessageClose: closeMessageDialog,
+    logs: true, // todo: based on permissions and access
+    onLogs: openLogsDialog,
+    onLogsClose: closeLogsDialog,
   };
 
   return (
@@ -257,6 +293,69 @@ export const ManageDevices = () => {
           </DialogActions>
         </Form>
       </Dialog>
+
+      {/* Get Logs of Device Dialog */}
+      <Dialog
+        open={logsOpen}
+        onClose={closeLogsDialog}
+        aria-labelledby="logs-dialog-title"
+        aria-describedby="logs-dialog-description"
+      >
+        <DialogTitle id="logs-dialog-title">
+          Getting Logs of the Device({messageId}) as {user.roles![0].name}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="logs-dialog-description">
+            This is a debug tool which allows us to get the logs of the device
+            for debugging and troubleshooting purposes.
+          </DialogContentText>
+          <div className="logs flex flex-col-reverse gap-2 mt-4">
+            {logsContent.map((l, i) => (
+              <pre
+                key={i}
+                className="w-full font-mono text-xs bg-slate-800
+                text-blue-300 rounded-md p-2 whitespace-pre-wrap
+                relative"
+              >
+                <span
+                  className="absolute bg-blue-500 text-white
+                  rounded-xl w-6 h-6 top-2 right-2 flex text-xs
+                  items-center justify-center"
+                >
+                  {i}
+                </span>
+                {l}
+              </pre>
+            ))}
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeLogsDialog}>Cancel</Button>
+          <form method="post" onSubmit={sendMessageToDevice}>
+            <input
+              type="hidden"
+              name="message"
+              value={JSON.stringify({
+                ok: true,
+                signal: "SEND_LOGS",
+                id: logsId,
+              })}
+            />
+            <Button type="submit" variant="contained" color="warning">
+              Send Signal
+            </Button>
+          </form>
+          <Button
+            onClick={getDeviceLogs}
+            autoFocus
+            variant="contained"
+            color="primary"
+            type="submit"
+          >
+            Get Logs
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
@@ -272,6 +371,9 @@ const generateGridColumns = (options: {
   message: boolean;
   onMessage: (dId: string) => any;
   onMessageClose: () => any;
+  logs: boolean;
+  onLogs: (dId: string) => any;
+  onLogsClose: () => any;
 }): GridColDef[] => [
   {
     field: "action",
@@ -306,6 +408,15 @@ const generateGridColumns = (options: {
               onClick: () => {
                 console.log("Preparing to send message to: ", dId);
                 options.onMessage(dId);
+              },
+            },
+            {
+              title: "View Logs",
+              icon: <DocumentTextIcon className="h-4 w-4" />,
+              // className: "!text-rose-500",
+              onClick: () => {
+                console.log("Preparing to get logs of device: ", dId);
+                options.onLogs(dId);
               },
             },
           ]}
