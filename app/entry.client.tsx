@@ -1,4 +1,4 @@
-import { loadServiceWorker } from "@remix-pwa/sw";
+// import { loadServiceWorker } from "@remix-pwa/sw";
 import { RemixBrowser, useLocation, useMatches } from "@remix-run/react";
 import { hydrateRoot } from "react-dom/client";
 import * as Sentry from "@sentry/remix";

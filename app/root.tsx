@@ -21,7 +21,7 @@ import styles from "~/styles/root.css";
 import { LogoIcon } from "./components/atoms/LogoIcon";
 import { getEnv } from "./env.server";
 import type { V2_ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
-import { useSWEffect } from "@remix-pwa/sw";
+// import { useSWEffect } from "@remix-pwa/sw";
 
 // TODO: https://www.wking.dev/library/remix-route-helpers-a-better-way-to-use-parent-data
 // use matches
@@ -39,7 +39,7 @@ export const meta: V2_MetaFunction = () => [
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: styles },
-  { rel: "manifest", href: "resources/manifest/webmanifest" },
+  // { rel: "manifest", href: "resources/manifest/webmanifest" },
 ];
 
 type LoaderData = {
