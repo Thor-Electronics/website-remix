@@ -51,6 +51,7 @@ export const ManageDevices = () => {
   const [deleteId, setDeleteId] = useState<string>("");
   const [messageOpen, setMessageOpen] = useState<boolean>(false);
   const [messageId, setMessageId] = useState<string>("");
+  const [msgErr, setMsgErr] = useState<string>("");
 
   const openEditDialog = (dId: string) => {
     setEditOpen(true);
@@ -84,8 +85,30 @@ export const ManageDevices = () => {
       });
   };
 
-  const sendMessageToDevice = () => {
-    console.log("SENDING...");
+  const sendMessageToDevice = (e: any) => {
+    e.preventDefault();
+    console.log(`Sending Message to Device ${messageId}`);
+    axios
+      .post(
+        `${ENV.CORE_URL}/api/v1/admin/devices/${messageId}/message`,
+        { message: JSON.parse(e.currentTarget.message.value) },
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      .then((res) => {
+        console.log("Message Sent to Device: ", res);
+        alert(`Server: ${JSON.stringify(res.data)}`);
+        setMsgErr(JSON.stringify(res.data, null, 2));
+      })
+      .catch((err) => {
+        const errMsg =
+          err.response?.data?.message ??
+          err.response?.data ??
+          err.response ??
+          err;
+        console.warn("Error sending message to device: ", errMsg);
+        setMsgErr(errMsg); // JSON.stringify
+        alert(`Error: ${errMsg}`);
+      });
   };
 
   // todo: find a better way check by their permission
@@ -123,7 +146,7 @@ export const ManageDevices = () => {
         aria-describedby="edit-dialog-description"
       >
         <DialogTitle id="edit-dialog-title">
-          Edit "Device Name" as {user.roles![0].name}
+          Edit Device({editId}) as {user.roles![0].name}
         </DialogTitle>
         <DialogContent id="edit-dialog-description">
           You'll be redirected to another page!
@@ -146,7 +169,7 @@ export const ManageDevices = () => {
         aria-describedby="delete-dialog-description"
       >
         <DialogTitle id="delete-dialog-title">
-          Delete "Device Name" as {user.roles![0].name}
+          Delete Device({deleteId}) as {user.roles![0].name}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="delete-dialog-description">
@@ -177,9 +200,9 @@ export const ManageDevices = () => {
         aria-labelledby="message-dialog-title"
         aria-describedby="message-dialog-description"
       >
-        <Form method="POST">
+        <Form method="POST" onSubmit={sendMessageToDevice}>
           <DialogTitle id="message-dialog-title">
-            Send Message to "Device Name" as {user.roles![0].name}
+            Send Message to Device({messageId}) as {user.roles![0].name}
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="message-dialog-description">
@@ -191,8 +214,7 @@ export const ManageDevices = () => {
                 text-emerald-300 rounded-md p-2 mt-4"
               name="message"
               rows={15}
-            >
-              {JSON.stringify(
+              defaultValue={JSON.stringify(
                 {
                   ok: true,
                   signal: "UPDATE_STATE",
@@ -211,12 +233,20 @@ export const ManageDevices = () => {
                 null,
                 2
               )}
-            </textarea>
+            />
+            {msgErr && (
+              <pre
+                className="font-mono whitespace-pre-wrap bg-slate-300
+                text-slate-600 p-2 rounded-md mt-4"
+              >
+                {msgErr}
+              </pre>
+            )}
           </DialogContent>
           <DialogActions>
             <Button onClick={closeMessageDialog}>Cancel</Button>
             <Button
-              onClick={sendMessageToDevice}
+              // onClick={sendMessageToDevice}
               autoFocus
               variant="contained"
               color="primary"
