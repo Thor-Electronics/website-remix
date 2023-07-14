@@ -69,6 +69,7 @@ html {
 }
 
 input,
+textarea,
 select {
   @apply w-full border border-slate-400 rounded-lg py-1.5 px-2.5 shadow;
 }

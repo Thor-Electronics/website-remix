@@ -3,13 +3,12 @@ import {
   FolderPlusIcon,
 } from "@heroicons/react/24/solid";
 import type { LoaderFunction } from "@remix-run/node";
-import { ActionFunction, json, redirect } from "@remix-run/node";
-import { useActionData, useLoaderData, useNavigation } from "@remix-run/react";
+import { json } from "@remix-run/node";
+import { useLoaderData, useNavigation } from "@remix-run/react";
 import type { FormEvent } from "react";
 import { useState } from "react";
 import Button from "~/components/atoms/Button";
-import { getSessionToken } from "~/models/session.server";
-import api from "~/utils/core.server";
+import { getSessionToken, requireSessionToken } from "~/models/session.server";
 import { PANEL_PREFIX } from "./panel";
 
 // type ActionData = {
@@ -21,50 +20,26 @@ type LoaderData = {
 };
 
 export const loader: LoaderFunction = async ({ request }) =>
-  json<LoaderData>({ sessionToken: await getSessionToken(request) });
-
-// export const action: ActionFunction = async ({ request }) => {
-//   const form = await request.formData()
-//   console.log(
-//     "Posting form data to core: ",
-//     form,
-//     form.entries(),
-//     form.values(),
-//     form.get("file"),
-//     form.get("version")
-//   )
-// return await api
-//   .adminPostFirmware(new FormData(), await getSessionToken(request))
-//   .then(res => {
-//     console.log("RESPONSE: ", res)
-//     return res
-//   })
-//   .then(data => {
-//     console.log("Response DATA: ", data)
-//     return redirect("/admin/ota-updates")
-//   })
-//   .catch(err => {
-//     console.error("ERROR Response: ", err, err.response)
-//     return json<ActionData>(
-//       { errors: [err.response?.data?.message, err.message] },
-//       err.response?.status
-//     )
-//   })
-// }
+  json<LoaderData>({ sessionToken: await requireSessionToken(request) });
 
 const chips = [
-  { value: "ESP8266", displayName: "ESP8266" },
+  {
+    value: "ESP8266",
+    displayName: "ESP8266",
+  },
   {
     value: "ESP32",
     displayName: "ESP32",
+  },
+  {
+    value: "STM32",
+    displayName: "STM32",
   },
 ];
 
 export const AdminOTAUpdatesNew = () => {
   const { sessionToken } = useLoaderData<LoaderData>();
   const navigation = useNavigation();
-  // const actionData = useActionData<ActionData>()
-  // console.log("ACTION DATA: ", actionData)
   const [error, setError] = useState("");
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -76,7 +51,6 @@ export const AdminOTAUpdatesNew = () => {
       if (!v) formData.delete(k);
     });
     console.log("ENTRIES: ", formData.entries());
-    // [...formData.entries()].foreach
     // we can't use the API since it's a server file :)
     fetch(`${ENV.CORE_URL}/api/v1/admin/firmware-updates`, {
       method: "POST",
@@ -164,6 +138,14 @@ export const AdminOTAUpdatesNew = () => {
         <label className="label">
           File:
           <input type="file" name="file" required />
+        </label>
+        <label className="label">
+          Description: (Optional)
+          <textarea
+            cols={5}
+            name="description"
+            placeholder="Enjoy Thor on Norouz with AI!"
+          />
         </label>
         <Button
           className={`${

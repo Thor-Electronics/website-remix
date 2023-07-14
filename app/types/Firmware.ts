@@ -6,6 +6,7 @@ export type Firmware = {
   version: Version
   file: FirmwareFile
   target: FirmwareTarget
+  description: string
   created_at: string
   updated_at: string
 }
@@ -17,6 +18,7 @@ export type RefinedFirmware = {
   version: Version | { str: string }
   fileName: string
   fileSize: number
+  description: string
   manufacturerId?: string
   groupId?: string
   deviceId?: string
@@ -63,6 +65,7 @@ export const refineFirmware = (fw: Firmware): RefinedFirmware => ({
   fileSize: fw.file?.size,
   chip: fw.target.chip,
   deviceType: fw.target.deviceType,
+  description: fw.description,
   manufacturerId: fw.target.manufacturerId,
   groupId: fw.target.groupId,
   deviceId: fw.target.deviceId,

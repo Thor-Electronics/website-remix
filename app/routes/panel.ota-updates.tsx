@@ -12,17 +12,12 @@ import { VersionBadge } from "~/components/atoms/Badge";
 import Button, { IconButton } from "~/components/atoms/Button";
 import { getSessionToken } from "~/models/session.server";
 import type { Firmware } from "~/types/Firmware";
-import { DistChannel, refineFirmware } from "~/types/Firmware";
+import { refineFirmware } from "~/types/Firmware";
 import readableFileSize from "~/utils/bytes";
 import { adminGetFirmware as adminGetFirmwareUpdates } from "~/utils/core.server";
 import { timeAgo } from "~/utils/time";
 
 type LoaderData = {
-  // firmwareUpdates: {
-  //   fileName: string;
-  //   fileSize: string;
-  //   modifiedAt: Date;
-  // }[];
   firmwareUpdates: Firmware[];
 };
 
@@ -32,9 +27,8 @@ export const loader: LoaderFunction = async ({ request }) => {
 };
 
 export const AdminOTAUpdates = () => {
-  const { firmwareUpdates: fws } = useLoaderData<LoaderData>(); // <typeof loader>
+  const { firmwareUpdates: fws } = useLoaderData<LoaderData>();
 
-  // console.log("FIRMWARE: ", fws);
   const refinedFws = fws.map((f) => refineFirmware(f));
   console.log("REFINED FIRMWARE: ", refinedFws);
 
@@ -141,6 +135,12 @@ const gridColumns: GridColDef[] = [
     headerName: "Modification Date",
     width: 200,
     valueGetter: (params) => timeAgo(new Date(params.value)),
+  },
+  {
+    field: "description",
+    headerName: "Description",
+    width: 400,
+    cellClassName: "text-xs",
   },
 ];
 
