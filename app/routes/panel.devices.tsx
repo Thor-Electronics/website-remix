@@ -1,5 +1,6 @@
 import {
   EllipsisVerticalIcon,
+  PaperAirplaneIcon,
   PencilIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
@@ -19,7 +20,7 @@ import {
 import type { GridColDef } from "@mui/x-data-grid";
 import { DataGrid } from "@mui/x-data-grid";
 import { json, type LoaderFunction } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Form, Link, useLoaderData } from "@remix-run/react";
 import axios from "axios";
 import type { ReactNode } from "react";
 import { useState } from "react";
@@ -48,6 +49,8 @@ export const ManageDevices = () => {
   const [editId, setEditId] = useState<string>("");
   const [deleteOpen, setDeleteOpen] = useState<boolean>(false);
   const [deleteId, setDeleteId] = useState<string>("");
+  const [messageOpen, setMessageOpen] = useState<boolean>(false);
+  const [messageId, setMessageId] = useState<string>("");
 
   const openEditDialog = (dId: string) => {
     setEditOpen(true);
@@ -59,8 +62,13 @@ export const ManageDevices = () => {
     setDeleteId(dId);
     // Set delete state so that the dialog knows what to load?
   };
+  const openMessageDialog = (dId: string) => {
+    setMessageOpen(true);
+    setMessageId(dId);
+  };
   const closeEditDialog = () => setEditOpen(false);
   const closeDeleteDialog = () => setDeleteOpen(false);
+  const closeMessageDialog = () => setMessageOpen(false);
 
   const deleteDevice = () => {
     console.log("Device was deleted through API!");
@@ -76,14 +84,22 @@ export const ManageDevices = () => {
       });
   };
 
-  const isUserAllowedToMutate = !!user.roles;
+  const sendMessageToDevice = () => {
+    console.log("SENDING...");
+  };
+
+  // todo: find a better way check by their permission
+  const isUserAllowedToMutate = !!user.roles; // todo: remove options from rows if user's not allowed
   const deviceOptions = {
-    edit: true,
+    edit: true, // todo: based on permissions and access
     onEdit: openEditDialog,
     onEditClose: closeEditDialog,
-    delete: true,
+    delete: true, // todo: based on permissions and access
     onDelete: openDeleteDialog,
     onDeleteClose: closeDeleteDialog,
+    message: true, // todo: based on permissions and access
+    onMessage: openMessageDialog,
+    onMessageClose: closeMessageDialog,
   };
 
   return (
@@ -104,7 +120,7 @@ export const ManageDevices = () => {
         open={editOpen}
         onClose={closeEditDialog}
         aria-labelledby="edit-dialog-title"
-        aria-describedby="alert-dialog-description"
+        aria-describedby="edit-dialog-description"
       >
         <DialogTitle id="edit-dialog-title">
           Edit "Device Name" as {user.roles![0].name}
@@ -126,14 +142,14 @@ export const ManageDevices = () => {
       <Dialog
         open={deleteOpen}
         onClose={closeDeleteDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+        aria-labelledby="delete-dialog-title"
+        aria-describedby="delete-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
+        <DialogTitle id="delete-dialog-title">
           Delete "Device Name" as {user.roles![0].name}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
+          <DialogContentText id="delete-dialog-description">
             Deleting this device will cause it{" "}
             <b>being disconnected form Thor IoT Network</b>, which means it
             needs to re-signup in in order to use the services. Are you sure you
@@ -153,6 +169,64 @@ export const ManageDevices = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Send Message to Device Dialog */}
+      <Dialog
+        open={messageOpen}
+        onClose={closeMessageDialog}
+        aria-labelledby="message-dialog-title"
+        aria-describedby="message-dialog-description"
+      >
+        <Form method="POST">
+          <DialogTitle id="message-dialog-title">
+            Send Message to "Device Name" as {user.roles![0].name}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="message-dialog-description">
+              This is a debug tool which allows us to send custom messages to
+              devices for debugging and troubleshooting purposes.
+            </DialogContentText>
+            <textarea
+              className="w-full font-mono text-xs bg-slate-800
+                text-emerald-300 rounded-md p-2 mt-4"
+              name="message"
+              rows={15}
+            >
+              {JSON.stringify(
+                {
+                  ok: true,
+                  signal: "UPDATE_STATE",
+                  payload: {
+                    ssid: "Thor Access Point",
+                  },
+                  control: {
+                    power: {
+                      "0": false,
+                      "1": true,
+                    },
+                  },
+                  update: {},
+                  id: "000000000000000000000000",
+                },
+                null,
+                2
+              )}
+            </textarea>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={closeMessageDialog}>Cancel</Button>
+            <Button
+              onClick={sendMessageToDevice}
+              autoFocus
+              variant="contained"
+              color="primary"
+              type="submit"
+            >
+              SEND
+            </Button>
+          </DialogActions>
+        </Form>
+      </Dialog>
     </div>
   );
 };
@@ -165,6 +239,9 @@ const generateGridColumns = (options: {
   delete: boolean;
   onDelete: (dId: string) => any;
   onDeleteClose: () => any;
+  message: boolean;
+  onMessage: (dId: string) => any;
+  onMessageClose: () => any;
 }): GridColDef[] => [
   {
     field: "action",
@@ -190,6 +267,15 @@ const generateGridColumns = (options: {
               onClick: () => {
                 console.log("Deleting: ", dId);
                 options.onDelete(dId);
+              },
+            },
+            {
+              title: "Send Message",
+              icon: <PaperAirplaneIcon className="h-4 w-4" />,
+              // className: "!text-rose-500",
+              onClick: () => {
+                console.log("Preparing to send message to: ", dId);
+                options.onMessage(dId);
               },
             },
           ]}
