@@ -63,6 +63,8 @@ export function Client({ data: c, ...props }: ClientProps) {
   return (
     <div className="card border border-blue-500 flex gap-1" {...props}>
       <span className="text-green-500">{c.type}</span>
+      <span className="text-slate-500">{(c.device ?? c.user)!.name}</span>
+      <span className="text-slate-500">{(c.device ?? c.user)!.id}</span>
       <span className="text-blue-500">{c.ip}</span>
       <span className="text-red-500">{c.latency.toLocaleString()}ns</span>
       {/* µ */}
