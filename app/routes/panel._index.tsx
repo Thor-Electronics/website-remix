@@ -7,7 +7,11 @@ import {
 import { json, type LoaderFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import DashboardCard from "~/components/molecules/DashboardCard";
-import { getSessionToken, requireUser } from "~/models/session.server";
+import {
+  getSessionToken,
+  requireSessionToken,
+  requireUser,
+} from "~/models/session.server";
 import { type User } from "~/types/User";
 import api from "~/utils/core.server";
 
@@ -33,9 +37,8 @@ type LoaderData = {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const user = await requireUser(request);
   const { user: u, dashboard: d } = await api.adminGetInitialData(
-    await getSessionToken(request)
+    await requireSessionToken(request)
   );
   return json<LoaderData>({
     user: u,
@@ -117,9 +120,16 @@ export const AdminIndex = () => {
           </DashboardCard>
         ))}
       </div>
-      <p className="text-center">
+      <p className="text-center my-4">
         Welcome {user.name}({user.roles?.at(0)?.name})
       </p>
+      <div className="fw-updates flex flex-col gap-2">
+        {latestOTAUpdates.map((obj) => (
+          <div key={obj.title} className="text-xs font-mono card">
+            {obj.title} - {obj.size} - {obj.date} - {obj.description}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
