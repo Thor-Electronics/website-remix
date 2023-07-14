@@ -117,6 +117,9 @@ export const AdminIndex = () => {
           </DashboardCard>
         ))}
       </div>
+      <p className="text-center">
+        Welcome {user.name}({user.roles?.at(0)?.name})
+      </p>
     </div>
   );
 };
