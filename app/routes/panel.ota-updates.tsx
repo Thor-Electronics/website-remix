@@ -14,7 +14,7 @@ import { getSessionToken } from "~/models/session.server";
 import type { Firmware } from "~/types/Firmware";
 import { DistChannel, refineFirmware } from "~/types/Firmware";
 import readableFileSize from "~/utils/bytes";
-import { adminGetFirmwares as adminGetFirmwareUpdates } from "~/utils/core.server";
+import { adminGetFirmware as adminGetFirmwareUpdates } from "~/utils/core.server";
 import { timeAgo } from "~/utils/time";
 
 type LoaderData = {

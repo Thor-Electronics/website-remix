@@ -86,7 +86,7 @@ export const adminGetInitialData = (token: string) =>
   ax.get(`${admin}`, h(token)).then(extractResponseData)
 export const adminGetUsers = (token: string) =>
   ax.get(`${admin}/users`, h(token)).then(extractResponseData)
-export const adminGetFirmwares = (token: string) =>
+export const adminGetFirmware = (token: string) =>
   ax.get(`${admin}/firmware-updates`, h(token)).then(extractResponseData)
 export const adminPostFirmware = (formData: FormData, token: string) =>
   ax
@@ -142,12 +142,12 @@ const api = {
 
   adminGetInitialData,
   adminGetUsers,
-  adminGetFirmwares,
+  adminGetFirmware,
   adminPostFirmware,
   adminGetDevices,
   adminGetAreas,
   adminGetNetwork,
-  sendDeviceMessage: adminSendDeviceMessage,
+  adminSendDeviceMessage,
 }
 
 export default api
