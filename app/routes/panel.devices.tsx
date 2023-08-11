@@ -56,6 +56,7 @@ export const ManageDevices = () => {
   const [logsOpen, setLogsOpen] = useState<boolean>(false);
   const [logsId, setLogsId] = useState<string>("");
   const [logsContent, setLogsContent] = useState<string[]>([]);
+  console.log("DEVICES: ", devices);
 
   const openEditDialog = (dId: string) => {
     setEditOpen(true);
