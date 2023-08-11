@@ -1,12 +1,8 @@
 import { json, type LoaderFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { requireSessionToken } from "~/models/session.server";
-import {
-  parseHubContainer,
-  type HubContainer,
-  Client,
-  parseClient,
-} from "~/types/Hub";
+import { parseHubContainer, parseClient } from "~/types/Hub";
+import type { Client, HubContainer } from "~/types/Hub";
 import { adminGetNetwork } from "~/utils/core.server";
 
 type LoaderData = {
@@ -38,10 +34,10 @@ export const AdminInvoices = () => {
                 {dh.groupId}
                 <div className="clients flex gap-1">
                   {dh.userClients.map((uc) => (
-                    <Client data={parseClient(uc)} key={uc.groupId} />
+                    <ClientComponent data={parseClient(uc)} key={uc.groupId} />
                   ))}
                   {dh.deviceClients.map((dc) => (
-                    <Client data={parseClient(dc)} key={dc.groupId} />
+                    <ClientComponent data={parseClient(dc)} key={dc.groupId} />
                   ))}
                 </div>
               </div>
@@ -59,7 +55,7 @@ type ClientProps = {
   data: Client;
   className?: string;
 };
-export function Client({ data: c, ...props }: ClientProps) {
+export function ClientComponent({ data: c, ...props }: ClientProps) {
   return (
     <div className="card border border-blue-500 flex gap-1" {...props}>
       <span className="text-green-500">{c.type}</span>

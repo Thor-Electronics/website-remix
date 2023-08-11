@@ -1960,18 +1960,26 @@ var Push = class {
 };
 
 // node_modules/@remix-pwa/sw/lib/core/logger.js
-var logger = false ? null : (() => {
+var methodToColorMap = {
+  debug: `#7f8c8d`,
+  log: `#2ecc71`,
+  info: `#3498db`,
+  warn: `#f39c12`,
+  error: `#c0392b`,
+  groupCollapsed: `#3498db`,
+  groupEnd: null
+  // No colored prefix on groupEnd
+};
+var logger = false ? (() => {
+  const api = {};
+  const loggerMethods = Object.keys(methodToColorMap);
+  for (const key of loggerMethods) {
+    const method = key;
+    api[method] = noop;
+  }
+  return api;
+})() : (() => {
   let inGroup = false;
-  const methodToColorMap = {
-    debug: `#7f8c8d`,
-    log: `#2ecc71`,
-    info: `#3498db`,
-    warn: `#f39c12`,
-    error: `#c0392b`,
-    groupCollapsed: `#3498db`,
-    groupEnd: null
-    // No colored prefix on groupEnd
-  };
   const print = function(method, args) {
     if (self.__DISABLE_PWA_DEV_LOGS) {
       return;
@@ -2094,6 +2102,9 @@ var MessageHandler = class {
       yield this._handleMessage(event, state);
     });
   }
+  /**
+   * Runs the plugins that are passed in when the handler is initialised.
+   */
   runPlugins(hook, env) {
     return __awaiter2(this, void 0, void 0, function* () {
       for (const plugin of this.plugins) {
@@ -2135,7 +2146,7 @@ var __awaiter3 = function(thisArg, _arguments, P, generator) {
 };
 var PrecacheHandler = class extends MessageHandler {
   constructor({ plugins, dataCacheName, documentCacheName, assetCacheName, state }) {
-    super({ plugins, state });
+    super({ plugins, state: {} });
     Object.defineProperty(this, "dataCacheName", {
       enumerable: true,
       configurable: true,
@@ -2154,10 +2165,17 @@ var PrecacheHandler = class extends MessageHandler {
       writable: true,
       value: void 0
     });
+    Object.defineProperty(this, "_ignoredFiles", {
+      enumerable: true,
+      configurable: true,
+      writable: true,
+      value: null
+    });
     this.dataCacheName = dataCacheName;
     this.documentCacheName = documentCacheName;
     this.assetCacheName = assetCacheName;
     this._handleMessage = this._handleMessage.bind(this);
+    this._ignoredFiles = (state === null || state === void 0 ? void 0 : state.ignoredRoutes) || null;
   }
   _handleMessage(event) {
     return __awaiter3(this, void 0, void 0, function* () {
@@ -2178,9 +2196,57 @@ var PrecacheHandler = class extends MessageHandler {
       const routes = Object.values((manifest === null || manifest === void 0 ? void 0 : manifest.routes) || {});
       for (const route of routes) {
         if (route.id.includes("$")) {
-          logger.debug("parametrized route", route.id);
+          logger.info("Skipping parametrized route:", route.id);
           continue;
         }
+        if (Array.isArray(this._ignoredFiles)) {
+          if (typeof this._ignoredFiles[0] === "string") {
+            const map = this._ignoredFiles.map((ignoredRoute) => {
+              ignoredRoute = ignoredRoute;
+              ignoredRoute = ignoredRoute.charAt(0) === "/" ? ignoredRoute : ignoredRoute = "/" + ignoredRoute;
+              if (getPathname(route) == ignoredRoute) {
+                logger.debug("Skipping ignored route:", route.id);
+                return true;
+              } else {
+                return false;
+              }
+            });
+            if (map.includes(true))
+              continue;
+          } else if (typeof this._ignoredFiles[0] === "function") {
+            const map = this._ignoredFiles.map((ignoredRoute) => {
+              ignoredRoute = ignoredRoute;
+              if (ignoredRoute(route)) {
+                logger.debug("Skipping ignored route:", route.id);
+                return true;
+              } else {
+                return false;
+              }
+            });
+            if (map.includes(true))
+              continue;
+          } else if (this._ignoredFiles[0] instanceof RegExp) {
+            let map = this._ignoredFiles.map((ignoredRoute) => {
+              ignoredRoute = ignoredRoute;
+              if (ignoredRoute.test(getPathname(route))) {
+                logger.debug("Skipping ignored route:", route.id);
+                return true;
+              } else {
+                return false;
+              }
+            });
+            if (map.includes(true))
+              continue;
+          } else {
+            logger.error("Invalid ignoredRoutes type:", this._ignoredFiles);
+          }
+        } else if (typeof this._ignoredFiles === "function") {
+          if (this._ignoredFiles(route)) {
+            logger.debug("Skipping ignored route:", route.id);
+            continue;
+          }
+        }
+        logger.log("Precaching route:", route.id);
         cacheRoute(route);
       }
       yield Promise.all(cachePromises.values());
@@ -2194,15 +2260,27 @@ var PrecacheHandler = class extends MessageHandler {
         }
         if (route.imports) {
           for (const assetUrl of route.imports) {
-            logger.debug(route.index, route.parentId, route.imports, route.module);
+            logger.groupCollapsed("Caching asset: ", assetUrl);
+            logger.log("Is index:", route.index || false);
+            logger.log("Parent ID:", route.parentId);
+            logger.log("Imports:", route.imports);
+            logger.log("Module:", route.module);
+            logger.groupEnd();
             if (cachePromises.has(assetUrl)) {
               continue;
             }
             cachePromises.set(assetUrl, cacheAsset(assetUrl));
           }
         }
+        logger.info("Caching document:", pathname);
         cachePromises.set(pathname, documentCache.add(pathname).catch((error) => {
-          console.debug(`Failed to cache document ${pathname}:`, error);
+          if (error instanceof TypeError) {
+            logger.error(`TypeError when caching document ${pathname}:`, error.message);
+          } else if (error instanceof DOMException) {
+            logger.error(`DOMException when caching document ${pathname}:`, error.message);
+          } else {
+            logger.error(`Failed to cache document ${pathname}:`, error);
+          }
         }));
       }
       function cacheLoaderData(route) {
@@ -2213,7 +2291,13 @@ var PrecacheHandler = class extends MessageHandler {
         if (!cachePromises.has(url)) {
           logger.debug("caching loader data", url);
           cachePromises.set(url, dataCache.add(url).catch((error) => {
-            logger.error(`Failed to cache data for ${url}:`, error);
+            if (error instanceof TypeError) {
+              logger.error(`TypeError when caching data ${pathname}:`, error.message);
+            } else if (error instanceof DOMException) {
+              logger.error(`DOMException when caching data ${pathname}:`, error.message);
+            } else {
+              logger.error(`Failed to cache data ${pathname}:`, error);
+            }
           }));
         }
       }
@@ -2222,14 +2306,20 @@ var PrecacheHandler = class extends MessageHandler {
           if (yield assetCache.match(assetUrl)) {
             return;
           }
-          console.debug("Caching asset", assetUrl);
+          logger.debug("Caching asset:", assetUrl);
           return assetCache.add(assetUrl).catch((error) => {
-            logger.error(`Failed to cache asset ${assetUrl}:`, error);
+            if (error instanceof TypeError) {
+              logger.error(`TypeError when caching asset ${assetUrl}:`, error.message);
+            } else if (error instanceof DOMException) {
+              logger.error(`DOMException when caching asset ${assetUrl}:`, error.message);
+            } else {
+              logger.error(`Failed to cache asset ${assetUrl}:`, error);
+            }
           });
         });
       }
       function getPathname(route) {
-        if (route.index)
+        if (route.index && route.parentId === "root")
           return "/";
         let pathname = "";
         if (route.path && route.path.length > 0) {
@@ -2280,7 +2370,6 @@ var __awaiter4 = function(thisArg, _arguments, P, generator) {
 };
 var remixLoaderPlugin = {
   fetchDidSucceed: ({ response }) => __awaiter4(void 0, void 0, void 0, function* () {
-    console.log("manifest", self.__remixManifest);
     return response;
   }),
   cachedResponseWillBeUsed: ({ cachedResponse }) => __awaiter4(void 0, void 0, void 0, function* () {
@@ -2313,7 +2402,7 @@ function matchLoaderRequest({ request }) {
 
 // node_modules/workbox-core/_version.js
 try {
-  self["workbox:core:6.5.4"] && _();
+  self["workbox:core:7.0.0"] && _();
 } catch (e) {
 }
 
@@ -2566,7 +2655,7 @@ var logger2 = false ? null : (() => {
     self.__WB_DISABLE_DEV_LOGS = false;
   }
   let inGroup = false;
-  const methodToColorMap = {
+  const methodToColorMap2 = {
     debug: `#7f8c8d`,
     log: `#2ecc71`,
     warn: `#f39c12`,
@@ -2586,7 +2675,7 @@ var logger2 = false ? null : (() => {
       }
     }
     const styles = [
-      `background: ${methodToColorMap[method]}`,
+      `background: ${methodToColorMap2[method]}`,
       `border-radius: 0.5em`,
       `color: white`,
       `font-weight: bold`,
@@ -2602,7 +2691,7 @@ var logger2 = false ? null : (() => {
     }
   };
   const api = {};
-  const loggerMethods = Object.keys(methodToColorMap);
+  const loggerMethods = Object.keys(methodToColorMap2);
   for (const key of loggerMethods) {
     const method = key;
     api[method] = (...args) => {
@@ -2614,7 +2703,7 @@ var logger2 = false ? null : (() => {
 
 // node_modules/workbox-routing/_version.js
 try {
-  self["workbox:routing:6.5.4"] && _();
+  self["workbox:routing:7.0.0"] && _();
 } catch (e) {
 }
 
@@ -3220,7 +3309,7 @@ function timeout(ms) {
 
 // node_modules/workbox-strategies/_version.js
 try {
-  self["workbox:strategies:6.5.4"] && _();
+  self["workbox:strategies:7.0.0"] && _();
 } catch (e) {
 }
 

@@ -427,7 +427,7 @@ const generateGridColumns = (options: {
   {
     field: "id",
     headerName: "ID",
-    width: 200,
+    width: 215,
     cellClassName: "text-xs font-mono",
   },
   {
@@ -438,6 +438,18 @@ const generateGridColumns = (options: {
   },
   { field: "type", headerName: "Type", width: 150 }, // todo: render icon instead!
   { field: "name", headerName: "Name", width: 200 },
+  {
+    field: "userId",
+    headerName: "User ID",
+    width: 215,
+    cellClassName: "text-xs font-mono",
+  },
+  {
+    field: "groupId",
+    headerName: "Group ID",
+    width: 215,
+    cellClassName: "text-xs font-mono",
+  },
   {
     field: "created_at",
     headerName: "Creation Date",
