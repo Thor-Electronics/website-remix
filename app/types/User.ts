@@ -53,6 +53,7 @@ export const parsePermission = (p: any): Permission => ({
 
 export const parseRole = (r: any): Role => ({
   ...(r as Role),
+  id: r.id || r._id,
   permissions: r.permissions.map((p: any) => parsePermission(p)),
   created_at: r.created_at ? new Date(r.created_at) : undefined,
   updated_at: r.updated_at ? new Date(r.updated_at) : undefined,
@@ -60,6 +61,7 @@ export const parseRole = (r: any): Role => ({
 
 export const parseUser = (u: any): User => ({
   ...(u as User),
+  id: u.id || u._id,
   emailVerifiedAt: u.emailVerifiedAt ? new Date(u.emailVerifiedAt) : undefined,
   phoneVerifiedAt: u.phoneVerifiedAt ? new Date(u.phoneVerifiedAt) : undefined,
   created_at: u.created_at ? new Date(u.created_at) : undefined,

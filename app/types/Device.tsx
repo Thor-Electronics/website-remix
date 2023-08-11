@@ -8,13 +8,17 @@ import type { CommandMessage, Message } from "./Message";
 import { parseDeviceToken, type DeviceToken } from "./DeviceToken";
 import { DeviceType } from "./DeviceType";
 import type { DeviceChip } from "./DeviceChip";
+import { parseUser, type User } from "./User";
+import { parseGroup, type Group } from "./Group";
 
 export interface Device {
   id: string;
   cpuId: string;
   name: string;
   userId: string;
+  user?: User;
   groupId?: string;
+  group?: Group;
   type: DeviceType;
   chip: DeviceChip;
   state: DeviceState;
@@ -35,6 +39,9 @@ export const parseDevice = (d: any): Device => {
   }
   return {
     ...d,
+    id: d.id || d._id,
+    user: d.user && parseUser(d.user),
+    group: d.group && parseGroup(d.group),
     token: d.token && parseDeviceToken(d.token),
     created_at: new Date(d.created_at),
     updated_at: new Date(d.updated_at),

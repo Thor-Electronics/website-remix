@@ -20,6 +20,7 @@ export enum GroupType {
 
 export const parseGroup = (g: any): Group => ({
   ...(g as Group),
+  id: g.id || g._id,
   devices: g.devices ? g.devices.map((d: any) => parseDevice(d)) : [],
   created_at: g.created_at ? new Date(g.created_at) : undefined,
   updated_at: g.updated_at ? new Date(g.updated_at) : undefined,

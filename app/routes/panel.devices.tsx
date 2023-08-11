@@ -5,6 +5,7 @@ import {
   PencilIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
+import { UserIcon, BuildingOffice2Icon } from "@heroicons/react/24/outline";
 import {
   Button,
   Dialog,
@@ -17,6 +18,7 @@ import {
   ListItemText,
   Menu,
   MenuItem,
+  Tooltip,
 } from "@mui/material";
 import type { GridColDef } from "@mui/x-data-grid";
 import { DataGrid } from "@mui/x-data-grid";
@@ -440,16 +442,65 @@ const generateGridColumns = (options: {
   { field: "type", headerName: "Type", width: 150 }, // todo: render icon instead!
   { field: "name", headerName: "Name", width: 200 },
   {
-    field: "userId",
-    headerName: "User ID",
-    width: 215,
-    cellClassName: "text-xs font-mono",
+    field: "user",
+    headerName: "User",
+    width: 125,
+    renderCell: ({ row }) => {
+      return (
+        <Tooltip
+          title={
+            <div className="font-mono">
+              <div>ID: {row.user._id}</div>
+              <div>Name: {row.user.name}</div>
+              <div>
+                Phone: {row.user.phone}(
+                {Date.parse(row.user.phoneVerifiedAt) > 0 ? "" : "not "}
+                verified)
+              </div>
+              <div>
+                Email: {row.user.email}(
+                {Date.parse(row.user.emailVerifiedAt) > 0 ? "" : "not "}
+                verified)
+              </div>
+              <div>Username: {row.user.username}</div>
+              {row.user.roleIds && <div>role IDs: {row.user.roleIds}</div>}
+              {row.user.permissionIds && (
+                <div>permission IDs: {row.user.permissionIds}</div>
+              )}
+              <div>Created At: {timeAgo(new Date(row.user.created_at))}</div>
+              <div>Updated At: {timeAgo(new Date(row.user.created_at))}</div>
+            </div>
+          }
+        >
+          <div className="font-xs flex flex-row items-center justify-center gap-1 overflow-ellipsis">
+            <UserIcon className="w-4 h-4" />
+            {row.user.name || row.user.phone || row.user.email || row.user.id}
+          </div>
+        </Tooltip>
+      );
+    },
   },
   {
-    field: "groupId",
-    headerName: "Group ID",
-    width: 215,
-    cellClassName: "text-xs font-mono",
+    field: "group",
+    headerName: "Group",
+    width: 125,
+    renderCell: ({ row }) => {
+      return (
+        <Tooltip
+          title={
+            <div className="font-mono">
+              <div>ID: {row.group._id}</div>
+              <div>Name: {row.group.name}</div>
+            </div>
+          }
+        >
+          <div className="font-xs flex flex-row items-center justify-center gap-1 overflow-ellipsis">
+            <BuildingOffice2Icon className="w-4 h-4" />
+            {row.group.name || row.group.id}
+          </div>
+        </Tooltip>
+      );
+    },
   },
   {
     field: "created_at",
