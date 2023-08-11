@@ -5,7 +5,12 @@ import {
   PencilIcon,
   TrashIcon,
 } from "@heroicons/react/24/solid";
-import { UserIcon, BuildingOffice2Icon } from "@heroicons/react/24/outline";
+import {
+  UserIcon,
+  BuildingOffice2Icon,
+  XCircleIcon,
+  NoSymbolIcon,
+} from "@heroicons/react/24/outline";
 import {
   Button,
   Dialog,
@@ -148,7 +153,7 @@ export const ManageDevices = () => {
   };
 
   // todo: find a better way check by their permission
-  const isUserAllowedToMutate = !!user.roles; // todo: remove options from rows if user's not allowed
+  // const isUserAllowedToMutate = !!user.roles; // todo: remove options from rows if user's not allowed
   const deviceOptions = {
     edit: true, // todo: based on permissions and access
     onEdit: openEditDialog,
@@ -446,7 +451,7 @@ const generateGridColumns = (options: {
     headerName: "User",
     width: 125,
     renderCell: ({ row }) => {
-      return (
+      return row.user ? (
         <Tooltip
           title={
             <div className="font-mono">
@@ -472,11 +477,18 @@ const generateGridColumns = (options: {
             </div>
           }
         >
-          <div className="font-xs flex flex-row items-center justify-center gap-1 overflow-ellipsis">
+          <div className="font-xs flex flex-row items-center justify-center gap-1 overflow-ellipsis text-sky-700">
             <UserIcon className="w-4 h-4" />
             {row.user.name || row.user.phone || row.user.email || row.user.id}
           </div>
         </Tooltip>
+      ) : (
+        <div>
+          <Tooltip title="No User Found">
+            {/* <XCircleIcon className="w-6 h-6 text-slate-300" /> */}
+            <NoSymbolIcon className="w-6 h-6 text-slate-400" />
+          </Tooltip>
+        </div>
       );
     },
   },
@@ -485,7 +497,7 @@ const generateGridColumns = (options: {
     headerName: "Group",
     width: 125,
     renderCell: ({ row }) => {
-      return (
+      return row.group ? (
         <Tooltip
           title={
             <div className="font-mono">
@@ -494,11 +506,18 @@ const generateGridColumns = (options: {
             </div>
           }
         >
-          <div className="font-xs flex flex-row items-center justify-center gap-1 overflow-ellipsis">
+          <div className="font-xs flex flex-row items-center justify-center gap-1 overflow-ellipsis text-sky-700">
             <BuildingOffice2Icon className="w-4 h-4" />
             {row.group.name || row.group.id}
           </div>
         </Tooltip>
+      ) : (
+        <div>
+          <Tooltip title="No Group Found">
+            {/* <XCircleIcon className="w-6 h-6 text-slate-300" /> */}
+            <NoSymbolIcon className="w-6 h-6 text-slate-400" />
+          </Tooltip>
+        </div>
       );
     },
   },
