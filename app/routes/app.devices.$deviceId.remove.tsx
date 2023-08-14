@@ -1,33 +1,33 @@
-import type { ActionFunction } from "@remix-run/node"
-import { json, Response, type LoaderFunction, redirect } from "@remix-run/node"
-import { Form, Link, useLoaderData, useNavigation } from "@remix-run/react"
-import { TextButton } from "~/components/atoms/Button"
-import { getSessionToken } from "~/models/session.server"
-import type { Device } from "~/types/Device"
-import api from "~/utils/core.server"
-import { DASHBOARD_PREFIX } from "./app"
+import { json, Response, redirect } from "@remix-run/node";
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
+import { Form, Link, useLoaderData, useNavigation } from "@remix-run/react";
+import { TextButton } from "~/components/atoms/Button";
+import { requireSessionToken } from "~/models/session.server";
+import type { Device } from "~/types/Device";
+import api from "~/utils/core.server";
+import { DASHBOARD_PREFIX } from "./app";
 
 type LoaderData = {
-  device: Device
-  intent: Intent
-}
+  device: Device;
+  intent: Intent;
+};
 
-type Intent = "detach" | "delete"
+type Intent = "detach" | "delete";
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const token = await getSessionToken(request)
-  if (!params.deviceId) throw new Response("Device Not Found", { status: 404 })
-  const url = new URL(request.url)
-  let intent: Intent = (url.searchParams.get("intent") ?? "detach") as Intent
+  const token = await requireSessionToken(request);
+  if (!params.deviceId) throw new Response("Device Not Found", { status: 404 });
+  const url = new URL(request.url);
+  let intent: Intent = (url.searchParams.get("intent") ?? "detach") as Intent;
   if (intent !== "detach" && intent !== "delete") {
-    intent = "detach"
+    intent = "detach";
   }
   return api
     .getDeviceDetails(params.deviceId, token)
-    .then(data => {
-      return json<LoaderData>({ device: data as Device, intent })
+    .then((data) => {
+      return json<LoaderData>({ device: data as Device, intent });
     })
-    .catch(err => {
+    .catch((err) => {
       throw new Response(
         err.response?.data?.message ??
           err.response?.data ??
@@ -37,22 +37,22 @@ export const loader: LoaderFunction = async ({ request, params }) => {
           status: err.response?.status ?? 404,
           statusText: err.response?.statusText ?? "Failed to get device info!",
         }
-      )
-    })
-}
+      );
+    });
+};
 
 export const action: ActionFunction = async ({ request, params }) => {
-  const token = await getSessionToken(request)
-  if (!params.deviceId) throw new Response("Device Not Found", { status: 404 })
-  const formData = await request.formData()
-  const intent = formData.get("intent")
+  const token = await requireSessionToken(request);
+  if (!params.deviceId) throw new Response("Device Not Found", { status: 404 });
+  const formData = await request.formData();
+  const intent = formData.get("intent");
   if (intent === "delete")
     return api
       .deleteDevice(params.deviceId, token)
       .then(() => {
-        return redirect(`${DASHBOARD_PREFIX}/groups/${params.groupId ?? ""}`)
+        return redirect(`${DASHBOARD_PREFIX}/groups/${params.groupId ?? ""}`);
       })
-      .catch(err => {
+      .catch((err) => {
         throw new Response(
           "Error deleting the device: " + err.response?.data?.message ??
             err.response?.data ??
@@ -63,14 +63,14 @@ export const action: ActionFunction = async ({ request, params }) => {
             statusText:
               err.response?.statusText ?? "Internal Error Deleting The Device!",
           }
-        )
-      })
+        );
+      });
   return api
     .detachDevice(params.deviceId, token)
     .then(() => {
-      return redirect(`${DASHBOARD_PREFIX}/groups/${params.groupId ?? ""}`)
+      return redirect(`${DASHBOARD_PREFIX}/groups/${params.groupId ?? ""}`);
     })
-    .catch(err => {
+    .catch((err) => {
       throw new Response(
         "Error detaching device from the group: " +
           err.response?.data?.message ??
@@ -82,13 +82,13 @@ export const action: ActionFunction = async ({ request, params }) => {
           statusText:
             err.response?.statusText ?? "Internal Error Detaching The Device!",
         }
-      )
-    })
-}
+      );
+    });
+};
 
 export default function DeleteDevicePage() {
-  const { device, intent } = useLoaderData<LoaderData>()
-  const navigation = useNavigation()
+  const { device, intent } = useLoaderData<LoaderData>();
+  const navigation = useNavigation();
 
   return (
     <div className="DeleteDeviceCard">
@@ -97,7 +97,9 @@ export default function DeleteDevicePage() {
           Are you sure you want to {intent} {device.name}{" "}
           <code
             className={
-              intent === "delete" ? "text-rose-600" : "text-orange-600"
+              intent === "delete"
+                ? "text-rose-600 dark:text-rose-400"
+                : "text-orange-600 dark:text-orange-400"
             }
           >
             {device.cpuId || "NO_CPU_ID"} - {device.id}
@@ -115,7 +117,9 @@ export default function DeleteDevicePage() {
             <TextButton
               type="submit"
               className={
-                intent === "delete" ? "!bg-rose-500" : "!bg-orange-500"
+                intent === "delete"
+                  ? "!bg-rose-500 dark:!bg-rose-400"
+                  : "!bg-orange-500 dark:!bg-orange-400"
               }
               disabled={
                 navigation.state === "submitting" ||
@@ -140,5 +144,5 @@ export default function DeleteDevicePage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

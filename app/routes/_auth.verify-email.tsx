@@ -1,62 +1,62 @@
-import type { ActionFunction, LoaderFunction } from "@remix-run/node"
-import { json, redirect } from "@remix-run/node"
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import {
   Form,
   useActionData,
   useLoaderData,
   useNavigation,
-} from "@remix-run/react"
-import invariant from "tiny-invariant"
-import { TextButton } from "~/components/atoms/Button"
-import { getSessionToken, requireUser } from "~/models/session.server"
-import api from "~/utils/core.server"
-import { DASHBOARD_PREFIX } from "./app"
-import type { User } from "~/types/User"
+} from "@remix-run/react";
+import invariant from "tiny-invariant";
+import { TextButton } from "~/components/atoms/Button";
+import { requireSessionToken, requireUser } from "~/models/session.server";
+import api from "~/utils/core.server";
+import { DASHBOARD_PREFIX } from "./app";
+import type { User } from "~/types/User";
 
 type LoaderData = {
-  user: User
-}
+  user: User;
+};
 
 type ActionData = {
-  error: string
-}
+  error: string;
+};
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const user = await requireUser(request)
-  return json<LoaderData>({ user: user })
-}
+  const user = await requireUser(request);
+  return json<LoaderData>({ user: user });
+};
 
 export const action: ActionFunction = async ({ request }) => {
-  const form = await request.formData()
-  const code = form.get("code")
+  const form = await request.formData();
+  const code = form.get("code");
 
-  invariant(code, "Code is required!")
+  invariant(code, "Code is required!");
 
   return await api
-    .verifyEmail(await getSessionToken(request), { code })
-    .then(async res => {
-      const { message } = res.data
-      console.log("Successfully verified user's email!: ", message)
-      return redirect(DASHBOARD_PREFIX + "/profile")
+    .verifyEmail(await requireSessionToken(request), { code })
+    .then(async (res) => {
+      const { message } = res.data;
+      console.log("Successfully verified user's email!: ", message);
+      return redirect(DASHBOARD_PREFIX + "/profile");
     })
-    .catch(err => {
+    .catch((err) => {
       console.error(
         "Failed to verify email: ",
         err.response?.data,
         err.response,
         err
-      )
+      );
       return json<ActionData>(
         { error: err.response?.data?.message },
         err.response?.status
-      )
-    })
-}
+      );
+    });
+};
 
 export const VerifyEmail = () => {
-  const { user } = useLoaderData<LoaderData>()
-  const navigation = useNavigation()
-  const actionData = useActionData<ActionData>()
+  const { user } = useLoaderData<LoaderData>();
+  const navigation = useNavigation();
+  const actionData = useActionData<ActionData>();
 
   return (
     <Form className="LoginCard card flex flex-col gap-4" method="POST">
@@ -82,7 +82,7 @@ export const VerifyEmail = () => {
         </TextButton>
       </div>
     </Form>
-  )
-}
+  );
+};
 
-export default VerifyEmail
+export default VerifyEmail;

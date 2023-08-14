@@ -18,7 +18,7 @@ import { Copyright } from "~/components/atoms/Copyright";
 import { LogoIcon } from "~/components/atoms/LogoIcon";
 import type { FixedNavItem } from "~/components/organisms/FixedNav";
 import { DashboardNav } from "~/components/organisms/DashboardNav";
-import { getSessionToken, requireUser } from "~/models/session.server";
+import { requireSessionToken, requireUser } from "~/models/session.server";
 import dashboardStyles from "~/styles/dashboard.css";
 import type { User } from "~/types/User";
 import type { V2_ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
@@ -35,7 +35,7 @@ type LoaderData = {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const token = await getSessionToken(request);
+  const token = await requireSessionToken(request);
   const user = await requireUser(request); // todo: optimize it by getting the token once? or getAuth to get both token and user?
   // console.log(`app.tsx -- ${user.name}(${user.id}) is using the app`)
   const orphanDevices = await api
@@ -64,7 +64,11 @@ export const Dashboard = () => {
   }
 
   return (
-    <div className="Dashboard bg-slate-200 min-h-screen p-2 relative pb-20 sm:pb-2 sm:pt-28 xl:pt-2 xl:pl-36">
+    <div
+      className="Dashboard bg-slate-200 dark:bg-slate-900
+      min-h-screen p-2 relative pb-20 sm:pb-2 sm:pt-28 xl:pt-2
+      xl:pl-36"
+    >
       <DashboardNav user={user as User} items={navItems} />
       <Outlet />
       <Copyright />
@@ -77,7 +81,11 @@ export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
   console.error("Error in dashboard: ", error);
 
   return (
-    <div className="h-screen bg-rose-100 shadow-lg text-rose-600 p-4 flex items-center justify-center flex-col">
+    <div
+      className="h-screen bg-rose-100 dark:bg-rose-950
+      shadow-lg text-rose-600 dark:text-rose-400 p-4 flex
+      items-center justify-center flex-col"
+    >
       <LogoIcon className="w-24" />
       <h1 className="text-lg font-bold mb-4">Error Loading Dashboard!</h1>
       <p className="font-lg font-semibold">
@@ -141,7 +149,8 @@ const initialUserNavItems: FixedNavItem[] = [
     label: "Logout",
     to: `/logout`,
     props: {
-      className: "!bg-rose-100 !text-rose-500",
+      className:
+        "!bg-rose-100 dark:!bg-slate-700 !text-rose-500 dark:!text-rose-400",
     },
   },
 ];

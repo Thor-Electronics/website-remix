@@ -1,12 +1,12 @@
-import { Link } from "@remix-run/react"
-import { Copyright } from "../atoms/Copyright"
-import { LogoIcon } from "../atoms/LogoIcon"
-import type { User } from "~/types/User"
-import { TextButton } from "../atoms/Button"
+import { Link } from "@remix-run/react";
+import { Copyright } from "../atoms/Copyright";
+import { LogoIcon } from "../atoms/LogoIcon";
+import type { User } from "~/types/User";
+import { TextButton } from "../atoms/Button";
 
 type Props = {
-  user?: User
-}
+  user?: User;
+};
 
 export const Hero = ({ user, ...props }: Props) => (
   <section className="min-h-screen bg-blue-500 py-4 text-white relative flex flex-col items-center justify-center gap-4 snap-start">
@@ -46,6 +46,6 @@ export const Hero = ({ user, ...props }: Props) => (
       <Copyright />
     </div>
   </section>
-)
+);
 
-export default Hero
+export default Hero;

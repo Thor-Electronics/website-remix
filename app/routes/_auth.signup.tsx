@@ -1,76 +1,70 @@
-import type { ActionFunction, LoaderFunction } from "@remix-run/node"
-import { fetch, json, redirect } from "@remix-run/node"
-import {
-  Form,
-  Link,
-  useActionData,
-  useLoaderData,
-  useNavigation,
-  useTransition,
-} from "@remix-run/react"
+import type { ActionFunction, LoaderFunction } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
+import { Form, Link, useActionData, useNavigation } from "@remix-run/react";
 // import { getClientIPAddress } from "remix-utils"
-import Button, { TextButton } from "~/components/atoms/Button"
-import {
-  createDBSession,
-  getSessionData,
-  getUserId,
-} from "~/models/session.server"
-import api, { signup } from "~/utils/core.server"
+import { TextButton } from "~/components/atoms/Button";
+import { createDBSession, getUserId } from "~/models/session.server";
+import api from "~/utils/core.server";
 
 type ActionData = {
   errors: {
-    email?: string
-    name?: string
-    password?: string
-  }
-}
+    email?: string;
+    name?: string;
+    password?: string;
+  };
+};
 
 export const action: ActionFunction = async ({ request }) => {
-  const form = await request.formData()
-  const email = form.get("email")
-  const name = form.get("name")
-  const password = form.get("password")
+  const form = await request.formData();
+  const email = form.get("email");
+  const name = form.get("name");
+  const password = form.get("password");
 
   let errors = {
     email: typeof email !== "string" && "Email must be string!",
     name: typeof name !== "string" && "Name must be string!",
     password: typeof password !== "string" && "Password must be string!",
-  }
+  };
 
-  if (Object.values(errors).some(Boolean)) return json({ errors }, 400)
+  if (Object.values(errors).some(Boolean)) return json({ errors }, 400);
 
   // call the core service api
   return await api
     .signup({ email, name, password })
-    .then(async res => {
-      const { user, token, message } = res.data
+    .then(async (res) => {
+      const { user, token, message } = res.data;
       const { cookieSession: session, redirect } = await createDBSession(
         user.id,
         token,
         // getClientIPAddress(request) ?? "",
         "",
         "/app"
-      )
-      return redirect
+      );
+      return redirect;
     })
-    .catch(err => {
-      console.error("ERROR signing up: ", err.response?.data, err.response, err)
+    .catch((err) => {
+      console.error(
+        "ERROR signing up: ",
+        err.response?.data,
+        err.response,
+        err
+      );
       return json<ActionData>(
         { errors: { email: err.response?.data?.message } },
         err.response?.status
-      )
-    })
-}
+      );
+    });
+};
 
 export const loader: LoaderFunction = async ({ request }) => {
-  if (await getUserId(request)) return redirect("/app")
-  return null
-}
+  if (await getUserId(request)) return redirect("/app");
+  return null;
+};
 
 export const Signup = () => {
   // const loaderData = useLoaderData()
-  const navigation = useNavigation()
-  const actionData = useActionData<ActionData>()
+  const navigation = useNavigation();
+  const actionData = useActionData<ActionData>();
 
   return (
     <Form
@@ -136,7 +130,7 @@ export const Signup = () => {
         .
       </p>
     </Form>
-  )
-}
+  );
+};
 
-export default Signup
+export default Signup;

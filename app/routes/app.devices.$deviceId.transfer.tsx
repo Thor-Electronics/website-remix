@@ -1,65 +1,65 @@
-import type { LoaderFunction } from "@remix-run/node"
-import { json, redirect } from "@remix-run/node"
+import type { LoaderFunction } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import {
   Form,
   Link,
   useActionData,
   useLoaderData,
   useNavigation,
-} from "@remix-run/react"
-import type { ActionFunction } from "react-router"
-import invariant from "tiny-invariant"
-import { getSessionToken, requireUser } from "~/models/session.server"
-import type { Device } from "~/types/Device"
-import api, { getDeviceDetails } from "~/utils/core.server"
-import { DASHBOARD_PREFIX } from "./app"
-import { TextButton } from "~/components/atoms/Button"
-import { Alert } from "@mui/material"
+} from "@remix-run/react";
+import type { ActionFunction } from "react-router";
+import invariant from "tiny-invariant";
+import { requireSessionToken } from "~/models/session.server";
+import type { Device } from "~/types/Device";
+import api, { getDeviceDetails } from "~/utils/core.server";
+import { DASHBOARD_PREFIX } from "./app";
+import { TextButton } from "~/components/atoms/Button";
+import { Alert } from "@mui/material";
 
 type LoaderData = {
-  device: Device
-}
+  device: Device;
+};
 
 export const loader: LoaderFunction = async ({ request, params }) => {
-  const token = await getSessionToken(request)
-  invariant(params.deviceId, "Device ID is required")
-  const device = await getDeviceDetails(params.deviceId, token)
-  return json<LoaderData>({ device })
-}
+  const token = await requireSessionToken(request);
+  invariant(params.deviceId, "Device ID is required");
+  const device = await getDeviceDetails(params.deviceId, token);
+  return json<LoaderData>({ device });
+};
 
 type ActionData = {
   errors?: {
-    message?: string
-  }
-}
+    message?: string;
+  };
+};
 
 export const action: ActionFunction = async ({ request, params }) => {
-  const token = await getSessionToken(request)
-  invariant(params.deviceId, "Device ID is required")
-  const formData = await request.formData()
-  const phone = formData.get("phone") as string
-  invariant(phone, "Phone number is required")
+  const token = await requireSessionToken(request);
+  invariant(params.deviceId, "Device ID is required");
+  const formData = await request.formData();
+  const phone = formData.get("phone") as string;
+  invariant(phone, "Phone number is required");
   return api
     .transferDevice(params.deviceId, token, { userPhone: phone })
-    .then(data => {
-      console.log("Successfully transferred the device: ", data)
-      return redirect(`${DASHBOARD_PREFIX}/groups/`)
+    .then((data) => {
+      console.log("Successfully transferred the device: ", data);
+      return redirect(`${DASHBOARD_PREFIX}/groups/`);
     })
-    .catch(err => {
+    .catch((err) => {
       const message =
-        err.response?.data?.message || err.response?.data || err.response
+        err.response?.data?.message || err.response?.data || err.response;
       !err.response?.data?.message &&
-        console.error("Error transferring device: ", message, err)
+        console.error("Error transferring device: ", message, err);
       return json<ActionData>({
         errors: { message: message || "Unknown Error" },
-      })
-    })
-}
+      });
+    });
+};
 
 export default function TransferDeviceRoute() {
-  const { device } = useLoaderData<LoaderData>()
-  const actionData = useActionData<ActionData>()
-  const navigation = useNavigation()
+  const { device } = useLoaderData<LoaderData>();
+  const actionData = useActionData<ActionData>();
+  const navigation = useNavigation();
 
   return (
     <div className="TransferDeviceRoute">
@@ -90,7 +90,7 @@ export default function TransferDeviceRoute() {
         <div className="buttons flex flex-row-reverse items-stretch gap-2">
           <TextButton
             type="submit"
-            className="!bg-teal-500"
+            className="!bg-teal-500 dark:!bg-teal-400"
             disabled={navigation.state !== "idle"}
           >
             Transfer Ownership
@@ -103,5 +103,5 @@ export default function TransferDeviceRoute() {
         </div>
       </Form>
     </div>
-  )
+  );
 }

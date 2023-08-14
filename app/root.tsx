@@ -6,12 +6,7 @@ import type {
 import { json } from "@remix-run/node";
 import {
   Link,
-  Links,
-  LiveReload,
-  Meta,
   Outlet,
-  Scripts,
-  ScrollRestoration,
   isRouteErrorResponse,
   useLoaderData,
   useRouteError,
@@ -21,6 +16,8 @@ import styles from "~/styles/root.css";
 import { LogoIcon } from "./components/atoms/LogoIcon";
 import { getEnv } from "./env.server";
 import type { V2_ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
+import { useEffect, useState } from "react";
+import Document from "./Document";
 // import { useSWEffect } from "@remix-pwa/sw";
 
 // TODO: https://www.wking.dev/library/remix-route-helpers-a-better-way-to-use-parent-data
@@ -101,10 +98,32 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function App() {
   const { ENV } = useLoaderData<LoaderData>();
+  const [theme, setTheme] = useState<"dark" | "">("");
   // useSWEffect();
+  useEffect(() => {
+    if (window) {
+      let userTheme: "dark" | "" = "";
+      const prefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
+      if (prefersDark) {
+        console.log("Browser prefers dark");
+        userTheme = "dark";
+      }
+
+      const savedTheme = window.localStorage.getItem("theme");
+      if (savedTheme === "dark") {
+        // savedTheme
+        console.log("Saved theme is: ", savedTheme);
+        userTheme = savedTheme;
+      }
+      console.log("Setting theme: ", userTheme);
+      setTheme(userTheme);
+    }
+  }, []);
 
   return (
-    <Document>
+    <Document className={theme}>
       <Outlet />
       <script
         dangerouslySetInnerHTML={{
@@ -117,13 +136,17 @@ export default function App() {
 
 export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
   const error = useRouteError();
-  // console.error("root.tsx ERROR: ", error)
+  console.error("root.tsx ERROR: ", error);
 
   if (isRouteErrorResponse(error)) {
     // console.log("Is Route Error Response: ", error)
     return (
       <Document title="Oops!">
-        <div className="error-container h-screen error bg-rose-100 text-rose-600 flex flex-col gap-6 items-center justify-center text-center">
+        <div
+          className="error-container h-screen error bg-rose-100
+          dark:bg-slate-900 text-rose-600 dark:text-rose-400
+          flex flex-col gap-6 items-center justify-center text-center"
+        >
           <LogoIcon className="w-32" />
           <h2 className="text-2xl font-bold">Something Went Wrong!</h2>
           <p className="font-lg font-semibold">
@@ -145,7 +168,11 @@ export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
   // }
   return (
     <Document title="Error!">
-      <div className="error-container h-screen bg-rose-200 text-rose-600 flex flex-col gap-6 items-center justify-center text-center">
+      <div
+        className="error-container h-screen bg-rose-200 dark:bg-slate-900
+        text-rose-600 dark:text-rose-400 flex flex-col gap-6
+        items-center justify-center text-center"
+      >
         <LogoIcon className="w-32" />
         <h1 className="status flex items-center justify-center gap-2 text-3xl font-bold">
           App Error
@@ -159,45 +186,3 @@ export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
     </Document>
   );
 };
-
-function Document({
-  children,
-  title = `Thor Electronics`,
-}: {
-  children: React.ReactNode;
-  title?: string;
-}) {
-  return (
-    <html lang="en">
-      <head>
-        <Meta />
-        <title>{title}</title>
-        <Links />
-        {/* Hotjar Tracking Code for https://thor-electronics.ir */}
-        {ENV.NODE_ENV === "production" && (
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-              (function(h,o,t,j,a,r){
-                  h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
-                  h._hjSettings={hjid:3479118,hjsv:6};
-                  a=o.getElementsByTagName('head')[0];
-                  r=o.createElement('script');r.async=1;
-                  r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
-                  a.appendChild(r);
-              })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
-            `,
-            }}
-          />
-        )}
-      </head>
-      <body className="min-h-screen bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-200">
-        {/* <NavigatingScreen /> */}
-        {children}
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
-      </body>
-    </html>
-  );
-}
