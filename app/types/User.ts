@@ -1,3 +1,6 @@
+import type { Device } from "./Device"
+import type { Group } from "./Group"
+
 export type User = {
   id: string
   name: string
@@ -11,6 +14,10 @@ export type User = {
   permissions?: Permission[]
   roleIds?: string[]
   roles?: Role[]
+  deviceCount?: number
+  groupCount?: number
+  groups?: Group[]
+  devices?: Device[]
 }
 
 export type Permission = {

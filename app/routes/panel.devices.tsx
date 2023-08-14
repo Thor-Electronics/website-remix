@@ -8,7 +8,7 @@ import {
 import {
   UserIcon,
   BuildingOffice2Icon,
-  XCircleIcon,
+  // XCircleIcon,
   NoSymbolIcon,
 } from "@heroicons/react/24/outline";
 import {
@@ -477,7 +477,7 @@ const generateGridColumns = (options: {
             </div>
           }
         >
-          <div className="font-xs flex flex-row items-center justify-center gap-1 overflow-ellipsis text-sky-700">
+          <div className="text-xs flex flex-row items-center justify-center gap-1 overflow-ellipsis text-sky-700">
             <UserIcon className="w-4 h-4" />
             {row.user.name || row.user.phone || row.user.email || row.user.id}
           </div>
