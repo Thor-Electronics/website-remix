@@ -7,11 +7,7 @@ import {
 import { json, type LoaderFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import DashboardCard from "~/components/molecules/DashboardCard";
-import {
-  getSessionToken,
-  requireSessionToken,
-  requireUser,
-} from "~/models/session.server";
+import { requireSessionToken } from "~/models/session.server";
 import { type User } from "~/types/User";
 import api from "~/utils/core.server";
 

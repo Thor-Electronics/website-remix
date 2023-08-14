@@ -8,7 +8,7 @@ import { useLoaderData, useNavigation } from "@remix-run/react";
 import type { FormEvent } from "react";
 import { useState } from "react";
 import Button from "~/components/atoms/Button";
-import { getSessionToken, requireSessionToken } from "~/models/session.server";
+import { requireSessionToken } from "~/models/session.server";
 import { PANEL_PREFIX } from "./panel";
 
 // type ActionData = {
@@ -82,10 +82,17 @@ export const AdminOTAUpdatesNew = () => {
         onSubmit={handleSubmit}
         method="post"
         encType="multipart/form-data"
-        className="form max-w-xs mx-auto bg-white rounded-lg shadow-lg px-2 py-3 sm:p-4 flex flex-col items-stretch justify-center gap-4"
+        className="form max-w-xs mx-auto bg-white
+          dark:bg-slate-800 rounded-lg shadow-lg px-2 py-3 sm:p-4
+          flex flex-col items-stretch justify-center gap-4"
       >
         {error && (
-          <p className="error bg-rose-100 border border-rose-400 shadow-md shadow-rose-200 rounded-md py-1 px-2 text-rose-600">
+          <p
+            className="error bg-rose-100 dark:bg-rose-950 border
+            border-rose-400 dark:border-rose-600 shadow-md
+            shadow-rose-200 dark:shadow-rose-800 rounded-md py-1
+            px-2 text-rose-600 dark:text-rose-400"
+          >
             {error}
           </p>
         )}
@@ -150,8 +157,8 @@ export const AdminOTAUpdatesNew = () => {
         <Button
           className={`${
             error
-              ? "!bg-rose-500 shadow-rose-300"
-              : "!bg-primary shadow-blue-300"
+              ? "!bg-rose-500 dark:!bg-rose-400 shadow-rose-300 dark:shadow-rose-700"
+              : "!bg-primary dark:!bg-blue-400 shadow-blue-300 dark:shadow-blue-600"
           } py-1 px-3  flex items-center justify-center gap-2.5`}
           disabled={navigation.state === "submitting"}
         >

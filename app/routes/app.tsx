@@ -82,7 +82,7 @@ export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
 
   return (
     <div
-      className="h-screen bg-rose-100 dark:bg-rose-950
+      className="h-screen bg-rose-100 dark:bg-stone-900
       shadow-lg text-rose-600 dark:text-rose-400 p-4 flex
       items-center justify-center flex-col"
     >

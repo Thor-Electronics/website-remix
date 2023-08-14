@@ -1,30 +1,30 @@
-import type { LoaderFunction } from "@remix-run/node"
-import { json } from "@remix-run/node"
-import { Outlet, useLoaderData, useRouteError } from "@remix-run/react"
-import type { V2_ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules"
-import { DashboardGroupsList } from "~/components/organisms/DashboardGroupsList"
-import { getSessionToken } from "~/models/session.server"
-import { DeviceType } from "~/types/DeviceType"
-import type { Group } from "~/types/Group"
-import { getUserGroups } from "~/utils/core.server"
+import type { LoaderFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { Outlet, useLoaderData, useRouteError } from "@remix-run/react";
+import type { V2_ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
+import { DashboardGroupsList } from "~/components/organisms/DashboardGroupsList";
+import { getSessionToken } from "~/models/session.server";
+import { DeviceType } from "~/types/DeviceType";
+import type { Group } from "~/types/Group";
+import { getUserGroups } from "~/utils/core.server";
 
 type LoaderData = {
-  vehicles: Group[]
-}
+  vehicles: Group[];
+};
 
 export const loader: LoaderFunction = async ({ request }) => {
   return json<LoaderData>({
     vehicles: [sampleVehicleGroup],
-  })
+  });
   // return json<LoaderData>({
   //   vehicles: (
   //     (await getUserGroups(await getSessionToken(request))) as Group[]
   //   ).map(g => g), // TODO: filter groups by their types. Only vehicles
   // })
-}
+};
 
 export const DashboardVehicles = () => {
-  const { vehicles } = useLoaderData<LoaderData>()
+  const { vehicles } = useLoaderData<LoaderData>();
 
   return (
     <div className="DashboardVehicles">
@@ -32,19 +32,22 @@ export const DashboardVehicles = () => {
       <DashboardGroupsList items={vehicles as Group[]} />
       <Outlet />
     </div>
-  )
-}
+  );
+};
 
 export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
-  const error = useRouteError()
-  console.error("Error in vehicles: ", error)
+  const error = useRouteError();
+  console.error("Error in vehicles: ", error);
 
   return (
-    <div className="DashboardVehicles bg-rose-200 text-rose-600">
+    <div
+      className="DashboardVehicles bg-rose-200 dark:bg-stone-900
+      text-rose-600 dark:text-rose-400"
+    >
       <h1>Something went wrong while showing the vehicles</h1>
     </div>
-  )
-}
+  );
+};
 
 export const sampleVehicle = {
   id: "fake_id",
@@ -62,11 +65,11 @@ export const sampleVehicle = {
   },
   isOnline: true,
   latency: 16,
-}
+};
 
 export const sampleVehicleGroup = {
   id: "0",
   name: "911 Turbo",
   userId: "",
   devices: [sampleVehicle],
-}
+};

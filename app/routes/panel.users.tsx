@@ -34,8 +34,9 @@ export const AdminUsers = () => {
           rows={users}
           columns={gridColumns}
           autoHeight
-          checkboxSelection
+          // checkboxSelection
           isRowSelectable={() => true}
+          // className="dark:text-slate-400"
         />
       </div>
     </div>
@@ -70,7 +71,10 @@ const gridColumns: GridColDef[] = [
             </div>
           }
         >
-          <div className="flex items-center justify-center gap-1 overflow-ellipsis text-sky-700">
+          <div
+            className="flex items-center justify-center gap-1
+            overflow-ellipsis text-sky-700 dark:text-sky-300"
+          >
             <BuildingOffice2Icon className="w-4 h-4" />
             {row.groupCount || row.groups?.length}
           </div>
@@ -79,7 +83,10 @@ const gridColumns: GridColDef[] = [
         <div>
           <Tooltip title="No Groups Found">
             {/* <XCircleIcon className="w-6 h-6 text-slate-300" /> */}
-            <NoSymbolIcon className="w-6 h-6 text-slate-400" />
+            <NoSymbolIcon
+              className="w-6 h-6 text-slate-400
+              dark:text-slate-600"
+            />
           </Tooltip>
         </div>
       );
@@ -102,7 +109,11 @@ const gridColumns: GridColDef[] = [
             </div>
           }
         >
-          <div className="text-xs flex items-center justify-center gap-1 overflow-ellipsis text-sky-700">
+          <div
+            className="text-xs flex items-center justify-center
+              gap-1 overflow-ellipsis text-sky-700
+              dark:text-sky-300"
+          >
             <CpuChipIcon className="w-5 h-5" />
             {row.deviceCount || row.devices?.length}
           </div>
@@ -111,7 +122,10 @@ const gridColumns: GridColDef[] = [
         <div>
           <Tooltip title="No Devices Found">
             {/* <XCircleIcon className="w-6 h-6 text-slate-300" /> */}
-            <NoSymbolIcon className="w-6 h-6 text-slate-400" />
+            <NoSymbolIcon
+              className="w-6 h-6 text-slate-400
+              dark:text-slate-600"
+            />
           </Tooltip>
         </div>
       );

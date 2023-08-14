@@ -171,7 +171,10 @@ export const GroupCard = ({
       {...props}
     >
       {connected && (
-        <div className="connected absolute text-white text-xs top-full text-center w-full font-extrabold italic">
+        <div
+          className="connected absolute text-white text-xs
+          top-full text-center w-full font-extrabold italic"
+        >
           ONLINE!
         </div>
       )}
@@ -179,14 +182,19 @@ export const GroupCard = ({
         <HomeModernIcon className="w-6 h-6" />
       </div>
       <div
-        className={`name font-semibold flex flex-row items-center justify-start gap-2 text-lg`}
+        className={`name font-semibold flex flex-row items-center
+          justify-start gap-2 text-lg`}
       >
         <span>{group.name}</span>
-        <div className="plan-badge rounded-full shadow bg-primary text-white text-xs px-1.5">
+        <div
+          className="plan-badge rounded-full shadow bg-primary
+          text-white text-xs px-1.5"
+        >
           Pro
         </div>
         <span
-          className={`status text-xs px-2 py-0.5 rounded-full text-white shadow-md ${connectionStatus.className}`}
+          className={`status text-xs px-2 py-0.5 rounded-full
+            text-white shadow-md ${connectionStatus.className}`}
         >
           {connectionStatus.text}
         </span>
@@ -226,7 +234,10 @@ export const GroupCard = ({
           <MapPinIcon className="w-6 h-6" />
           {group.address}
         </div>
-        <div className="id font-mono text-slate-600 hover:text-emerald-600 row">
+        <div
+          className="id font-mono text-slate-600
+          hover:text-emerald-600 row"
+        >
           <HashtagIcon className="w-6 h-6" />
           {group.id}
         </div>
@@ -239,7 +250,10 @@ export const GroupCard = ({
           <PuzzlePieceIcon className="w-6 h-6" />
           {group.plugins?.length || 0} Plugins
         </div>
-        <div className="options flex flex-row gap-2 justify-end items-center text-base">
+        <div
+          className="options flex flex-row gap-2 justify-end
+          items-center text-base"
+        >
           <Link
             to={`${DASHBOARD_PREFIX}/groups/${group.id}/devices/new`}
             prefetch="render"

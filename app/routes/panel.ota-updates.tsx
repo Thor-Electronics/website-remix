@@ -63,17 +63,29 @@ const gridColumns: GridColDef[] = [
     renderCell: (params) => (
       <div className="actions flex gap-1">
         <Link to={`#`}>
-          <IconButton className="!bg-rose-100 !text-rose-400 border border-rose-300">
+          <IconButton
+            className="!bg-rose-100 dark:!bg-rose-950
+            !text-rose-400 dark:!text-rose-600 border
+            border-rose-300 dark:border-rose-700"
+          >
             <TrashIcon className="w-4" />
           </IconButton>
         </Link>
         <Link to={`#`}>
-          <IconButton className="!bg-blue-100 !text-blue-400 border border-blue-300">
+          <IconButton
+            className="!bg-blue-100 dark:!bg-blue-950
+            !text-blue-400 dark:!text-blue-600 border
+            border-blue-300 dark:border-blue-700"
+          >
             <CloudArrowDownIcon className="w-4" />
           </IconButton>
         </Link>
         <Link to={`#`}>
-          <IconButton className="!bg-amber-100 !text-amber-400 border border-amber-300">
+          <IconButton
+            className="!bg-amber-100 dark:!bg-amber-950
+            !text-amber-400 dark:!text-amber-600 border
+            border-amber-300 dark:border-amber-700"
+          >
             <PencilIcon className="w-4" />
           </IconButton>
         </Link>
@@ -117,7 +129,9 @@ const gridColumns: GridColDef[] = [
     width: 125,
     renderCell: (params) => (
       <span
-        className="px-1 rounded-md font-mono border bg-slate-200 text-slate-500 border-slate-400"
+        className="px-1 rounded-md font-mono border bg-slate-200
+          dark:bg-slate-700 text-slate-500 border-slate-400
+          dark:border-slate-600"
         title={"SI: " + readableFileSize(params.value, true)}
       >
         {readableFileSize(params.value)}

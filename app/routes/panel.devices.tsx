@@ -281,8 +281,9 @@ export const ManageDevices = () => {
             />
             {msgErr && (
               <pre
-                className="font-mono whitespace-pre-wrap bg-slate-300
-                text-slate-600 p-2 rounded-md mt-4"
+                className="font-mono whitespace-pre-wrap
+                  bg-slate-300 dark:bg-slate-600 text-slate-600
+                  dark:text-slate-300 p-2 rounded-md mt-4"
               >
                 {msgErr}
               </pre>
@@ -327,9 +328,9 @@ export const ManageDevices = () => {
                 relative"
               >
                 <span
-                  className="absolute bg-blue-500 text-white
+                  className="absolute bg-blue-500 dark:bg-blue-400
                   rounded-xl w-6 h-6 top-2 right-2 flex text-xs
-                  items-center justify-center"
+                  items-center justify-center text-white"
                 >
                   {i}
                 </span>
@@ -478,7 +479,11 @@ const generateGridColumns = (options: {
             </div>
           }
         >
-          <div className="text-xs flex flex-row items-center justify-center gap-1 overflow-ellipsis text-sky-700">
+          <div
+            className="text-xs flex flex-row items-center
+            justify-center gap-1 overflow-ellipsis text-sky-700
+            dark:text-sky-300"
+          >
             <UserIcon className="w-4 h-4" />
             {row.user.name || row.user.phone || row.user.email || row.user.id}
           </div>
@@ -487,7 +492,10 @@ const generateGridColumns = (options: {
         <div>
           <Tooltip title="No User Found">
             {/* <XCircleIcon className="w-6 h-6 text-slate-300" /> */}
-            <NoSymbolIcon className="w-6 h-6 text-slate-400" />
+            <NoSymbolIcon
+              className="w-6 h-6 text-slate-400
+              dark:text-slate-600"
+            />
           </Tooltip>
         </div>
       );
@@ -507,7 +515,11 @@ const generateGridColumns = (options: {
             </div>
           }
         >
-          <div className="font-xs flex flex-row items-center justify-center gap-1 overflow-ellipsis text-sky-700">
+          <div
+            className="font-xs flex flex-row items-center
+            justify-center gap-1 overflow-ellipsis text-sky-700
+            dark:text-sky-300"
+          >
             <BuildingOffice2Icon className="w-4 h-4" />
             {row.group.name || row.group.id}
           </div>
@@ -516,7 +528,10 @@ const generateGridColumns = (options: {
         <div>
           <Tooltip title="No Group Found">
             {/* <XCircleIcon className="w-6 h-6 text-slate-300" /> */}
-            <NoSymbolIcon className="w-6 h-6 text-slate-400" />
+            <NoSymbolIcon
+              className="w-6 h-6 text-slate-400
+                dark:text-slate-600"
+            />
           </Tooltip>
         </div>
       );

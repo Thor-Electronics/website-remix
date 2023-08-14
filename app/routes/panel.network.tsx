@@ -27,7 +27,8 @@ export const AdminInvoices = () => {
           <div className="flex gap-2 flex-wrap">
             {h.deviceHubs.map((dh) => (
               <div
-                className="DeviceHub card border border-red-400 flex flex-col gap-1"
+                className="DeviceHub card border border-red-400
+                  dark:border-red-600 flex flex-col gap-1"
                 key={dh.groupId}
               >
                 {dh.name}
@@ -58,11 +59,17 @@ type ClientProps = {
 export function ClientComponent({ data: c, ...props }: ClientProps) {
   return (
     <div className="card border border-blue-500 flex gap-1" {...props}>
-      <span className="text-green-500">{c.type}</span>
-      <span className="text-slate-500">{(c.device ?? c.user)!.name}</span>
-      <span className="text-slate-500">{(c.device ?? c.user)!.id}</span>
-      <span className="text-blue-500">{c.ip}</span>
-      <span className="text-red-500">{c.latency.toLocaleString()}ns</span>
+      <span className="text-green-500 dark:text-green-400">{c.type}</span>
+      <span className="text-slate-500 dark:text-slate-400">
+        {(c.device ?? c.user)!.name}
+      </span>
+      <span className="text-slate-500 dark:text-slate-400">
+        {(c.device ?? c.user)!.id}
+      </span>
+      <span className="text-blue-500 dark:text-blue-400">{c.ip}</span>
+      <span className="text-red-500 dark:text-red-400">
+        {c.latency.toLocaleString()}ns
+      </span>
       {/* µ */}
     </div>
   );

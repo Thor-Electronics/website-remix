@@ -10,10 +10,9 @@ import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { Response, json } from "@remix-run/node";
 import { Form, Link, useLoaderData, useNavigation } from "@remix-run/react";
 import Badge from "~/components/atoms/Badge";
-import { TextButton } from "~/components/atoms/Button";
+import { IconButton, TextButton } from "~/components/atoms/Button";
 import { requireUser } from "~/models/session.server";
 import type { User } from "~/types/User";
-import api from "~/utils/core.server";
 
 type LoaderData = {
   user: User;
@@ -55,7 +54,7 @@ export default function DashboardProfile() {
         {u.name}
         {u.roles && (
           <div
-            className="roles bg-teal-500 text-white p-0.5 rounded-full"
+            className="roles bg-teal-500 dark:bg-teal-600 text-white p-0.5 rounded-full"
             title={u.roles.map((r) => r.name).join(", ")}
           >
             <UserCircleIcon className="w-6" />
@@ -141,7 +140,7 @@ export default function DashboardProfile() {
           {u.roles.map((r) => (
             <span
               key={r.name}
-              className="role bg-teal-500 text-white rounded-md py-0.5 px-2 flex items-center gap-1"
+              className="role bg-teal-500 dark:bg-teal-600 text-white rounded-md py-0.5 px-2 flex items-center gap-1"
             >
               <ShieldCheckIcon className="w-4" />
               {r.name}
@@ -149,6 +148,11 @@ export default function DashboardProfile() {
           ))}
         </div>
       )}
+      {/* <div className="theme">
+        <IconButton>
+
+        </IconButton>
+      </div> */}
     </div>
   );
 }

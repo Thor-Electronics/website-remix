@@ -16,7 +16,7 @@ export const LogoutPage = () => {
   return (
     <Form
       method="post"
-      className="bg-white dark:bg-slate-900 border
+      className="bg-white dark:bg-slate-800 border
         border-rose-500 dark:border-rose-600 p-3
         rounded-xl shadow-lg shadow-rose-200
         dark:shadow-rose-800"

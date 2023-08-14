@@ -144,7 +144,7 @@ export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
       <Document title="Oops!">
         <div
           className="error-container h-screen error bg-rose-100
-          dark:bg-slate-900 text-rose-600 dark:text-rose-400
+          dark:bg-stone-900 text-rose-600 dark:text-rose-400
           flex flex-col gap-6 items-center justify-center text-center"
         >
           <LogoIcon className="w-32" />
