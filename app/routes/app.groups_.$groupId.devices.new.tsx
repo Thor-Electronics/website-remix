@@ -9,6 +9,7 @@ import {
 } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import { requireSessionToken, requireUser } from "~/models/session.server";
+import type { ServerDeviceTypes } from "~/types/DeviceType";
 import { DeviceType } from "~/types/DeviceType";
 import type { Group } from "~/types/Group";
 import type { User } from "~/types/User";
@@ -19,9 +20,7 @@ import Button from "~/components/atoms/Button";
 type LoaderData = {
   user: User;
   group: Group;
-  deviceTypes: {
-    [key in DeviceType]: string; // [k: DeviceType]: string
-  };
+  deviceTypes: ServerDeviceTypes;
 };
 
 type ActionData = {

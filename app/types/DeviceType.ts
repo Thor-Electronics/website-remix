@@ -36,3 +36,7 @@ export enum DeviceType {
   // DOOR = "DOOR",
   // VEHICLE = "VEHICLE",
 }
+
+export type ServerDeviceTypes = {
+  [key in DeviceType]: string // [k: DeviceType]: string
+}
