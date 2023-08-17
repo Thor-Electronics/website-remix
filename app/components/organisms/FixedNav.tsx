@@ -68,7 +68,7 @@ export const FixedNav = ({
       className={`FixedNav bg-white dark:bg-slate-800 rounded-xl
         p-2 shadow-lg fixed bottom-2 left-2 sm:bottom-auto sm:top-2
         w-full xl:w-32 xl:left-2 xl:bottom-2 z-10 flex flex-row
-        sm:flex-col items-stretch justify-between ${className}`}
+        sm:flex-col items-stretch justify-between gap-2 ${className}`}
       {...props}
     >
       <div className="header">{header}</div>
