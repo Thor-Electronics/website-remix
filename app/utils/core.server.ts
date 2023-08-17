@@ -60,6 +60,8 @@ export const deleteGroup = (id: string, token: string) =>
 
 /* =-=-=-=-=-=-=-=-=-=-=-=-=-=- DEVICES =-=-=-=-=-=-=-=-=-=-=-=-=-= */
 const devices = `${v1}/devices`
+export const getDeviceTypes = (token: string) =>
+  ax.get(`${devices}/types/`, h(token)).then(extractResponseData)
 export const createDevice = (token: string, data: object) =>
   ax.post(`${devices}`, data, h(token)).then(extractResponseData)
 export const getDeviceDetails = (id: string, token: string) =>
@@ -131,6 +133,7 @@ const api = {
   getGroupDetails,
   deleteGroup,
 
+  getDeviceTypes,
   createDevice,
   getDeviceDetails,
   deleteDevice,

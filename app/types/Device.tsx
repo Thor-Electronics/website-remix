@@ -127,12 +127,12 @@ export const commonActions: { [key: string]: LegacyDeviceAction } = {
 };
 
 export const deviceActions: { [key: string]: LegacyDeviceAction[] } = {
-  [DeviceType.KEY]: [commonActions.powerAction, commonActions.restartAction],
-  [DeviceType.KEY1]: [commonActions.powerAction, commonActions.restartAction],
-  [DeviceType.KEY2]: [commonActions.powerAction, commonActions.restartAction],
-  [DeviceType.KEY3]: [commonActions.powerAction, commonActions.restartAction],
-  [DeviceType.KEY4]: [commonActions.powerAction, commonActions.restartAction],
-  [DeviceType.BELL]: [
+  [DeviceType.Key]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceType.Key1]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceType.Key2]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceType.Key3]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceType.Key4]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceType.Bell]: [
     commonActions.powerAction,
     commonActions.restartAction,
     {
@@ -165,7 +165,7 @@ export const deviceActions: { [key: string]: LegacyDeviceAction[] } = {
       callback: () => "CHANNEL_DOWN",
     },
   ],
-  [DeviceType.LIGHT]: [
+  [DeviceType.Light]: [
     commonActions.powerAction,
     commonActions.restartAction,
     {
@@ -174,8 +174,8 @@ export const deviceActions: { [key: string]: LegacyDeviceAction[] } = {
       callback: () => "SET_COLOR",
     },
   ],
-  [DeviceType.IRHUB]: [commonActions.powerAction, commonActions.restartAction],
-  [DeviceType.LOCK]: [commonActions.powerAction, commonActions.restartAction],
-  [DeviceType.DOOR]: [commonActions.powerAction, commonActions.restartAction],
-  [DeviceType.BLINDS]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceType.IRHub]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceType.Lock]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceType.Door]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceType.Blind]: [commonActions.powerAction, commonActions.restartAction],
 };

@@ -1,7 +1,7 @@
-import { Switch } from "@mui/material"
-import type { ReactNode } from "react"
-import type { DeviceControlProps } from "~/types/Device"
-import { DeviceType } from "~/types/DeviceType"
+import { Switch } from "@mui/material";
+import type { ReactNode } from "react";
+import type { DeviceControlProps } from "~/types/Device";
+import { DeviceType } from "~/types/DeviceType";
 
 export default function Key4({
   type: t,
@@ -10,14 +10,14 @@ export default function Key4({
 }: DeviceControlProps): ReactNode {
   const handleUpdate = (k: string, v: number | boolean) => {
     if (!handleUpdate)
-      return console.warn("Update handler is not configured for this key!")
+      return console.warn("Update handler is not configured for this key!");
     if (!state.power) {
       state.power = {
         "0": false,
         "1": false,
         "2": false,
         "3": false,
-      }
+      };
     }
     updateHandler({
       command: {
@@ -26,31 +26,31 @@ export default function Key4({
           [k]: v ? false : true,
         },
       },
-    })
-  }
+    });
+  };
   const toggleSinglePower = () => {
-    if (!updateHandler) return
+    if (!updateHandler) return;
     updateHandler({
       command: { power: state.power ? false : true },
-    })
-  }
+    });
+  };
 
   // Fix state if empty
-  if (!state || typeof state !== "object") state = {}
-  if (t !== DeviceType.KEY && t !== DeviceType.KEY1) {
+  if (!state || typeof state !== "object") state = {};
+  if (t !== DeviceType.Key && t !== DeviceType.Key1) {
     if (!state.power || typeof state.power !== "object") {
       state.power =
-        t === DeviceType.KEY2
+        t === DeviceType.Key2
           ? { 0: false, 1: false }
-          : t === DeviceType.KEY3
+          : t === DeviceType.Key3
           ? { 0: false, 1: false, 2: false }
-          : { 0: false, 1: false, 2: false, 3: false } // it's probably 4
+          : { 0: false, 1: false, 2: false, 3: false }; // it's probably 4
     }
   }
 
   return (
     <div className={`KeyControl`}>
-      {t === DeviceType.KEY || t === DeviceType.KEY1 ? (
+      {t === DeviceType.Key || t === DeviceType.Key1 ? (
         <Switch checked={!!state.power} onChange={toggleSinglePower} />
       ) : (
         Object.entries(state.power).map(([k, v]) => {
@@ -59,9 +59,9 @@ export default function Key4({
               {k}
               <Switch checked={!!v} onChange={() => handleUpdate(k, v)} />
             </label>
-          )
+          );
         })
       )}
     </div>
-  )
+  );
 }

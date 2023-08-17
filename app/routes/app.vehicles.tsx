@@ -54,7 +54,7 @@ export const sampleVehicle = {
   cpuId: "ECU_18328193140",
   name: "911 Turbo",
   groupId: "0",
-  type: DeviceType.VEHICLE,
+  type: DeviceType.ECU,
   state: {
     speed: 60, // KMpH
     rpm: 2000, // RPM

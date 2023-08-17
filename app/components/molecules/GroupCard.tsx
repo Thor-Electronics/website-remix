@@ -205,7 +205,7 @@ export const GroupCard = ({
           <div className="devices">
             {group.devices?.map((d) => {
               switch (d.type) {
-                case DeviceType.KEY1:
+                case DeviceType.Key1:
                 // return
                 // break
 

@@ -12,13 +12,16 @@ import { requireSessionToken, requireUser } from "~/models/session.server";
 import { DeviceType } from "~/types/DeviceType";
 import type { Group } from "~/types/Group";
 import type { User } from "~/types/User";
-import api, { getGroupDetails } from "~/utils/core.server";
+import api, { getDeviceTypes, getGroupDetails } from "~/utils/core.server";
 import { DASHBOARD_PREFIX } from "./app";
 import Button from "~/components/atoms/Button";
 
 type LoaderData = {
   user: User;
   group: Group;
+  deviceTypes: {
+    [key in DeviceType]: string; // [k: DeviceType]: string
+  };
 };
 
 type ActionData = {
@@ -36,7 +39,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const token = await requireSessionToken(request);
   invariant(params.groupId, "Invalid Group ID");
   const group = await getGroupDetails(params.groupId, token);
-  return json<LoaderData>({ user, group });
+  const deviceTypes = await getDeviceTypes(token);
+  return json<LoaderData>({ user, group, deviceTypes });
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
@@ -88,17 +92,20 @@ export const action: ActionFunction = async ({ request, params }) => {
 };
 
 export default function NewDevicePage() {
-  const { group: g } = useLoaderData<LoaderData>();
+  const { group: g, deviceTypes } = useLoaderData<LoaderData>();
   const actionData = useActionData<ActionData>();
   const navigation = useNavigation();
 
   return (
     <div className="NewDevicePage">
-      <h1>
+      <h1 className="page-title text-center my-4 text-xl font-bold">
         Adding New Device to{" "}
         <Link to={`${DASHBOARD_PREFIX}/groups/${g.id}`}>{g.name}</Link>
       </h1>
-      <Form method="POST" className="flex flex-col gap-4">
+      <Form
+        method="POST"
+        className="flex flex-col gap-4 max-w-sm mx-auto card sm:p-4"
+      >
         {actionData?.errors?.message && (
           <div className="error">{actionData?.errors?.message}</div>
         )}
@@ -114,9 +121,9 @@ export default function NewDevicePage() {
           {actionData?.errors?.type && (
             <span className="error">{actionData.errors.type}</span>
           )}
-          <select name="type" required>
-            {Object.entries(DeviceType).map(([k, v]) => (
-              <option key={k} value={v}>
+          <select name="type" required defaultValue={DeviceType.Key4}>
+            {Object.entries(deviceTypes).map(([k, v]) => (
+              <option key={k} value={k}>
                 {v}
               </option>
             ))}
