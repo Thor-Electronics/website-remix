@@ -72,7 +72,8 @@ html.dark [class~="MuiDataGrid-cell"] {
 }
 
 .card {
-  @apply bg-white p-3 rounded-lg shadow-lg dark:bg-slate-800;
+  @apply bg-white p-3 rounded-lg shadow-lg dark:bg-slate-800
+  sm:p-4 sm:rounded-xl;
 }
 
 @media (prefers-color-scheme: dark) {

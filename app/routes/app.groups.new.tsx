@@ -49,7 +49,7 @@ export const NewGroup = () => {
 
   return (
     <div>
-      <form className="flex flex-col gap-4" method="post">
+      <form className="flex flex-col gap-4 card max-w-sm mx-auto" method="post">
         <h1 className="title font-bold text-2xl text-center">
           Create New Group
         </h1>
