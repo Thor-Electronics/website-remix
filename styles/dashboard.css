@@ -38,7 +38,7 @@
     !p-3 sm:mx-auto sm:p-2;
 
     .devices {
-      @apply mx-[-0.75rem];
+      @apply mx-[-0.75rem] sm:mx-0;
     }
   }
 
