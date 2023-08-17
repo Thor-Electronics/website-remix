@@ -63,7 +63,10 @@ export default function TransferDeviceRoute() {
 
   return (
     <div className="TransferDeviceRoute">
-      <Form method="POST" className="card flex flex-col gap-4">
+      <h1 className="text-xl font-semibold text-center my-4">
+        Transfer Device Ownership({device.name})
+      </h1>
+      <Form method="POST" className="card max-w-lg mx-auto flex flex-col gap-4">
         {actionData?.errors && (
           <Alert severity="error">{actionData.errors.message}</Alert>
         )}
