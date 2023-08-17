@@ -96,29 +96,27 @@ export const loader: LoaderFunction = async ({ request }) => {
   );
 };
 
+export type Theme = "dark" | "light" | "";
+
 export default function App() {
   const { ENV } = useLoaderData<LoaderData>();
-  const [theme, setTheme] = useState<"dark" | "">("");
+  const [theme, setTheme] = useState<Theme>("");
   // useSWEffect();
   useEffect(() => {
     if (window) {
-      let userTheme: "dark" | "" = "";
-      const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      if (prefersDark) {
-        console.log("Browser prefers dark");
-        userTheme = "dark";
-      }
-
       const savedTheme = window.localStorage.getItem("theme");
-      if (savedTheme === "dark") {
-        // savedTheme
+      if (savedTheme !== null) {
         console.log("Saved theme is: ", savedTheme);
-        userTheme = savedTheme;
+        setTheme(savedTheme as Theme);
+      } else {
+        const browserPrefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+        if (browserPrefersDark) {
+          console.log("Browser prefers dark");
+          setTheme("dark");
+        }
       }
-      console.log("Setting theme: ", userTheme);
-      setTheme(userTheme);
     }
   }, []);
 

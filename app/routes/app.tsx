@@ -4,6 +4,7 @@ import {
   ArrowRightOnRectangleIcon,
   UserCircleIcon,
   CpuChipIcon,
+  MoonIcon,
 } from "@heroicons/react/24/solid";
 import type { LoaderFunction, LinksFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
