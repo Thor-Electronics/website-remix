@@ -56,50 +56,53 @@ export default function AppOrphanDevicesRoute() {
   const actionData = useActionData<ActionData>();
 
   return (
-    <div className="card flex flex-col items-stretch gap-4 !rounded-xl">
-      {actionData?.error && <Alert severity="error">{actionData.error}</Alert>}
-      {orphanDevices.map((d) => (
-        <div
-          className="bg-slate-200 dark:bg-slate-800 p-2
+    <>
+      <h1 className="title text-xl font-semibold text-center my-4">
+        Orphan Devices
+      </h1>
+      <div className="card max-w-md mx-auto flex flex-col items-stretch gap-4 !rounded-xl">
+        {actionData?.error && (
+          <Alert severity="error">{actionData.error}</Alert>
+        )}
+        {orphanDevices.map((d) => (
+          <div
+            className="bg-slate-200 dark:bg-slate-800 p-2
             shadow-inner rounded-md"
-          key={d.id}
-        >
-          <b className="title">{d.name}</b> -{" "}
-          <small className="text-xs text-slate-500 font-mono">{d.id}</small>
-          <Form method="POST">
-            <label className="block mt-4">
-              Move to:
-              <select name="groupId" required>
-                <option key={0}>Please Select</option>
-                {groups.map((g) => (
-                  <option value={g.id} key={g.id}>
-                    {g.name}
-                    {/* ({g.type ?? "Building"}) */}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <input type="text" value={d.id} name="deviceId" readOnly hidden />
-            <div className="buttons mt-4 flex items-start gap-2 justify-start flex-row-reverse">
-              <TextButton className="!bg-primary" type="submit">
-                Move
-              </TextButton>
-              <Link to={`${DASHBOARD_PREFIX}/devices/${d.id}/transfer`}>
-                <TextButton className="!bg-teal-500 dark:!bg-teal-400">
-                  Transfer
+            key={d.id}
+          >
+            <b className="title">{d.name}</b> -{" "}
+            <small className="text-xs text-slate-500 font-mono">{d.id}</small>
+            <Form method="POST">
+              <label className="block mt-4">
+                Move to:
+                <select name="groupId" required>
+                  <option key={0}>Please Select</option>
+                  {groups.map((g) => (
+                    <option value={g.id} key={g.id}>
+                      {g.name}
+                      {/* ({g.type ?? "Building"}) */}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <input type="text" value={d.id} name="deviceId" readOnly hidden />
+              <div className="buttons mt-4 flex items-start gap-2 justify-start flex-row-reverse">
+                <TextButton className="!bg-primary" type="submit">
+                  Move
                 </TextButton>
-              </Link>
-              <Link
-                to={`${DASHBOARD_PREFIX}/devices/${d.id}/remove?intent=delete`}
-              >
-                <TextButton className="!bg-rose-500 dark:!bg-rose-400">
-                  Delete
-                </TextButton>
-              </Link>
-            </div>
-          </Form>
-        </div>
-      ))}
-    </div>
+                <Link to={`${DASHBOARD_PREFIX}/devices/${d.id}/transfer`}>
+                  <TextButton className="!bg-teal-500">Transfer</TextButton>
+                </Link>
+                <Link
+                  to={`${DASHBOARD_PREFIX}/devices/${d.id}/remove?intent=delete`}
+                >
+                  <TextButton className="!bg-rose-500">Delete</TextButton>
+                </Link>
+              </div>
+            </Form>
+          </div>
+        ))}
+      </div>
+    </>
   );
 }
