@@ -55,6 +55,10 @@ export default function AppOrphanDevicesRoute() {
   const { groups } = useLoaderData<LoaderData>();
   const actionData = useActionData<ActionData>();
 
+  if (!orphanDevices?.length) {
+    // todo: redirect to homepage
+  }
+
   return (
     <>
       <h1 className="title text-xl font-semibold text-center my-4">
