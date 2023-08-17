@@ -74,11 +74,13 @@ export const DashboardIndexRoute = () => {
         </Alert>
       )}
       {group ? (
-        <GroupCard
-          data={group as Group}
-          socketToken={socketToken}
-          className="dashboard-friendly"
-        />
+        <div className="sm:max-w-5xl sm:mx-auto">
+          <GroupCard
+            data={group as Group}
+            socketToken={socketToken}
+            className="dashboard-friendly"
+          />
+        </div>
       ) : (
         <p>You don't have any group yet! Create a new one in the groups page</p>
       )}
