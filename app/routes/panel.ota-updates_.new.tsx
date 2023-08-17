@@ -82,7 +82,7 @@ export const AdminOTAUpdatesNew = () => {
         onSubmit={handleSubmit}
         method="post"
         encType="multipart/form-data"
-        className="form max-w-xs mx-auto bg-white
+        className="form max-w-sm mx-auto bg-white
           dark:bg-slate-800 rounded-lg shadow-lg px-2 py-3 sm:p-4
           flex flex-col items-stretch justify-center gap-4"
       >
