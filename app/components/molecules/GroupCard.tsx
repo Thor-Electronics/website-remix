@@ -33,19 +33,19 @@ export interface Props extends HTMLAttributes<HTMLElement> {
 export const WS_STATUS_BADGES = {
   [ReadyState.CONNECTING]: {
     text: "Connecting",
-    className: "bg-orange-500 shadow-orange-300",
+    className: "bg-orange-500 shadow-orange-300 dark:shadow-orange-700",
   },
   [ReadyState.OPEN]: {
     text: "Connected",
-    className: "bg-green-500 shadow-green-300",
+    className: "bg-green-500 shadow-green-300 dark:shadow-green-700",
   },
   [ReadyState.CLOSING]: {
     text: "Disconnecting",
-    className: "bg-rose-500 shadow-rose-300",
+    className: "bg-rose-500 shadow-rose-300 dark:shadow-rose-700",
   },
   [ReadyState.CLOSED]: {
     text: "Disconnected",
-    className: "bg-slate-800 shadow-slate-300",
+    className: "bg-slate-800 shadow-slate-300 dark:shadow-slate-700",
   },
   [ReadyState.UNINSTANTIATED]: {
     text: "Uninstantiated",
@@ -260,7 +260,8 @@ export const GroupCard = ({
           >
             <Button
               className="p-2 rounded-xl sm:rounded-lg sm:px-3 sm:py-1
-                 !bg-emerald-500 shadow-emerald-300 sm:shadow-emerald-200"
+                 !bg-emerald-500 shadow-emerald-300
+                 dark:shadow-emerald-700 sm:shadow-emerald-200"
               title="Add New Device to the Group"
             >
               <SquaresPlusIcon className={groupActionIconClassNames} />
@@ -270,7 +271,8 @@ export const GroupCard = ({
 
           <Button
             className="p-2 rounded-xl sm:rounded-lg sm:px-3 sm:py-1
-                 !bg-blue-500 shadow-blue-300 sm:shadow-blue-200"
+                 !bg-blue-500 shadow-blue-300
+                 dark:shadow-blue-700 sm:shadow-blue-200"
             title="Edit the Group"
           >
             <PencilIcon className={groupActionIconClassNames} />
@@ -280,7 +282,8 @@ export const GroupCard = ({
           <Link to={`${DASHBOARD_PREFIX}/groups/${group.id}/delete`}>
             <Button
               className="p-2 rounded-xl sm:rounded-lg sm:px-3 sm:py-1
-                 !bg-red-500 shadow-red-300 sm:shadow-red-200"
+                 !bg-red-500 shadow-red-300
+                 dark:shadow-red-700 sm:shadow-red-200"
               title="Disable the Group"
             >
               <TrashIcon className={groupActionIconClassNames} />

@@ -25,7 +25,7 @@
   /* grid-template-rows: 24px 1fr 48px; */
 
   &.online {
-    @apply !shadow-emerald-300 dark:!shadow-emerald-800 border
+    @apply !shadow-emerald-300 dark:!shadow-emerald-700 border
     border-emerald-400 dark:border-emerald-600 border-b-[16px];
 
     /* .devices {
