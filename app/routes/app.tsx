@@ -115,7 +115,7 @@ const orphanDeviceNavItem = {
   label: "Devices",
   to: `${DASHBOARD_PREFIX}/orphan-devices`,
   props: {
-    className: "!bg-orange-100 !text-orange-400",
+    className: "!bg-orange-100 dark:!bg-slate-700 !text-orange-400",
   },
 };
 const initialUserNavItems: FixedNavItem[] = [
