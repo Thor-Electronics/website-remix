@@ -15,7 +15,7 @@ export enum DeviceType {
   Lock = "LOCK", // Lock
   Door = "DOOR", // Door
   TV = "TV", // Smart TV
-  Blind = "BLIND", // Window Blinds
+  Blinds = "BLINDS", // Window Blinds
   Curtain = "CURTAIN", // Window Curtain
   Thermostat = "THERMOSTAT", // Thermostat
   IRHub = "HUB_IR", // IR_HUB?
