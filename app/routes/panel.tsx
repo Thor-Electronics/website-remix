@@ -75,7 +75,7 @@ export const Admin = () => {
       min-h-screen p-2 relative pb-20 sm:bp-2 sm:pt-28 xl:pt-2
       xl:pl-36"
     >
-      <FixedNav items={userNavItems} />
+      <FixedNav items={userNavItems} darkModeToggle />
       <Outlet />
       <Copyright />
     </div>
