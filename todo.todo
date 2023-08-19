@@ -1,3 +1,4 @@
 - Invalid login attempt causes app crash!
 - Redirect admin to panel doesn't work!
 - New firmware upload progression loading stuff transitions
+- Use cookie session to store user theme if possible to avoid FOUC flash: https://github.com/mattstobbs/remix-dark-mode/blob/main/app/root.tsx
