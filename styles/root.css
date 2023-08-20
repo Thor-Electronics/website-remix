@@ -104,7 +104,7 @@ label {
   .error {
     @apply text-red-600 dark:text-red-400 italic font-bold;
   }
-  input,
+  input:not([type="checkbox"]),
   select {
     @apply mt-2;
   }

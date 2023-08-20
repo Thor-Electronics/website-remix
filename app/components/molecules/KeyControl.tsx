@@ -50,13 +50,18 @@ export default function Key4({
   }
 
   return (
-    <div className={`KeyControl`}>
+    <div
+      className={`KeyControl flex flex-col items-center justify-center gap-2`}
+    >
       {t === DeviceType.Key || t === DeviceType.Key1 ? (
         <Switch checked={!!state.power} onChange={toggleSinglePower} />
       ) : (
         Object.entries(state.power).map(([k, v]) => {
           return (
-            <label key={k}>
+            <label
+              key={k}
+              className="flex items-center justify-center flex-row gap-2"
+            >
               {k}
               {/* <Switch checked={!!v} onChange={() => handleUpdate(k, v)} /> */}
               <Switch checked={!!v} onChange={() => handleUpdate(k, v)} />

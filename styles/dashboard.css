@@ -57,10 +57,7 @@
   }
 
   .devices {
-    @apply border border-slate-200 p-2 dark:border-slate-600
-    rounded-xl bg-slate-100 dark:bg-slate-700 flex
-    shadow-slate-200 dark:shadow-slate-600
-    flex-row gap-2 shadow-inner flex-wrap;
+    @apply flex flex-row gap-2 flex-wrap;
   }
 
   .SimpleDeviceCard {
