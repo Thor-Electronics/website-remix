@@ -8,17 +8,26 @@ interface IProps extends HTMLAttributes<HTMLInputElement> {
 
 export const Switch = ({ checked, className, ...props }: IProps) => {
   return (
-    <div
-      className={`Switch ${checked ? "checked" : ""} ${className}`}
+    <input
+      type="checkbox"
+      className={`Switch ${className}`}
+      checked={checked}
       {...props}
-    >
-      <div
-        className={`circle ${
-          checked
-            ? "bg-white dark:bg-slate-600"
-            : "bg-slate-50 dark:bg-slate-700"
-        }`}
-      ></div>
-    </div>
+    />
   );
 };
+
+{
+  /* <div
+  className={`Switch ${checked ? "checked" : ""} ${className}`}
+  {...props}
+>
+  <div
+    className={`circle ${
+      checked
+        ? "bg-white dark:bg-slate-600"
+        : "bg-slate-50 dark:bg-slate-700"
+    }`}
+  ></div>
+</div> */
+}

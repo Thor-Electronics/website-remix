@@ -7,14 +7,7 @@ import type {
 import { OnlinePulse } from "../atoms/Pulse";
 import KeyControl from "./KeyControl";
 import TVControl from "./TVControl";
-import { Link } from "@remix-run/react";
-import { DASHBOARD_PREFIX } from "~/routes/app";
-import {
-  ArrowSmallRightIcon,
-  EllipsisVerticalIcon,
-  PencilIcon,
-  TrashIcon,
-} from "@heroicons/react/24/solid";
+import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
 import type { DeviceType } from "~/types/DeviceType";
 import SimpleDeviceCardOptionsMenu from "./SimpleDeviceCardOptionsMenu";
 import { IconButton } from "@mui/material";

@@ -4,4 +4,4 @@
 - Use cookie session to store user theme if possible to avoid FOUC flash:
   - https://github.com/mattstobbs/remix-dark-mode/blob/main/app/root.tsx
   - https://www.mattstobbs.com/remix-dark-mode/
-- FFF
+- Hide scrollbar and list of groups if user has only one group

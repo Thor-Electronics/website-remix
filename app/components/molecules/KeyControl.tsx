@@ -1,7 +1,8 @@
-import { Switch } from "@mui/material";
 import type { ReactNode } from "react";
 import type { DeviceControlProps } from "~/types/Device";
 import { DeviceType } from "~/types/DeviceType";
+import { Switch } from "../atoms/Switch";
+// import { Switch } from "@mui/material";
 
 export default function Key4({
   type: t,
@@ -57,6 +58,7 @@ export default function Key4({
           return (
             <label key={k}>
               {k}
+              {/* <Switch checked={!!v} onChange={() => handleUpdate(k, v)} /> */}
               <Switch checked={!!v} onChange={() => handleUpdate(k, v)} />
             </label>
           );
