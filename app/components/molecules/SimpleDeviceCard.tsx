@@ -6,6 +6,7 @@ import type {
 } from "~/types/Device";
 import { OnlinePulse } from "../atoms/Pulse";
 import KeyControl from "./KeyControl";
+import RelayControl from "./RelayControl";
 import TVControl from "./TVControl";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
 import type { DeviceType } from "~/types/DeviceType";
@@ -115,9 +116,9 @@ export const DeviceControlPanels: Record<DeviceType, Function> = {
   KEY2: KeyControl,
   KEY3: KeyControl,
   KEY4: KeyControl,
-  RELAY: () => "GENERAL RELAY",
-  RELAY8: () => "RELAY CARD(8)",
-  RELAY12: () => "RELAY CARD(12)",
+  RELAY: RelayControl,
+  RELAY8: RelayControl,
+  RELAY12: RelayControl,
   PLUG: () => "PLUG / WALL PLUG/ POWER SOCKET",
   LIGHT: () => "LIGHT CONTROL",
   BELL: () => "BELL CONTROL",
