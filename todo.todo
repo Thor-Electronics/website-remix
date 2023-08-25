@@ -5,3 +5,6 @@
   - https://github.com/mattstobbs/remix-dark-mode/blob/main/app/root.tsx
   - https://www.mattstobbs.com/remix-dark-mode/
 - Hide scrollbar and list of groups if user has only one group
+- signup with phone only!
+- Add snackbars and toasts
+- Connect snackbars on session and cookie messages
