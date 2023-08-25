@@ -42,28 +42,29 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 type ActionData = {
   errors: {
-    email?: string;
+    message?: string;
+    identifier?: string;
     password?: string;
   };
 };
 
 export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData();
-  const email = form.get("email");
+  const identifier = form.get("identifier");
   const password = form.get("password");
 
   let errors = {
-    email: typeof email !== "string" && "Email must be string!",
+    identifier: typeof identifier !== "string" && "Identifier must be string!",
     password: typeof password !== "string" && "Password must be string!",
   };
 
   if (Object.values(errors).some(Boolean)) return json({ errors }, 400);
 
-  console.log(`${email} is logging in...`);
+  console.log(`${identifier} is logging in...`);
   const startTime = new Date().getTime();
   // call the core service api
-  return await api
-    .login({ email, password })
+  return api
+    .login({ identifier, password })
     .then(async (res) => {
       const { user: u, token, message } = res.data;
       const user: User = u;
@@ -82,21 +83,23 @@ export const action: ActionFunction = async ({ request }) => {
         redirectTo
       );
       console.log(
-        `${email} successfully logged in(${
+        `${identifier} ${message}(${
           new Date().getTime() - startTime
         }ms). Redirecting them to ${redirectTo}...`
       );
+      // todo: set message on snackbar
       return redirect;
     })
     .catch((err) => {
-      console.error(
-        "ERROR Logging in: ",
-        err.response?.data,
-        err.response,
-        err
-      );
+      const errMsg =
+        err.response?.data?.message ||
+        err.response?.data ||
+        err.response ||
+        err ||
+        "Unknown error";
+      console.error("ERROR Logging in: ", errMsg);
       return json<ActionData>(
-        { errors: { email: err.response?.data?.message } },
+        { errors: { message: errMsg, identifier: errMsg } },
         err.response?.status
       );
     });
@@ -115,13 +118,13 @@ export const Login = () => {
       <h1 className="title font-bold text-2xl text-center">LOGIN</h1>
       <div className="inputs flex flex-col gap-4">
         <label className="label">
-          Email:{" "}
-          {actionData?.errors.email && (
-            <span className="error">{actionData.errors.email}</span>
+          Phone / Email / Username:{" "}
+          {actionData?.errors.identifier && (
+            <span className="error">{actionData.errors.identifier}</span>
           )}
           <input
             type="text"
-            name="email"
+            name="identifier"
             placeholder="john.doe@example.com"
             required
           />

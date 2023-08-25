@@ -48,6 +48,7 @@ export const createCookieSession = async (
   cookieSession.set("token", token)
   cookieSession.set("userId", userId)
   return {
+    cookieSession,
     redirect: redirect(redirectTo, {
       headers: {
         "Set-Cookie": await cookieSessionStorage.commitSession(cookieSession),
