@@ -1,5 +1,5 @@
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import { TextButton } from "~/components/atoms/Button";
@@ -45,7 +45,30 @@ type ActionData = {
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
-  return json<ActionData>({ errors: { message: "Coming Soon!" } });
+  const fd = await request.formData();
+  invariant(params.deviceId, "Device ID is required!");
+  return api
+    .updateDevice(
+      params.deviceId,
+      await requireSessionToken(request),
+      Object.fromEntries(fd)
+    )
+    .then((coreResponse) => {
+      console.log(`Updated device ${coreResponse.id}`);
+      return redirect(DASHBOARD_PREFIX + "/");
+    })
+    .catch((err) => {
+      const errMsg =
+        err.response?.data?.message ||
+        err.response?.data ||
+        err.response ||
+        err ||
+        "unknown error!";
+      console.error(err);
+      return json<ActionData>({ errors: { message: errMsg } });
+    });
+  // console.log("CORE RESPONSE: ", coreResponse);
+  // return json<ActionData>({ errors: { message: "Coming Soon!" } });
 };
 
 export default function EditDeviceRoute() {
