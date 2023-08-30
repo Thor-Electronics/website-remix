@@ -2,15 +2,15 @@
   "private": true,
   "sideEffects": false,
   "scripts": {
-    "dev": "run-p dev:*",
-    "dev:remix": "cross-env NODE_ENV=development remix dev",
+    "dev": "npx run-p dev:*",
+    "dev:remix": "npx cross-env NODE_ENV=development remix dev",
     "dev:css": "postcss styles --base styles --dir app/styles -w",
-    "build": "run-s build:*",
-    "build:css": "postcss styles --base styles --dir app/styles --env production",
+    "build": "npx run-s build:*",
+    "build:css": "npx postcss styles --base styles --dir app/styles --env production",
     "start": "remix-serve build",
-    "build:remix": "cross-env NODE_ENV=production remix build",
+    "build:remix": "npx cross-env NODE_ENV=production remix build",
     "build-worker": "esbuild ./app/entry.workbox.ts --outfile=./public/entry.workbox.js --minify --bundle --platform=node --format=esm --define:process.env.NODE_ENV='\"production\"'",
-    "build-render": "NODE_ENV=production remix build",
+    "build-render": "npx cross-env NODE_ENV=production remix build",
     "dev:worker": "esbuild ./app/entry.workbox.ts --outfile=./public/entry.workbox.js --bundle --platform=node --format=esm --define:process.env.NODE_ENV='\"development\"' --watch"
   },
   "dependencies": {
