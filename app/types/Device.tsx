@@ -2,81 +2,98 @@ import {
   ArrowPathIcon,
   BellAlertIcon,
   PowerIcon,
-} from "@heroicons/react/24/solid"
-import type { ReactNode } from "react"
-import type { CommandMessage, Message } from "./Message"
+} from "@heroicons/react/24/solid";
+import type { ReactNode } from "react";
+import type { CommandMessage, Message } from "./Message";
+import { parseDeviceToken, type DeviceToken } from "./DeviceToken";
+import { DeviceType } from "./DeviceType";
+import type { DeviceChip } from "./DeviceChip";
+import { parseUser, type User } from "./User";
+import { parseGroup, type Group } from "./Group";
 
 export interface Device {
-  id: string
-  cpuId: string
-  name: string
-  groupId: string
-  type: DeviceTypes
-  state: DeviceState
-  isOnline?: boolean // could be connected timestamp to calculate uptime
-  uptime?: Date
-  latency?: number
+  id: string;
+  cpuId: string;
+  name: string;
+  userId: string;
+  user?: User;
+  groupId?: string;
+  group?: Group;
+  type: DeviceType;
+  chip: DeviceChip;
+  state: DeviceState;
+  manufacturerId?: string;
+  isOnline?: boolean; // could be connected timestamp to calculate uptime
+  uptime?: Date;
+  latency?: number;
+  token?: DeviceToken;
+  created_at?: Date;
+  updated_at?: Date;
+  verifiedAt?: Date;
+  activatedAt?: Date;
 }
 
+export const parseDevice = (d: any): Device => {
+  if ([d.id, d.cpuId, d.name, d.type].some((v) => v === undefined)) {
+    throw new Error("Invalid input to parse device");
+  }
+  return {
+    ...d,
+    id: d.id || d._id,
+    user: d.user && parseUser(d.user),
+    group: d.group && parseGroup(d.group),
+    token: d.token && parseDeviceToken(d.token),
+    created_at: new Date(d.created_at),
+    updated_at: new Date(d.updated_at),
+    verifiedAt: new Date(d.verifiedAt),
+    activatedAt: new Date(d.activatedAt),
+  };
+};
+
 export type DeviceState = {
-  [x: string]: string | number | boolean | object
-  power: number | boolean | { [x: string]: number | boolean }
+  [x: string]: string | number | boolean | object | undefined;
+  power?: number | boolean | { [x: string]: number | boolean };
   // volume?: number // TV, Radio, Speaker
   // channel?: number // TV, Radio
   // [key: string]: object
-}
-
-export enum DeviceTypes {
-  KEY = "KEY",
-  KEY1 = "KEY1",
-  KEY2 = "KEY2",
-  KEY3 = "KEY3",
-  KEY4 = "KEY4",
-  LOCK = "LOCK",
-  BELL = "BELL",
-  TV = "TV",
-  LIGHT = "LIGHT",
-  IRHUB = "IRHUB",
-  BLINDS = "BLINDS",
-  DOOR = "DOOR",
-}
+};
 
 export type DeviceActionCallbackReturnType =
   | Pick<Message, "update">
   | string
-  | void
+  | void;
 
 export type LegacyDeviceAction = {
-  title: string
-  className?: string
-  icon: string | ReactNode
-  callback: () => DeviceActionCallbackReturnType // generate new state or return action type or do something and return nothing
-}
+  title: string;
+  className?: string;
+  icon: string | ReactNode;
+  callback: () => DeviceActionCallbackReturnType; // generate new state or return action type or do something and return nothing
+};
 
 // A device action can be a button which controls an action in the
 // device control panel
-export type DeviceAction = ReactNode
+export type DeviceAction = ReactNode;
 
 // Sends update requests to the server(helps with)
-export type DeviceStateUpdateSender = (msg: Message) => boolean
+export type DeviceStateUpdateSender = (msg: Message) => boolean;
 
 export type DeviceControlPanelStateUpdateHandler = (
   cmd: CommandMessage
-) => boolean
+) => boolean;
 
 // Generates the message to be sent through StateUpdateSender
-export type DeviceStateUpdater = () => Message
+export type DeviceStateUpdater = () => Message;
 
 // Generates a new updater for the given action?
-export type DeviceStateUpdaterGenerator = () => DeviceStateUpdater
+export type DeviceStateUpdaterGenerator = () => DeviceStateUpdater;
 
 // Generates device actions for the device to be used in the device control
 export type DeviceActionGenerator = (
   id: string,
-  type: DeviceTypes,
+  type: DeviceType,
   state: DeviceState,
   onUpdate: Function
-) => ReactNode
+) => ReactNode;
 
 // Genertes device actions for
 export type DeviceStateEntryActionGenerator = (
@@ -84,15 +101,15 @@ export type DeviceStateEntryActionGenerator = (
   key: string,
   value: any,
   onUpdate: Function
-) => DeviceAction
+) => DeviceAction;
 
 export type DeviceControlProps = {
-  type: DeviceTypes
-  state: DeviceState
-  onUpdate: DeviceControlPanelStateUpdateHandler
-}
+  type: DeviceType;
+  state: DeviceState;
+  onUpdate: DeviceControlPanelStateUpdateHandler;
+};
 
-const cn = "w-7 h-7"
+const cn = "w-7 h-7";
 
 export const commonActions: { [key: string]: LegacyDeviceAction } = {
   powerAction: {
@@ -107,15 +124,15 @@ export const commonActions: { [key: string]: LegacyDeviceAction } = {
     icon: <ArrowPathIcon className={cn} />,
     callback: () => "RESTART",
   },
-}
+};
 
 export const deviceActions: { [key: string]: LegacyDeviceAction[] } = {
-  [DeviceTypes.KEY]: [commonActions.powerAction, commonActions.restartAction],
-  [DeviceTypes.KEY1]: [commonActions.powerAction, commonActions.restartAction],
-  [DeviceTypes.KEY2]: [commonActions.powerAction, commonActions.restartAction],
-  [DeviceTypes.KEY3]: [commonActions.powerAction, commonActions.restartAction],
-  [DeviceTypes.KEY4]: [commonActions.powerAction, commonActions.restartAction],
-  [DeviceTypes.BELL]: [
+  [DeviceType.Key]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceType.Key1]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceType.Key2]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceType.Key3]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceType.Key4]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceType.Bell]: [
     commonActions.powerAction,
     commonActions.restartAction,
     {
@@ -124,7 +141,7 @@ export const deviceActions: { [key: string]: LegacyDeviceAction[] } = {
       callback: () => "BUZZ",
     },
   ],
-  [DeviceTypes.TV]: [
+  [DeviceType.TV]: [
     commonActions.powerAction,
     commonActions.restartAction,
     {
@@ -148,7 +165,7 @@ export const deviceActions: { [key: string]: LegacyDeviceAction[] } = {
       callback: () => "CHANNEL_DOWN",
     },
   ],
-  [DeviceTypes.LIGHT]: [
+  [DeviceType.Light]: [
     commonActions.powerAction,
     commonActions.restartAction,
     {
@@ -157,11 +174,8 @@ export const deviceActions: { [key: string]: LegacyDeviceAction[] } = {
       callback: () => "SET_COLOR",
     },
   ],
-  [DeviceTypes.IRHUB]: [commonActions.powerAction, commonActions.restartAction],
-  [DeviceTypes.LOCK]: [commonActions.powerAction, commonActions.restartAction],
-  [DeviceTypes.DOOR]: [commonActions.powerAction, commonActions.restartAction],
-  [DeviceTypes.BLINDS]: [
-    commonActions.powerAction,
-    commonActions.restartAction,
-  ],
-}
+  [DeviceType.IRHub]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceType.Lock]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceType.Door]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceType.Blind]: [commonActions.powerAction, commonActions.restartAction],
+};

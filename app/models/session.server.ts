@@ -1,26 +1,17 @@
-import { createCookieSessionStorage, redirect } from "@remix-run/node"
+// import type { Request } from "@remix-run/node"
+import { redirect } from "@remix-run/node"
+import type { User } from "~/types/User"
 import api from "~/utils/core.server"
 import { db } from "~/utils/db.server"
+import cookieSessionStorage from "~/session/cookie.session.server"
+// import memorySessionStorage from "~/session/memory.session.server"
+// import fileSessionStorage from "~/session/file.session.server"
 
-const SESSION_SECRET = process.env.SESSION_SECRET
+export const SESSION_SECRET = process.env.SESSION_SECRET
 if (!SESSION_SECRET) throw new Error("SESSION_SECRET must be set")
 
-const storage = createCookieSessionStorage({
-  cookie: {
-    name: "RIW_session",
-    // normally you want this to be `secure: true`
-    // but that doesn't work on localhost for Safari
-    // https://web.dev/when-to-use-local-https/
-    secure: process.env.NODE_ENV === "production",
-    secrets: [SESSION_SECRET],
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 30,
-    httpOnly: true,
-  },
-})
-
-export async function createSession(
+// Creates a new session record in DB
+export async function createDBSession(
   userId: string,
   token: string,
   ip: string,
@@ -33,29 +24,51 @@ export async function createSession(
       IP: ip ?? "",
     },
   })
-  const session = await storage.getSession()
-  session.set("id", authSession.ID)
-  session.set("token", authSession.token)
-  session.set("userId", authSession.userID) // is it necessary?
+  const cookieSession = await cookieSessionStorage.getSession()
+  cookieSession.set("id", authSession.ID)
+  cookieSession.set("token", authSession.token)
+  cookieSession.set("userId", authSession.userID) // todo: necessary?
   return {
-    session: authSession,
+    cookieSession: authSession,
     redirect: redirect(redirectTo, {
       headers: {
-        "Set-Cookie": await storage.commitSession(session),
+        "Set-Cookie": await cookieSessionStorage.commitSession(cookieSession),
       },
     }),
   }
 }
 
-export const getUserSession = async (request: Request) =>
-  storage.getSession(request.headers.get("Cookie"))
+export const createCookieSession = async (
+  userId: string,
+  token: string,
+  request: Request,
+  redirectTo: string
+) => {
+  const cookieSession = await cookieSessionStorage.getSession()
+  cookieSession.set("token", token)
+  cookieSession.set("userId", userId)
+  return {
+    cookieSession,
+    redirect: redirect(redirectTo, {
+      headers: {
+        "Set-Cookie": await cookieSessionStorage.commitSession(cookieSession),
+      },
+    }),
+  }
+}
 
+// Extracts user's cookie session from request
+export const getUserSession = async (request: Request) =>
+  cookieSessionStorage.getSession(request.headers.get("Cookie"))
+
+// Extracts user's ID stored in the cookie session from request
 export async function getUserId(request: Request) {
   const session = await getUserSession(request)
   const userId = session.get("userId")
   return !userId || typeof userId !== "string" ? null : userId
 }
 
+// Extracts user's cookie session data from request
 export async function getSessionData(request: Request) {
   const session = await getUserSession(request)
   return {
@@ -68,16 +81,36 @@ export async function getSessionData(request: Request) {
 export const getSessionToken = async (request: Request) =>
   (await getSessionData(request)).token
 
+export const requireSessionToken = async (
+  request: Request
+): Promise<string> => {
+  const token = await getSessionToken(request)
+  if (!token) {
+    const url = new URL(request.url)
+    console.log("Undefined token. Redirecting to: ", url.pathname)
+    throw await logout(request, url.pathname)
+  }
+  return token
+}
+
 /** Get user info from core service based on token saved in session(cookie) */
-export const getOptionalUser = async (request: Request) =>
-  await api
-    .checkAuth((await getSessionData(request)).token)
-    .then(res => res.data.user)
-    .catch(err => null)
+export const getOptionalUser = async (request: Request) => {
+  const cookieSessionData = await getSessionData(request)
+  const token = cookieSessionData.token
+  if (!token) return undefined
+  return await api
+    .checkAuth(token)
+    .then(res => res.data.user as User)
+    .catch(err => undefined)
+}
 
 export const requireUser = async (request: Request) => {
   const user = await getOptionalUser(request)
-  if (!user) throw await logout(request)
+  if (!user) {
+    const url = new URL(request.url)
+    console.log("User is undefined. redirecting to: ", url.pathname)
+    throw await logout(request, url.pathname)
+  }
   return user
 }
 
@@ -87,22 +120,31 @@ export const requireUserId = async (
 ) => {
   const userId = getUserId(request)
   if (!userId) {
-    const searchParams = new URLSearchParams([["redirectTo", redirectTo]])
-    throw redirect(`/login?${searchParams}`)
+    // const searchParams = new URLSearchParams([["redirectTo", redirectTo]])
+    // throw redirect(`/login?${searchParams}`)
+    const url = new URL(request.url)
+    console.log("User ID is undefined. redirecting to: ", url.pathname)
+    throw await logout(request, url.pathname)
   }
   return userId
 }
 
-export const logout = async (request: Request) => {
-  const session = await getUserSession(request)
-  try {
-    await db.session.delete({ where: { ID: session.get("id") } })
-  } catch {
-    console.warn("Session doesn't exist")
-  }
-  return redirect("/login", {
+// TODO: set redirectTo cookie or something when redirecting to login
+export const logout = async (request: Request, redirectTo: string = "/app") => {
+  const cookieAuthSession = await getUserSession(request)
+  console.log(`Logging out to ${redirectTo}...`)
+  // try {
+  //   await db.session.delete({ where: { ID: cookieAuthSession.get("id") } })
+  // } catch {
+  //   console.warn("Session doesn't exist to delete. Continuing...")
+  // }
+  return redirect(`/login?redirect=${redirectTo}`, {
     headers: {
-      "Set-Cookie": await storage.destroySession(session),
+      "Set-Cookie": await cookieSessionStorage.destroySession(
+        cookieAuthSession
+      ),
     },
   })
 }
+
+// todo: internal cache system for auth! Amazing!

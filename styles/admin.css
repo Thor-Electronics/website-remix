@@ -2,7 +2,8 @@
 }
 
 .data-container {
-  @apply bg-slate-100 rounded-lg p-2 shadow-lg text-center;
+  @apply bg-slate-100 dark:bg-slate-800 dark:text-slate-600
+  rounded-lg p-2 shadow-lg text-center;
   /* min-height: 64vh; */
   /* height: 100vh; */
   /* max-height: calc(100vh - 175px); */

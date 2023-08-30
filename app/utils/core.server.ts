@@ -5,7 +5,7 @@ import axios from "axios"
 
 export const ax = axios.create({
   baseURL: ENV.CORE_URL,
-  // timeout: 10000,
+  // timeout: 9000,
   headers: { "X-Request-From": "Website" },
   // transformRequest: axios.defaults.transformRequest,
   // transformResponse: axios.defaults.transformResponse,
@@ -22,69 +22,99 @@ export const extractResponseData = (res: any) => res.data
 export const v1 = "/api/v1"
 
 export const healthCheck = () => ax.get("/health/")
-export const checkAuth = (token: string) => ax.get(`${v1}/auth/`, h(token))
-export const login = (data: object) => ax.post(`${v1}/auth/`, data)
-export const signup = (data: object) => ax.post(`${v1}/auth/signup/`, data)
+
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-= AUTH =-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+const auth = `${v1}/auth`
+export const checkAuth = (token: string) => ax.get(`${auth}/`, h(token))
+export const login = (data: object) => ax.post(`${auth}/`, data)
+export const signup = (data: object) => ax.post(`${auth}/signup/`, data)
 export const getUserProfile = (token: string) =>
-  ax.get(`${v1}/auth/profile`, h(token))
+  ax.get(`${auth}/profile`, h(token))
 export const updateUserProfile = (token: string) =>
-  ax.patch(`${v1}/auth/profile`, h(token))
+  ax.patch(`${auth}/profile`, h(token)) // TODO: duplicate
 export const sendPhoneVerification = (token: string) =>
-  ax.post(`${v1}/auth/send-phone-verification`, {}, h(token))
+  ax.post(`${auth}/send-phone-verification`, {}, h(token))
 export const sendEmailVerification = (token: string) =>
-  ax.post(`${v1}/auth/send-email-verification`, {}, h(token))
+  ax.post(`${auth}/send-email-verification`, {}, h(token))
 export const sendPasswordReset = (data: object) =>
-  ax.post(`${v1}/auth/send-password-reset`, data) // TODO: could take token instead of passing data?
+  ax.post(`${auth}/send-password-reset`, data) // TODO: could take token instead of passing data?
 export const verifyPhone = (token: string, data: object) =>
-  ax.post(`${v1}/auth/verify-phone`, data, h(token))
+  ax.post(`${auth}/verify-phone`, data, h(token))
 export const verifyEmail = (token: string, data: object) =>
-  ax.post(`${v1}/auth/verify-email`, data, h(token))
+  ax.post(`${auth}/verify-email`, data, h(token))
 export const resetPassword = (data: object) =>
-  ax.post(`${v1}/auth/reset-password`, data) // TODO: could take token instead of passing data?
+  ax.post(`${auth}/reset-password`, data) // TODO: could take token instead of passing data?
 export const updateProfile = (token: string, data: object) =>
-  ax.patch(`${v1}/auth/profile`, data, h(token))
+  ax.patch(`${auth}/profile`, data, h(token))
 
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=- GROUPS =-=-=-=-=-=-=-=-=-=-=-=-=-=- */
+const groups = `${v1}/groups`
 export const getUserGroups = (token: string) =>
-  ax.get(`${v1}/groups/`, h(token)).then(extractResponseData)
+  ax.get(`${groups}/`, h(token)).then(extractResponseData)
 export const createGroup = (token: string, data: object) =>
-  ax.post(`${v1}/groups/`, data, h(token)).then(extractResponseData)
+  ax.post(`${groups}/`, data, h(token)).then(extractResponseData)
 export const getGroupDetails = (id: string, token: string) =>
-  ax.get(`${v1}/groups/${id}/`, h(token)).then(extractResponseData)
-export const createDevice = (token: string, data: object) =>
-  ax.post(`${v1}/devices`, data, h(token)).then(extractResponseData)
-export const getDeviceDetails = (id: string, token: string) =>
-  ax.get(`${v1}/devices/${id}/`, h(token)).then(extractResponseData)
-export const deleteDevice = (id: string, token: string) =>
-  ax.delete(`${v1}/devices/${id}/`, h(token)).then(extractResponseData)
+  ax.get(`${groups}/${id}/`, h(token)).then(extractResponseData)
+export const deleteGroup = (id: string, token: string) =>
+  ax.delete(`${groups}/${id}`, h(token))
 
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=- DEVICES =-=-=-=-=-=-=-=-=-=-=-=-=-= */
+const devices = `${v1}/devices`
+export const getDeviceTypes = (token: string) =>
+  ax.get(`${devices}/types/`, h(token)).then(extractResponseData)
+export const createDevice = (token: string, data: object) =>
+  ax.post(`${devices}`, data, h(token)).then(extractResponseData)
+export const getDeviceDetails = (id: string, token: string) =>
+  ax.get(`${devices}/${id}/`, h(token)).then(extractResponseData)
+export const deleteDevice = (id: string, token: string) =>
+  ax.delete(`${devices}/${id}/`, h(token)).then(extractResponseData)
+export const updateDevice = (id: string, token: string, data: object) =>
+  ax.patch(`${devices}/${id}/`, data, h(token)).then(extractResponseData)
+export const detachDevice = (id: string, token: string) =>
+  ax.post(`${devices}/${id}/detach/`, {}, h(token)).then(extractResponseData)
+export const getOrphanDevices = (token: string) =>
+  ax.get(`${devices}/`, h(token)).then(extractResponseData)
+export const transferDevice = (id: string, token: string, data: object) =>
+  ax.post(`${devices}/${id}/transfer`, data, h(token)).then(extractResponseData)
+export const getDeviceLogs = (token: string, dId: string) =>
+  ax.get(`${v1}/statistics/logs/${dId}`, h(token)).then(extractResponseData)
+
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=- UTILS =-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 export const delay = (time: number) => ax.get(`${v1}/dev/delay?time=${time}`)
 export const dly = (t: number) =>
   fetch(`${process.env.CORE_ADDR}/api/v1/dev/delay?time=${t}`)
 
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=- ADMIN =-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+const admin = `${v1}/admin`
 export const adminGetInitialData = (token: string) =>
-  ax.get(`${v1}/admin`, h(token)).then(extractResponseData)
+  ax.get(`${admin}`, h(token)).then(extractResponseData)
 export const adminGetUsers = (token: string) =>
-  ax.get(`${v1}/admin/users`, h(token)).then(extractResponseData)
-export const adminGetFirmwares = (token: string) =>
-  ax.get(`${v1}/admin/firmware-updates`, h(token)).then(extractResponseData)
+  ax.get(`${admin}/users`, h(token)).then(extractResponseData)
+export const adminGetFirmware = (token: string) =>
+  ax.get(`${admin}/firmware-updates`, h(token)).then(extractResponseData)
 export const adminPostFirmware = (formData: FormData, token: string) =>
   ax
-    .post(`${v1}/admin/firmware-updates`, formData, h(token))
+    .post(`${admin}/firmware-updates`, formData, h(token))
     .then(extractResponseData)
 export const adminGetDevices = (token: string) =>
-  ax.get(`${v1}/admin/devices`, h(token)).then(extractResponseData)
+  ax.get(`${admin}/devices`, h(token)).then(extractResponseData)
 export const adminGetAreas = (token: string) =>
-  ax.get(`${v1}/admin/areas`, h(token)).then(extractResponseData)
-// fetch(`${ENV.CORE_URL + v1}/admin/firmware-updates`, {
-//   ...h(token),
-//   method: "POST",
-//   body: formData,
-// }).then(res => res.json())
-// .then(extractResponseData)
+  ax.get(`${admin}/areas`, h(token)).then(extractResponseData)
+export const adminGetNetwork = (token: string) =>
+  ax.get(`${admin}/network`, h(token)).then(extractResponseData)
+export const adminSendDeviceMessage = (
+  token: string,
+  dId: string,
+  msg: object
+) =>
+  ax
+    .post(`${admin}/devices/${dId}/message`, msg, h(token))
+    .then(extractResponseData)
 
 const api = {
   v1,
   healthCheck,
+
   checkAuth,
   login,
   signup,
@@ -97,20 +127,33 @@ const api = {
   verifyEmail,
   resetPassword,
   updateProfile,
+
   getUserGroups,
   createGroup,
   getGroupDetails,
+  deleteGroup,
+
+  getDeviceTypes,
   createDevice,
   getDeviceDetails,
   deleteDevice,
+  updateDevice,
+  detachDevice,
+  getOrphanDevices,
+  transferDevice,
+  getDeviceLogs,
+
   delay,
   dly,
+
   adminGetInitialData,
   adminGetUsers,
-  adminGetFirmwares,
+  adminGetFirmware,
   adminPostFirmware,
   adminGetDevices,
   adminGetAreas,
+  adminGetNetwork,
+  adminSendDeviceMessage,
 }
 
 export default api

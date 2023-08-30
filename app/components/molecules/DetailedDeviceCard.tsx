@@ -13,10 +13,10 @@ import {
 import { MdWifi, MdWifiOff } from "react-icons/md"
 import type { MouseEvent } from "react"
 import type { Device, DeviceActionCallbackReturnType } from "~/types/Device"
-import { DeviceState, DeviceTypes } from "~/types/Device"
 import { deviceActions } from "~/types/Device"
 import { IconButton } from "../atoms/Button"
 import OnlinePulse from "../atoms/Pulse"
+import { DeviceType } from "~/types/DeviceType"
 
 type Props = {
   data: Device
@@ -142,11 +142,11 @@ export const getStateIcon = (key: string, value: any) => {
   return icon
 }
 
-export const getDeviceIcon = (t: DeviceTypes | string, className?: string) => {
+export const getDeviceIcon = (t: DeviceType | string, className?: string) => {
   const cn = `w-6 h-6 ${className}`
   let icon = <BoltIcon className={cn} />
   switch (t) {
-    case DeviceTypes.TV:
+    case DeviceType.TV:
       icon = <TvIcon className={cn} />
   }
   return icon

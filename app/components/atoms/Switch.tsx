@@ -1,24 +1,33 @@
-import { HTMLAttributes } from "react"
+import type { HTMLAttributes } from "react";
 
 interface IProps extends HTMLAttributes<HTMLInputElement> {
-  checked?: boolean
-  disabled?: boolean
+  checked?: boolean;
+  disabled?: boolean;
   // onChange?: Function
 }
 
 export const Switch = ({ checked, className, ...props }: IProps) => {
   return (
-    <div
-      className={`Switch rounded-2xl w-12 h-6 p-1 cursor-pointer shadow-md flex ${
-        checked ? "bg-green-400 justify-end" : "bg-slate-300"
-      } ${className}`}
+    <input
+      type="checkbox"
+      className={`Switch ${className}`}
+      checked={checked}
       {...props}
-    >
-      <div
-        className={`circle w-4 h-4 rounded-2xl shadow-md ${
-          checked ? "bg-white" : "bg-slate-50"
-        }`}
-      ></div>
-    </div>
-  )
+    />
+  );
+};
+
+{
+  /* <div
+  className={`Switch ${checked ? "checked" : ""} ${className}`}
+  {...props}
+>
+  <div
+    className={`circle ${
+      checked
+        ? "bg-white dark:bg-slate-600"
+        : "bg-slate-50 dark:bg-slate-700"
+    }`}
+  ></div>
+</div> */
 }

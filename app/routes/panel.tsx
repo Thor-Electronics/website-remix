@@ -5,100 +5,109 @@ import {
   CpuChipIcon,
   CreditCardIcon,
   CubeTransparentIcon,
-  HomeModernIcon,
   MapIcon,
   QrCodeIcon,
   RectangleGroupIcon,
   ShieldCheckIcon,
   SignalIcon,
-  StopIcon,
   UsersIcon,
-} from "@heroicons/react/24/solid"
-import type { LinksFunction, LoaderFunction } from "@remix-run/node"
-import { json, Response } from "@remix-run/node"
-import { Link, Outlet, useCatch, useLoaderData } from "@remix-run/react"
-import { Copyright } from "~/components/atoms/Copyright"
-import { LogoIcon } from "~/components/atoms/LogoIcon"
-import type { FixedNavItem } from "~/components/organisms/FixedNav"
-import FixedNav from "~/components/organisms/FixedNav"
+} from "@heroicons/react/24/solid";
+import type { LinksFunction, LoaderFunction } from "@remix-run/node";
+import { json, Response } from "@remix-run/node";
+import { Link, Outlet, useLoaderData, useRouteError } from "@remix-run/react";
+import { Copyright } from "~/components/atoms/Copyright";
+import { LogoIcon } from "~/components/atoms/LogoIcon";
+import type { FixedNavItem } from "~/components/organisms/FixedNav";
+import FixedNav from "~/components/organisms/FixedNav";
 import {
   ACCESS,
   PERMISSION_CONTEXT,
   type User,
   type Permission,
-} from "~/types/User"
-import adminStyles from "~/styles/admin.css"
-import { requireUser } from "~/models/session.server"
+} from "~/types/User";
+import adminStyles from "~/styles/admin.css";
+import { requireUser } from "~/models/session.server";
+import type { V2_ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
 
 type LoaderData = {
-  user: User
-}
+  user: User;
+};
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const user: User = await requireUser(request)
+  const user: User = await requireUser(request);
   if (!user.roles)
     throw new Response("access denied", {
       status: 403,
       statusText: "Forbidden",
-    })
-  return json<LoaderData>({ user })
-}
+    });
+  return json<LoaderData>({ user });
+};
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: adminStyles },
-]
+];
 
 export const generateNavItemsBasedOnUserPermission = (
   permissions: Permission[]
 ): FixedNavItem[] => {
-  return initialAdminNavItems.map(i => {
-    if (!i.permission) return i
-    let isAllowed = false
-    const allow = () => (isAllowed = true)
-    permissions.forEach(p =>
+  return initialAdminNavItems.map((i) => {
+    if (!i.permission) return i;
+    let isAllowed = false;
+    const allow = () => (isAllowed = true);
+    permissions.forEach((p) =>
       p.context === i.permission?.context ? allow() : null
-    )
-    return isAllowed ? i : ({} as FixedNavItem)
-  })
-}
+    );
+    return isAllowed ? i : ({} as FixedNavItem);
+  });
+};
 
 export const Admin = () => {
-  const { user } = useLoaderData<LoaderData>()
+  const { user } = useLoaderData<LoaderData>();
   // console.log("Permissions: ", user.groups?.at(0)?.permissions)
 
   const userNavItems: FixedNavItem[] = generateNavItemsBasedOnUserPermission(
     user.roles!.at(0)!.permissions
-  )
+  );
 
   return (
-    <div className="Admin bg-slate-200 min-h-screen p-2 relative pb-20 sm:bp-2 sm:pt-28 xl:pt-2 xl:pl-36">
-      <FixedNav items={userNavItems} />
+    <div
+      className="Admin bg-slate-200 dark:bg-slate-900
+      min-h-screen p-2 relative pb-20 sm:bp-2 sm:pt-28 xl:pt-2
+      xl:pl-36"
+    >
+      <FixedNav items={userNavItems} darkModeToggle />
       <Outlet />
       <Copyright />
     </div>
-  )
-}
+  );
+};
 
-export const CatchBoundary = () => {
-  const caught = useCatch()
+export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
+  const error = useRouteError();
+  console.log("panel.tsx ERROR: ", error);
+
   return (
-    <div className="caught h-screen bg-rose-200 text-rose-600 flex flex-col gap-6 items-center justify-center text-center">
+    <div
+      className="error h-screen bg-rose-200 dark:bg-stone-900
+      text-rose-600 dark:text-rose-400 flex flex-col gap-6
+      items-center justify-center text-center"
+    >
       <LogoIcon className="w-32" />
       <h2 className="status flex items-center justify-center gap-2 text-3xl font-bold">
-        <span className="code">{caught.status}</span>|
-        <span className="text">{caught.statusText}</span>
+        <span className="code">{error.status}</span>|
+        <span className="text">{error.statusText}</span>
       </h2>
-      <div className="error text-3xl font-bold uppercase">{caught.data}</div>
+      <div className="error text-3xl font-bold uppercase">{error.data}</div>
       {/* <p className="description">There was an error handling your request</p> */}
       <Link to="/" className="font-semibold !underline" prefetch="render">
         Back to home
       </Link>
     </div>
-  )
-}
+  );
+};
 
-export const PANEL_PREFIX = "/panel"
-const iconClassNames = "w-8 h-8"
+export const PANEL_PREFIX = "/panel";
+const iconClassNames = "w-8 h-8";
 const initialAdminNavItems: FixedNavItem[] = [
   {
     icon: <LogoIcon className={iconClassNames} />,
@@ -172,16 +181,16 @@ const initialAdminNavItems: FixedNavItem[] = [
     icon: <RectangleGroupIcon className={iconClassNames} />,
     label: "Dashboard",
     to: `/app`,
-    permission: { context: PERMISSION_CONTEXT.NETWORK, access: ACCESS.VIEW },
   },
   {
     icon: <ArrowRightOnRectangleIcon className={iconClassNames} />,
     label: "Logout",
     to: `/logout`,
     props: {
-      className: "!bg-rose-100 !text-rose-500",
+      className:
+        "!bg-rose-100 dark:!bg-slate-700 !text-rose-500 dark:!text-rose-400",
     },
   },
-]
+];
 
-export default Admin
+export default Admin;

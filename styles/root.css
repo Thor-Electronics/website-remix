@@ -1,4 +1,5 @@
 @import "./components/Badge.css";
+@import "./components/Switch.css";
 
 @tailwind base;
 @tailwind components;
@@ -31,6 +32,16 @@
 }
 
 @layer components {
+  .glossy-fullscreen-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    /* background-color: rgba(255, 0, 0, 0.5); */
+  }
+
+  /* @import "./components/Switch.css"; */
 }
 
 @layer utilities {
@@ -42,12 +53,30 @@ html {
   --secondary-color: #6366f1;
   --body-bg: #f1f5f9;
   --links-color: #2563eb;
-  scroll-behaviour: smooth;
+  scroll-behavior: smooth;
   /* scroll-snap-type: y mandatory; */
 }
 
+html.dark {
+  --primary-color: #60a5fa;
+  --secondary-color: #818cf8;
+  --body-bg: #0f172a;
+  --links-color: #93c5fd; /* #60a5fa */
+}
+
+html.dark [class~="MuiDataGrid-root"] {
+  @apply !text-slate-400 !border-slate-600;
+  /* border-color: red !important; */
+}
+
+html.dark [class~="MuiDataGrid-row"],
+html.dark [class~="MuiDataGrid-cell"] {
+  @apply !border-slate-600;
+}
+
 .card {
-  @apply bg-white p-3 rounded-lg shadow-lg;
+  @apply bg-white p-3 rounded-lg shadow-lg dark:bg-slate-800
+  sm:p-4 sm:rounded-xl;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -60,20 +89,22 @@ html {
   @apply block;
 }
 
-input,
+input:not([type="checkbox"]),
+textarea,
 select {
-  @apply w-full border border-slate-400 rounded-lg py-1.5 px-2.5 shadow;
+  @apply w-full border border-slate-400 dark:border-slate-600
+  rounded-lg py-1.5 px-2.5 shadow dark:bg-slate-700;
 }
 
 select {
-  @apply bg-white;
+  @apply bg-white dark:bg-slate-700;
 }
 
 label {
   .error {
-    @apply text-red-600 italic font-bold;
+    @apply text-red-600 dark:text-red-400 italic font-bold;
   }
-  input,
+  input:not([type="checkbox"]),
   select {
     @apply mt-2;
   }
@@ -81,8 +112,9 @@ label {
 
 .NavigatingScreen {
   @apply fixed top-0 left-0 bottom-0 right-0
-    text-white text-2xl bg-emerald-400 flex
-    flex-col items-center justify-center font-bold italic; //pointer-events-none
+    text-white text-2xl bg-emerald-400 dark:bg-emerald-500 flex
+    flex-col items-center justify-center font-bold italic;
+  /* pointer-events-none */
   /* display: none; */
   /* opacity: 0; */
   animation-duration: 50ms;
@@ -117,6 +149,13 @@ label {
 
 .FixedNav .fake-class-to-generate-colors {
   /* @apply bg-rose-100 text-rose-500; */
+}
+
+.MuiModal-backdrop {
+  background-color: rgba(0, 0, 0, 0.75) !important;
+  backdrop-filter: blur(2px);
+  /* -webkit-backdrop-filter: blur(2px); */
+  filter: grayscale(0.75);
 }
 
 /* ========== KeyFrames ========== */
@@ -219,4 +258,9 @@ label {
     opacity: 0;
     width: 0.5em;
   }
+}
+
+.fakeClassToGenerateCSS {
+  @apply !bg-orange-400
+  !text-orange-400;
 }

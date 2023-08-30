@@ -1,7 +1,8 @@
-import { Switch } from "@mui/material"
-import type { ReactNode } from "react"
-import type { DeviceControlProps } from "~/types/Device"
-import { DeviceTypes } from "~/types/Device"
+import type { ReactNode } from "react";
+import type { DeviceControlProps } from "~/types/Device";
+import { DeviceType } from "~/types/DeviceType";
+import { Switch } from "../atoms/Switch";
+// import { Switch } from "@mui/material";
 
 export default function Key4({
   type: t,
@@ -10,7 +11,15 @@ export default function Key4({
 }: DeviceControlProps): ReactNode {
   const handleUpdate = (k: string, v: number | boolean) => {
     if (!handleUpdate)
-      return console.warn("Update handler is not configured for this key!")
+      return console.warn("Update handler is not configured for this key!");
+    if (!state.power) {
+      state.power = {
+        "0": false,
+        "1": false,
+        "2": false,
+        "3": false,
+      };
+    }
     updateHandler({
       command: {
         power: {
@@ -18,41 +27,48 @@ export default function Key4({
           [k]: v ? false : true,
         },
       },
-    })
-  }
+    });
+  };
   const toggleSinglePower = () => {
-    if (!updateHandler) return
+    if (!updateHandler) return;
     updateHandler({
       command: { power: state.power ? false : true },
-    })
-  }
+    });
+  };
 
   // Fix state if empty
-  if (t !== DeviceTypes.KEY && t !== DeviceTypes.KEY1) {
-    if (typeof state.power !== "object") {
+  if (!state || typeof state !== "object") state = {};
+  if (t !== DeviceType.Key && t !== DeviceType.Key1) {
+    if (!state.power || typeof state.power !== "object") {
       state.power =
-        t === DeviceTypes.KEY2
+        t === DeviceType.Key2
           ? { 0: false, 1: false }
-          : t === DeviceTypes.KEY3
+          : t === DeviceType.Key3
           ? { 0: false, 1: false, 2: false }
-          : { 0: false, 1: false, 2: false, 3: false } // it's probably 4
+          : { 0: false, 1: false, 2: false, 3: false }; // it's probably 4
     }
   }
 
   return (
-    <div className={`KeyControl`}>
-      {t === DeviceTypes.KEY || t === DeviceTypes.KEY1 ? (
+    <div
+      className={`KeyControl flex flex-col items-center justify-center gap-2`}
+    >
+      {t === DeviceType.Key || t === DeviceType.Key1 ? (
         <Switch checked={!!state.power} onChange={toggleSinglePower} />
       ) : (
         Object.entries(state.power).map(([k, v]) => {
           return (
-            <label key={k}>
+            <label
+              key={k}
+              className="flex items-center justify-center flex-row gap-2"
+            >
               {k}
+              {/* <Switch checked={!!v} onChange={() => handleUpdate(k, v)} /> */}
               <Switch checked={!!v} onChange={() => handleUpdate(k, v)} />
             </label>
-          )
+          );
         })
       )}
     </div>
-  )
+  );
 }

@@ -1,17 +1,24 @@
-import { Form } from "@remix-run/react"
-import type { User } from "~/types/User"
+import { Form } from "@remix-run/react";
+import type { User } from "~/types/User";
 
 type Props = {
-  user: User
-}
+  user: User;
+};
 
 export const DashboardUserProfile = ({ user, ...props }: Props) => (
-  <div className="DashboardUserProfile flex flex-row items-center justify-center gap-1 p-2">
+  <div
+    className="DashboardUserProfile flex flex-row items-center
+    justify-center gap-1 p-2"
+  >
     <div className="name" title={user.email}>
       {user.name}
     </div>
     <Form action="/logout" method="post" className="flex">
-      <button type="submit" title="Logout" className="text-rose-600 rounded-md">
+      <button
+        type="submit"
+        title="Logout"
+        className="text-rose-600 dark:text-rose-400 rounded-md"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
@@ -28,4 +35,4 @@ export const DashboardUserProfile = ({ user, ...props }: Props) => (
     </Form>
     {/* <div className="email text-xs">{user.email}</div> */}
   </div>
-)
+);

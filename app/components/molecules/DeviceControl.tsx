@@ -3,16 +3,16 @@ import type { HTMLAttributes } from "react"
 import type {
   DeviceState,
   DeviceStateUpdater,
-  DeviceTypes,
   DeviceStateUpdateSender,
   DeviceStateEntryActionGenerator,
   DeviceActionGenerator,
 } from "~/types/Device"
+import type { DeviceType } from "~/types/DeviceType"
 import type { Message } from "~/types/Message"
 
 interface IProps extends HTMLAttributes<HTMLElement> {
   deviceId: string
-  type: DeviceTypes
+  type: DeviceType
   state: DeviceState
   onUpdate?: DeviceStateUpdateSender
 }

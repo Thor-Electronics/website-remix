@@ -1,0 +1,70 @@
+/* .Switch {
+  @apply rounded-2xl w-12 h-6 p-1 cursor-pointer shadow-md flex bg-slate-300;
+
+  &.checked {
+    @apply bg-green-400 justify-end;
+  }
+
+  .circle {
+    @apply w-4 h-4 rounded-2xl shadow-md;
+  }
+} */
+
+/* switch */
+input[type="checkbox"].Switch {
+  @apply border-slate-400 dark:border-slate-500 bg-slate-100 dark:bg-transparent;
+  -webkit-appearance: none;
+  outline: none;
+  height: 2em;
+  width: 4em;
+  border-width: 0.375em;
+  border-style: solid;
+  border-radius: 1em;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+
+  /* Toggle Indicator */
+  &::before {
+    @apply bg-slate-400 dark:bg-slate-500;
+    content: "";
+    height: 0.825em;
+    width: 0.825em;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0.175em;
+    bottom: 0;
+    border-radius: 50%;
+    transition: all 0.2s;
+  }
+
+  /* Label */
+  &::after {
+    @apply text-slate-500 dark:text-slate-400;
+    content: "Off";
+    position: absolute;
+    font-size: 0.75em;
+    top: -0.1em;
+    right: 0.375em;
+    letter-spacing: 0.004em;
+  }
+
+  &:checked {
+    @apply bg-blue-500 dark:bg-blue-400 shadow shadow-blue-400
+    dark:shadow-blue-500 border-blue-500 dark:border-blue-200;
+
+    &::before {
+      @apply bg-white dark:bg-blue-200;
+      left: 2.2em;
+      box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.4);
+    }
+
+    &::after {
+      @apply text-white dark:text-blue-100;
+      content: "On";
+      left: 0.5em;
+      text-shadow: 0 0 3px rgba(0, 0, 0, 0.6);
+    }
+  }
+}
