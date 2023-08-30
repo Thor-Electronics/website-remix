@@ -10,6 +10,7 @@
     "start": "remix-serve build",
     "build:remix": "cross-env NODE_ENV=production remix build",
     "build-worker": "esbuild ./app/entry.workbox.ts --outfile=./public/entry.workbox.js --minify --bundle --platform=node --format=esm --define:process.env.NODE_ENV='\"production\"'",
+    "build-render": "remix build",
     "dev:worker": "esbuild ./app/entry.workbox.ts --outfile=./public/entry.workbox.js --bundle --platform=node --format=esm --define:process.env.NODE_ENV='\"development\"' --watch"
   },
   "dependencies": {
