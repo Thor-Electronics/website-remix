@@ -1,4 +1,5 @@
-import { useState, type HTMLAttributes } from "react";
+import { useState } from "react";
+import type { FC, HTMLAttributes } from "react";
 import type {
   Device,
   DeviceControlPanelStateUpdateHandler,
@@ -9,9 +10,12 @@ import KeyControl from "./KeyControl";
 import RelayControl from "./RelayControl";
 import TVControl from "./TVControl";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
-import type { DeviceType } from "~/types/DeviceType";
+import { DeviceType } from "~/types/DeviceType";
 import SimpleDeviceCardOptionsMenu from "./SimpleDeviceCardOptionsMenu";
 import { IconButton } from "@mui/material";
+import SolarPanel from "./devices/SolarPanel";
+import Battery from "./devices/Battery";
+import Fan from "./devices/Fan";
 
 export interface ISimpleDeviceCardProps extends HTMLAttributes<HTMLElement> {
   data: Device;
@@ -108,29 +112,32 @@ export const SimpleDeviceCard = ({
   );
 };
 
-export const DeviceControlPanels: Record<DeviceType, Function> = {
-  GENERAL: () => "GENERAL DEVICE",
-  CORE: () => "CORE PROCESSOR(THOR)",
-  KEY: KeyControl,
-  KEY1: KeyControl,
-  KEY2: KeyControl,
-  KEY3: KeyControl,
-  KEY4: KeyControl,
-  RELAY: RelayControl,
-  RELAY8: RelayControl,
-  RELAY12: RelayControl,
-  PLUG: () => "PLUG / WALL PLUG/ POWER SOCKET",
-  LIGHT: () => "LIGHT CONTROL",
-  BELL: () => "BELL CONTROL",
-  LOCK: () => "LOCK CONTROL",
-  DOOR: () => "DOOR CONTROL",
-  TV: TVControl,
-  BLINDS: () => "BLINDS CONTROL",
-  CURTAIN: () => "CURTAIN CONTROL",
-  THERMOSTAT: () => "THERMOSTAT CONTROL",
-  HUB_IR: () => "HUB_IR CONTROL",
-  HUB_RF: () => "HUB_RF CONTROL",
-  HUB_LOCAL: () => "HUB_LOCAL CONTROL",
-  DEV: () => "DEVELOPMENT DEVICE",
-  ECU: () => "VEHICLE CONTROL",
+export const DeviceControlPanels: Record<DeviceType, FC<any>> = {
+  [DeviceType.General]: () => "GENERAL DEVICE",
+  [DeviceType.Core]: () => "CORE PROCESSOR(THOR)",
+  [DeviceType.Key]: KeyControl,
+  [DeviceType.Key1]: KeyControl,
+  [DeviceType.Key2]: KeyControl,
+  [DeviceType.Key3]: KeyControl,
+  [DeviceType.Key4]: KeyControl,
+  [DeviceType.Relay]: RelayControl,
+  [DeviceType.Relay8]: RelayControl,
+  [DeviceType.Relay12]: RelayControl,
+  [DeviceType.Plug]: () => "PLUG / WALL PLUG/ POWER SOCKET",
+  [DeviceType.Light]: () => "LIGHT CONTROL",
+  [DeviceType.Bell]: () => "BELL CONTROL",
+  [DeviceType.Lock]: () => "LOCK CONTROL",
+  [DeviceType.Door]: () => "DOOR CONTROL",
+  [DeviceType.TV]: TVControl,
+  [DeviceType.Blinds]: () => "BLINDS CONTROL",
+  [DeviceType.Curtain]: () => "CURTAIN CONTROL",
+  [DeviceType.Thermostat]: () => "THERMOSTAT CONTROL",
+  [DeviceType.IRHub]: () => "HUB_IR CONTROL",
+  [DeviceType.RFHub]: () => "HUB_RF CONTROL",
+  [DeviceType.LocalHub]: () => "HUB_LOCAL CONTROL",
+  [DeviceType.Dev]: () => "DEVELOPMENT DEVICE",
+  [DeviceType.ECU]: () => "VEHICLE CONTROL",
+  [DeviceType.SolarPanel]: SolarPanel,
+  [DeviceType.Battery]: Battery,
+  [DeviceType.Fan]: Fan,
 };

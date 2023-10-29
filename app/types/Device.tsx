@@ -177,5 +177,5 @@ export const deviceActions: { [key: string]: LegacyDeviceAction[] } = {
   [DeviceType.IRHub]: [commonActions.powerAction, commonActions.restartAction],
   [DeviceType.Lock]: [commonActions.powerAction, commonActions.restartAction],
   [DeviceType.Door]: [commonActions.powerAction, commonActions.restartAction],
-  [DeviceType.Blind]: [commonActions.powerAction, commonActions.restartAction],
+  [DeviceType.Blinds]: [commonActions.powerAction, commonActions.restartAction],
 };

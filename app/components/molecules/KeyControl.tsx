@@ -1,14 +1,14 @@
-import type { ReactNode } from "react";
+import type { FC } from "react";
 import type { DeviceControlProps } from "~/types/Device";
 import { DeviceType } from "~/types/DeviceType";
 import { Switch } from "../atoms/Switch";
 // import { Switch } from "@mui/material";
 
-export default function Key4({
+export const Key4: FC<DeviceControlProps> = ({
   type: t,
   state,
   onUpdate: updateHandler,
-}: DeviceControlProps): ReactNode {
+}: DeviceControlProps) => {
   const handleUpdate = (k: string, v: number | boolean) => {
     if (!handleUpdate)
       return console.warn("Update handler is not configured for this key!");
@@ -71,4 +71,6 @@ export default function Key4({
       )}
     </div>
   );
-}
+};
+
+export default Key4;

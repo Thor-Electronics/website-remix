@@ -1,28 +1,85 @@
 export enum DeviceType {
-  General = "GENERAL", // A device with general functionalities
-  Core = "CORE", // A device with base functionalities
-  Key = "KEY", // General key?
-  Key1 = "KEY1", // 1 Pole key
-  Key2 = "KEY2", // 2 Pole key
-  Key3 = "KEY3", // 3 Pole key
-  Key4 = "KEY4", // 4 Pole key
-  Relay = "RELAY", // Relay card
-  Relay8 = "RELAY8", // Relay card 8
-  Relay12 = "RELAY12", // Relay card 12
-  Plug = "PLUG", // Power outlet/wall plug/power socket
-  Light = "LIGHT", // Smart Light with colors
-  Bell = "BELL", // Bell
-  Lock = "LOCK", // Lock
-  Door = "DOOR", // Door
-  TV = "TV", // Smart TV
-  Blinds = "BLINDS", // Window Blinds
-  Curtain = "CURTAIN", // Window Curtain
-  Thermostat = "THERMOSTAT", // Thermostat
-  IRHub = "HUB_IR", // IR_HUB?
-  RFHub = "HUB_RF", // RF Translator Hub?
-  LocalHub = "HUB_LOCAL", // Local Mini Server
-  Dev = "DEV", // Dev device used for development purposes
-  ECU = "ECU", // Cars ECU
+  // A device with general functionalities
+  General = "GENERAL",
+
+  // A device with base functionalities
+  Core = "CORE",
+
+  // General key?
+  Key = "KEY",
+
+  // 1 Pole key
+  Key1 = "KEY1",
+
+  // 2 Pole key
+  Key2 = "KEY2",
+
+  // 3 Pole key
+  Key3 = "KEY3",
+
+  // 4 Pole key
+  Key4 = "KEY4",
+
+  // Relay card
+  Relay = "RELAY",
+
+  // Relay card 8
+  Relay8 = "RELAY8",
+
+  // Relay card 12
+  Relay12 = "RELAY12",
+
+  // Power outlet/wall plug/power socket
+  Plug = "PLUG",
+
+  // Smart Light with colors
+  Light = "LIGHT",
+
+  // Bell
+  Bell = "BELL",
+
+  // Lock
+  Lock = "LOCK",
+
+  // Door
+  Door = "DOOR",
+
+  // Smart TV
+  TV = "TV",
+
+  // Window Blinds
+  Blinds = "BLINDS",
+
+  // Window Curtain
+  Curtain = "CURTAIN",
+
+  // Thermostat / Soil Moisture Meter / Humidity Meter / Hygrometer
+  Thermostat = "THERMOSTAT",
+
+  // IR_HUB?
+  IRHub = "HUB_IR",
+
+  // RF Translator Hub?
+  RFHub = "HUB_RF",
+
+  // Local Mini Server
+  LocalHub = "HUB_LOCAL",
+
+  // Dev device used for development purposes
+  Dev = "DEV",
+
+  // Cars ECU
+  ECU = "ECU",
+
+  // Solar Panel
+  SolarPanel = "SOLAR_PANEL",
+
+  // Battery
+  Battery = "BATTERY",
+
+  // Fan / Fan Quail
+  Fan = "FAN",
+
   // KEY = "KEY",
   // KEY1 = "KEY1",
   // KEY2 = "KEY2",
@@ -38,5 +95,5 @@ export enum DeviceType {
 }
 
 export type ServerDeviceTypes = {
-  [key in DeviceType]: string // [k: DeviceType]: string
-}
+  [key in DeviceType]: string; // [k: DeviceType]: string
+};
