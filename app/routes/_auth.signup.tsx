@@ -39,7 +39,7 @@ export const action: ActionFunction = async ({ request }) => {
   // call the core service api
   return api
     .signup({ phone, name, password })
-    .then(async (res) => {
+    .then(async res => {
       const { user, token, message } = res.data;
       const { cookieSession, redirect } = await createCookieSession(
         user.id,
@@ -51,7 +51,7 @@ export const action: ActionFunction = async ({ request }) => {
       console.log(message, cookieSession); // todo: set in cookie and show a snack bar message
       return redirect;
     })
-    .catch((err) => {
+    .catch(err => {
       const errMsg =
         err.response?.data?.message ||
         err.response?.data ||
@@ -78,7 +78,7 @@ export const Signup = () => {
 
   return (
     <Form
-      className="SignupCard card flex flex-col gap-4"
+      className="SignupCard card  max-w-sm flex flex-col gap-4"
       method="POST"
       // reloadDocument
     >
