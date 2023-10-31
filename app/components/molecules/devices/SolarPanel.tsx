@@ -15,7 +15,7 @@ export const SolarPanel: FC<IProps> = ({ className, ...props }: IProps) => {
     >
       <span className="output">Output: {state.output}</span>
       <span className="voltage">Voltage: {state.output}v</span>
-      <div className="status">Status: {state.status}</div>
+      <span className="status">Status: {state.status}</span>
     </div>
   );
 };

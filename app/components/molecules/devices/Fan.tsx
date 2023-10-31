@@ -15,7 +15,8 @@ export const Fan: FC<IProps> = ({ className, ...props }: IProps) => {
   return (
     <div
       className={`Fan flex flex-col items-center justify-center gap-2
-      w-60`}
+      w-60 ${className}`}
+      {...props}
     >
       <div className="battery">Battery: {state.battery}%</div>
       {/* todo: Sliders could be horizontal */}
@@ -23,7 +24,7 @@ export const Fan: FC<IProps> = ({ className, ...props }: IProps) => {
         Fan Icon:
         <Slider
           defaultValue={state.power}
-          getAriaValueText={(v) => `${v}℃`}
+          getAriaValueText={v => `${v}℃`}
           valueLabelDisplay="auto"
           step={1}
           marks={SliderMarks}
@@ -35,7 +36,7 @@ export const Fan: FC<IProps> = ({ className, ...props }: IProps) => {
         Heat Icon:
         <Slider
           defaultValue={state.heat}
-          getAriaValueText={(v) => `${v}℃`}
+          getAriaValueText={v => `${v}℃`}
           valueLabelDisplay="auto"
           step={1}
           marks={SliderMarks}

@@ -6,9 +6,6 @@ import { getOptionalUser, getSessionData } from "~/models/session.server";
 import Hero from "~/components/organisms/Hero";
 import Footer from "~/components/organisms/Footer";
 import type { User } from "~/types/User";
-import type { RgbColor } from "react-colorful";
-import { HexColorInput, RgbColorPicker } from "react-colorful";
-import { useState } from "react";
 
 // ROUTING: https://remix.run/docs/en/1.15.0/file-conventions/route-files-v2#folders-for-organization
 

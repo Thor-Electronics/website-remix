@@ -16,6 +16,7 @@ import { IconButton } from "@mui/material";
 import SolarPanel from "./devices/SolarPanel";
 import Battery from "./devices/Battery";
 import Fan from "./devices/Fan";
+import Thermostat from "./devices/Thermostat";
 
 export interface ISimpleDeviceCardProps extends HTMLAttributes<HTMLElement> {
   data: Device;
@@ -28,7 +29,7 @@ export const SimpleDeviceCard = ({
   onUpdate: updateHandler,
   ...props
 }: ISimpleDeviceCardProps) => {
-  const handleControlUpdate: DeviceControlPanelStateUpdateHandler = (cmd) => {
+  const handleControlUpdate: DeviceControlPanelStateUpdateHandler = cmd => {
     if (!updateHandler) return false;
     // Attach ID to the command before sending it to the server
     return updateHandler({ ...cmd, id: d.id });
@@ -131,7 +132,7 @@ export const DeviceControlPanels: Record<DeviceType, FC<any>> = {
   [DeviceType.TV]: TVControl,
   [DeviceType.Blinds]: () => "BLINDS CONTROL",
   [DeviceType.Curtain]: () => "CURTAIN CONTROL",
-  [DeviceType.Thermostat]: () => "THERMOSTAT CONTROL",
+  [DeviceType.Thermostat]: Thermostat,
   [DeviceType.IRHub]: () => "HUB_IR CONTROL",
   [DeviceType.RFHub]: () => "HUB_RF CONTROL",
   [DeviceType.LocalHub]: () => "HUB_LOCAL CONTROL",
