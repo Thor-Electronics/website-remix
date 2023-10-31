@@ -68,20 +68,22 @@ export const FixedNav = ({
       className={`FixedNav bg-white dark:bg-slate-800 rounded-xl
         p-2 shadow-lg fixed bottom-2 left-2 sm:bottom-auto sm:top-2
         w-full xl:w-32 xl:left-2 xl:bottom-2 z-10 flex flex-row
-        sm:flex-col items-stretch justify-between gap-2 ${className}`}
+        xl:flex-col items-stretch justify-between gap-2 ${className}`}
       {...props}
     >
       <div className="header">{header}</div>
 
       <ul
-        className={`items flex items-center gap-2 overflow-x-auto xl:overflow-x-hidden xl:overflow-y-auto xl:flex-col xl:items-stretch ${
+        className={`items flex items-center gap-2 overflow-x-auto
+        xl:overflow-x-hidden xl:overflow-y-auto xl:flex-col
+        xl:items-stretch ${
           items.length <= 5 ? "justify-center" : "justify-start"
         }`}
       >
         {/* <li className="fake-space-to-fix-css-scroll-bug sm:hidden p-6"></li>
         <li className="fake-space-to-fix-css-scroll-bug sm:hidden p-6"></li>
         <solution>NO NEED TO USE THESE FAKE STUFF, I JUST REMOVED JUSTIFY-CNETER SO THAT THE PROBLEM WAS FIXED</solution> */}
-        {items.map((i) =>
+        {items.map(i =>
           i.to ? (
             <Link
               to={i.to}
