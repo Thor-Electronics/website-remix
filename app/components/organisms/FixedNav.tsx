@@ -98,7 +98,10 @@ export const FixedNav = ({
                   ${i.props?.className}`}
               >
                 <span className="icon">{i.icon}</span>
-                <span className="item-label text-xs font-semibold hidden sm:block">
+                <span
+                  className="item-label text-xs font-semibold
+                  hidden sm:block"
+                >
                   {i.label}
                 </span>
               </li>
