@@ -51,16 +51,21 @@ export const Key4: FC<DeviceControlProps> = ({
 
   return (
     <div
-      className={`KeyControl flex flex-col items-center justify-center gap-2`}
+      className={`KeyControl flex flex-row items-center justify-center
+      gap-2 flex-wrap h-full`}
     >
       {t === DeviceType.Key || t === DeviceType.Key1 ? (
         <Switch checked={!!state.power} onChange={toggleSinglePower} />
       ) : (
-        Object.entries(state.power).map(([k, v]) => {
+        Object.entries(state.power as object).map(([k, v]) => {
           return (
             <label
               key={k}
-              className="flex items-center justify-center flex-row gap-2"
+              className={`flex items-center justify-center flex-row gap-2 ${
+                Object.entries(state.power as object).length === 3
+                  ? ""
+                  : "my-1 mx-4"
+              }`}
             >
               {k}
               {/* <Switch checked={!!v} onChange={() => handleUpdate(k, v)} /> */}
