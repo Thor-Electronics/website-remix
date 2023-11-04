@@ -37,7 +37,7 @@ export const GroupDetails = () => {
   const { group, socketToken } = useLoaderData<LoaderData>();
 
   return (
-    <div className="GroupDetails lg:max-w-5xl mx-auto">
+    <div className="GroupDetails lg:max-w-6xl mx-auto">
       <GroupCard
         key={group.id}
         data={group as Group}
@@ -52,7 +52,10 @@ export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
   const error = useRouteError();
   console.error("Error in $groupId: ", error);
   return (
-    <div className="GroupDetails bg-rose-100 dark:bg-rose-950 shadow-lg text-rose-600 dark:text-rose-400 p-4 rounded-xl">
+    <div
+      className="GroupDetails bg-rose-100 dark:bg-rose-950
+      shadow-lg text-rose-600 dark:text-rose-400 p-4 rounded-xl"
+    >
       <h1 className="text-lg font-bold mb-4">Error Loading Group Details!</h1>
       <p className="error">
         {isRouteErrorResponse(error) ? (

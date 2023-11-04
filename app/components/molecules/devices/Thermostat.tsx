@@ -1,4 +1,6 @@
 import type { FC, HTMLAttributes } from "react";
+import { iconClassNames, iconContainerClassNames } from "./SolarPanel";
+import { BsMoisture, BsThermometerHalf } from "react-icons/bs";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
   state: {
@@ -19,17 +21,25 @@ export const Thermostat: FC<IProps> = ({ className, ...props }: IProps) => {
 
   return (
     <div
-      className={`Thermostat flex items-center justify-center gap-2 ${className}`}
+      className={`Thermostat flex items-center justify-evenly ${className}`}
       {...props}
     >
-      {state.battery && (
+      {/* {state.battery && (
         <span className="battery">Battery: {state.battery}</span>
-      )}
+      )} */}
       {state.temperature && (
-        <span className="temperature">Temperature: {state.temperature}</span>
+        <span
+          className={`temperature text-xl ${iconContainerClassNames} gap-3`}
+        >
+          <BsThermometerHalf className={`w-8 h-8`} />
+          {state.temperature}℃
+        </span>
       )}
       {state.humidity && (
-        <span className="humidity">Humidity: {state.humidity}</span>
+        <span className={`humidity text-xl ${iconContainerClassNames} gap-3`}>
+          <BsMoisture className={`w-8 h-8`} />
+          {state.humidity}%
+        </span>
       )}
     </div>
   );
