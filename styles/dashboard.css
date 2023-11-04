@@ -136,6 +136,11 @@
       .options {
         @apply flex gap-1;
       }
+
+      [class*="MuiSlider-markLabel"] {
+        color: red !important;
+        font-size: 0.625rem;
+      }
     }
 
     &:hover > .details.auto-hide {
