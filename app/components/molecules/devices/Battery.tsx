@@ -1,5 +1,12 @@
 import type { FC, HTMLAttributes } from "react";
 import { BsFillLightningChargeFill } from "react-icons/bs";
+import {
+  FaHeartPulse,
+  FaPlugCircleBolt,
+  FaPlugCircleXmark,
+} from "react-icons/fa6";
+import { TbCircuitVoltmeter } from "react-icons/tb";
+import { iconClassNames, iconContainerClassNames } from "./SolarPanel";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
   state: { charge: number; health: string; status: string };
@@ -15,8 +22,8 @@ export const Battery: FC<IProps> = ({ className, ...props }: IProps) => {
 
   return (
     <div
-      className={`Battery flex items-center justify-between gap-2
-      ${className}`}
+      className={`Battery flex flex-col items-center justify-center
+      gap-4 h-full ${className}`}
       {...props}
     >
       <div
@@ -43,9 +50,23 @@ export const Battery: FC<IProps> = ({ className, ...props }: IProps) => {
           {state.charge}%
         </span>
       </div>
-      <div className="health">Health: {state.health}</div>
-      <div className="status">Status: {state.status}</div>
-      <div className="voltage">Voltage: {state.voltage}v</div>
+      <div className="second-row flex items-center justify-center gap-2">
+        <div className={`health ${iconContainerClassNames}`}>
+          <FaHeartPulse className={iconClassNames} /> {state.health}
+        </div>
+        <div className={`status ${iconContainerClassNames}`}>
+          {state.status?.toLowerCase() === "charging" ? (
+            <FaPlugCircleBolt className={iconClassNames} />
+          ) : (
+            <FaPlugCircleXmark className={iconClassNames} />
+          )}
+          {state.status}
+        </div>
+        <div className={`voltage ${iconContainerClassNames}`}>
+          <TbCircuitVoltmeter className={iconClassNames} />
+          {state.voltage}v
+        </div>
+      </div>
     </div>
   );
 };
