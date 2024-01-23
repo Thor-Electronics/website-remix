@@ -8,3 +8,10 @@
 - signup with phone only!
 - Add snackbars and toasts
 - Connect snackbars on session and cookie messages
+- /lab -> Developer Dashboard
+- Link to /lab in the profile page or somewhere in the dashboard and panel
+- Upgrade remix to v2
+- Add snackbars
+- Add links to documentations
+- Add links to guides
+- Serve static files of documentation on remix
