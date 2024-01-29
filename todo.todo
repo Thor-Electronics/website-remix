@@ -16,3 +16,8 @@
 - Add links to guides
 - Serve static files of documentation on remix
 - Panel, Send message to device, Sample messages with buttons that are some few useful messages ready pre-made
+- Dev Panel Filter hub messages and device messages by signal, message, etc.(Grep)
+- Admin Panel Firmware updates instead of OTA update
+- Admin Panel firmware updates sort by latest created(or published) desc
+- Admin Panel show user verification status(Phone & Email verified or not?)
+- Admin Panel hide object ID Hex because they're useless. Instead show a copy ID button(Maybe in options or actions elipsis menu)
