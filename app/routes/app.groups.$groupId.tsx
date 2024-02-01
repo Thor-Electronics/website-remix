@@ -6,7 +6,7 @@ import {
   useLoaderData,
   useRouteError,
 } from "@remix-run/react";
-import type { V2_ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
+import type { ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
 import invariant from "tiny-invariant";
 import { GroupCard } from "~/components/molecules/GroupCard";
 import { requireSessionToken } from "~/models/session.server";
@@ -22,13 +22,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   console.log("app.groups.$groupId.tsx -- SessionToken, GroupDetails");
   invariant(params.groupId, "Group not found");
   const token = await requireSessionToken(request);
-  const group = await api
-    .getGroupDetails(params.groupId, token)
-    .catch((err) => {
-      if (err.response?.status === 404) {
-        throw new Response("Group Not Found", { status: 404 });
-      }
-    });
+  const group = await api.getGroupDetails(params.groupId, token).catch(err => {
+    if (err.response?.status === 404) {
+      throw new Response("Group Not Found", { status: 404 });
+    }
+  });
   // console.log("GROUP: ", group)
   return json<LoaderData>({ group, socketToken: token });
 };
@@ -48,7 +46,7 @@ export const GroupDetails = () => {
   );
 };
 
-export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
+export const ErrorBoundary: ErrorBoundaryComponent = () => {
   const error = useRouteError();
   console.error("Error in $groupId: ", error);
   return (

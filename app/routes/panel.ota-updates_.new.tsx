@@ -40,11 +40,13 @@ const chips = [
 export const AdminOTAUpdatesNew = () => {
   const { sessionToken } = useLoaderData<LoaderData>();
   const navigation = useNavigation();
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [error, setError] = useState("");
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Submitting ...");
+    setIsSubmitting(true);
     const formData = new FormData(e.currentTarget);
     Array.from(formData).forEach(([k, v]) => {
       console.log("Checking: ", k, v);
@@ -60,7 +62,7 @@ export const AdminOTAUpdatesNew = () => {
       },
       body: formData,
     })
-      .then(async (res) => {
+      .then(async res => {
         console.log("RES: ", res);
         const body = await res.json();
         if (res.status !== 201 || !res.ok)
@@ -68,10 +70,12 @@ export const AdminOTAUpdatesNew = () => {
             `Error uploading firmware to core(${res.status} ${res.statusText}): ${body.message}`
           );
         window.location.href = `${PANEL_PREFIX}/ota-updates`;
+        setIsSubmitting(false);
       })
-      .catch((err) => {
+      .catch(err => {
         console.error("ERROR: ", err);
         setError(`Error uploading firmware to core: ${err.toString()}`);
+        setIsSubmitting(false);
       });
   };
 
@@ -99,7 +103,7 @@ export const AdminOTAUpdatesNew = () => {
         <label className="label">
           Chip:
           <select className="input mt-2" name="chip">
-            {chips.map((ch) => (
+            {chips.map(ch => (
               <option value={ch.value} key={ch.value}>
                 {ch.displayName}
               </option>
@@ -122,7 +126,7 @@ export const AdminOTAUpdatesNew = () => {
           <input
             type="text"
             name="version"
-            placeholder="1.0.19.beta"
+            placeholder="1.0.19-beta"
             required
           />
         </label>
@@ -160,7 +164,7 @@ export const AdminOTAUpdatesNew = () => {
               ? "!bg-rose-500 dark:!bg-rose-400 shadow-rose-300 dark:shadow-rose-700"
               : "!bg-primary dark:!bg-blue-400 shadow-blue-300 dark:shadow-blue-600"
           } py-1 px-3  flex items-center justify-center gap-2.5`}
-          disabled={navigation.state === "submitting"}
+          disabled={isSubmitting || navigation.state !== "idle"}
         >
           {error ? (
             <ExclamationTriangleIcon className="w-5 h-5" />

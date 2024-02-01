@@ -1,7 +1,7 @@
 import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Outlet, useLoaderData, useRouteError } from "@remix-run/react";
-import type { V2_ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
+import type { ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
 import { DashboardGroupsList } from "~/components/organisms/DashboardGroupsList";
 import { getSessionToken } from "~/models/session.server";
 import { DeviceType } from "~/types/DeviceType";
@@ -35,7 +35,7 @@ export const DashboardVehicles = () => {
   );
 };
 
-export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
+export const ErrorBoundary: ErrorBoundaryComponent = () => {
   const error = useRouteError();
   console.error("Error in vehicles: ", error);
 

@@ -27,7 +27,7 @@ import {
 } from "~/types/User";
 import adminStyles from "~/styles/admin.css";
 import { requireUser } from "~/models/session.server";
-import type { V2_ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
+import type { ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
 
 type LoaderData = {
   user: User;
@@ -50,11 +50,11 @@ export const links: LinksFunction = () => [
 export const generateNavItemsBasedOnUserPermission = (
   permissions: Permission[]
 ): FixedNavItem[] => {
-  return initialAdminNavItems.map((i) => {
+  return initialAdminNavItems.map(i => {
     if (!i.permission) return i;
     let isAllowed = false;
     const allow = () => (isAllowed = true);
-    permissions.forEach((p) =>
+    permissions.forEach(p =>
       p.context === i.permission?.context ? allow() : null
     );
     return isAllowed ? i : ({} as FixedNavItem);
@@ -82,7 +82,7 @@ export const Admin = () => {
   );
 };
 
-export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
+export const ErrorBoundary: ErrorBoundaryComponent = () => {
   const error = useRouteError();
   console.log("panel.tsx ERROR: ", error);
 

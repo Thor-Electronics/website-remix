@@ -8,7 +8,7 @@ import {
   useLoaderData,
   useRouteError,
 } from "@remix-run/react";
-import type { V2_ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
+import type { ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
 import { VehicleCard } from "~/components/molecules/VehicleCard";
 
 type LoaderData = {
@@ -32,7 +32,7 @@ export default function VehicleDetails() {
   );
 }
 
-export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
+export const ErrorBoundary: ErrorBoundaryComponent = () => {
   const error = useRouteError();
   console.error("Error in $vehicleId: ", error);
   return (

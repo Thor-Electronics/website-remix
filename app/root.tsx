@@ -1,7 +1,7 @@
 import type {
   LinksFunction,
   LoaderFunction,
-  V2_MetaFunction,
+  MetaFunction,
 } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import {
@@ -15,7 +15,7 @@ import {
 import styles from "~/styles/root.css";
 import { LogoIcon } from "./components/atoms/LogoIcon";
 import { getEnv } from "./env.server";
-import type { V2_ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
+import type { ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
 import { useEffect, useState } from "react";
 import Document from "./Document";
 // import { useSWEffect } from "@remix-pwa/sw";
@@ -27,7 +27,7 @@ import Document from "./Document";
 // TODO: Good utils: https://www.npmjs.com/package/remix-utils
 
 // TODO: MetaFunction after upgrade to v2
-export const meta: V2_MetaFunction = () => [
+export const meta: MetaFunction = () => [
   { title: "Thor Electronics" },
   { charSet: "utf-8" },
   { name: "viewport", content: "width=device-width,initial-scale=1" },
@@ -132,7 +132,7 @@ export default function App() {
   );
 }
 
-export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
+export const ErrorBoundary: ErrorBoundaryComponent = () => {
   const error = useRouteError();
   console.error("root.tsx ERROR: ", error);
 

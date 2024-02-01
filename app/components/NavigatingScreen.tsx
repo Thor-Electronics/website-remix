@@ -1,33 +1,33 @@
-import { useTransition } from "@remix-run/react"
-import { useEffect, useState } from "react"
+import { useNavigation } from "@remix-run/react";
+import { useEffect, useState } from "react";
 
 export const NavigatingScreen = () => {
-  const transition = useTransition()
-  const isNavigating = transition.state === "loading"
-  const [isVisible, setIsVisible] = useState(false)
-  const [isHiding, setIsHiding] = useState(false)
-  const [state, setState] = useState("Loading ")
+  const navigation = useNavigation();
+  const isNavigating = navigation.state === "loading";
+  const [isVisible, setIsVisible] = useState(false);
+  const [isHiding, setIsHiding] = useState(false);
+  const [state, setState] = useState("Loading ");
 
   useEffect(() => {
     if (isNavigating) {
-      setIsHiding(false)
-      setIsVisible(true)
+      setIsHiding(false);
+      setIsVisible(true);
     } else {
-      setIsHiding(true)
-      setTimeout(() => setIsVisible(false), 195)
+      setIsHiding(true);
+      setTimeout(() => setIsVisible(false), 195);
     }
-  }, [isNavigating])
+  }, [isNavigating]);
 
   useEffect(() => {
     setInterval(
       () =>
         setState(prev => {
-          if (prev === "Loading . . . . . ") return "Loading "
-          return prev + ". "
+          if (prev === "Loading . . . . . ") return "Loading ";
+          return prev + ". ";
         }),
       500
-    )
-  }, [])
+    );
+  }, []);
 
   return isVisible ? (
     <div className={`NavigatingScreen ${isHiding ? "hide" : "show"}`}>
@@ -35,7 +35,7 @@ export const NavigatingScreen = () => {
       {/* <p className="description">Please wait while</p> */}
       <div className="state">{state}</div>
     </div>
-  ) : null
-}
+  ) : null;
+};
 
-export default NavigatingScreen
+export default NavigatingScreen;

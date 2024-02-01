@@ -22,7 +22,7 @@ import { DashboardNav } from "~/components/organisms/DashboardNav";
 import { requireSessionToken, requireUser } from "~/models/session.server";
 import dashboardStyles from "~/styles/dashboard.css";
 import type { User } from "~/types/User";
-import type { V2_ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
+import type { ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
 import { IoCarSport } from "react-icons/io5";
 import api from "~/utils/core.server";
 import type { Device } from "~/types/Device";
@@ -41,8 +41,8 @@ export const loader: LoaderFunction = async ({ request }) => {
   // console.log(`app.tsx -- ${user.name}(${user.id}) is using the app`)
   const orphanDevices = await api
     .getOrphanDevices(token)
-    .then((data) => data)
-    .catch((err) => {
+    .then(data => data)
+    .catch(err => {
       console.error("Error fetching orphan devices: ", err);
       return [];
     });
@@ -77,7 +77,7 @@ export const Dashboard = () => {
   );
 };
 
-export const ErrorBoundary: V2_ErrorBoundaryComponent = () => {
+export const ErrorBoundary: ErrorBoundaryComponent = () => {
   const error = useRouteError();
   console.error("Error in dashboard: ", error);
 

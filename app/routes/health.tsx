@@ -1,8 +1,8 @@
-import type { LoaderArgs } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
 
 // import { db } from "~/utils/db.server";
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const host =
     request.headers.get("X-Forwarded-Host") ?? request.headers.get("host");
 
@@ -10,14 +10,14 @@ export async function loader({ request }: LoaderArgs) {
     const url = new URL("/", `http://${host}`);
     await Promise.all([
       // db.session.count(),
-      fetch(url.toString(), { method: "HEAD" }).then((r) => {
+      fetch(url.toString(), { method: "HEAD" }).then(r => {
         if (!r.ok) return Promise.reject(r);
       }),
       fetch(
         `${process.env.NODE_ENV === "production" ? "https" : "http"}://${
           process.env.CORE_ADDR
         }/health`
-      ).then((r) => {
+      ).then(r => {
         if (!r.ok) return Promise.reject(r);
       }),
     ]);
