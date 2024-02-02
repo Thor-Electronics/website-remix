@@ -146,8 +146,8 @@ const initialAdminNavItems: FixedNavItem[] = [
   },
   {
     icon: <CubeTransparentIcon className={iconClassNames} />, // ArrowPathIcon
-    label: "OTA Updates",
-    to: `${PANEL_PREFIX}/ota-updates`,
+    label: "Firmware Updates",
+    to: `${PANEL_PREFIX}/firmware-updates`,
     permission: {
       context: PERMISSION_CONTEXT.FIRMWARE_UPDATE,
       access: ACCESS.VIEW,

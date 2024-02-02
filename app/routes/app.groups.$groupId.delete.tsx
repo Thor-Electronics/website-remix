@@ -7,7 +7,6 @@ import {
   DialogTitle,
 } from "@mui/material";
 import {
-  Response,
   type ActionFunction,
   type LoaderFunction,
   json,
@@ -59,11 +58,11 @@ export const action: ActionFunction = async ({ request, params }) => {
   const group = await api.getGroupDetails(params.groupId, token);
   return api
     .deleteGroup(params.groupId, token)
-    .then((res) => {
+    .then(res => {
       console.log(`Deleted Group ${group.name}(${group.id})`, res.data);
       return redirect(DASHBOARD_PREFIX + "/groups");
     })
-    .catch((err) => {
+    .catch(err => {
       const errMsg =
         err.response?.data?.message ??
         err.response?.data ??
@@ -79,7 +78,7 @@ export default function DeleteGroupModal() {
   useActionData<ActionData>();
   const navigation = useNavigation();
   const navigate = useNavigate();
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState<boolean>(true);
 
   const handleClose = () => {
     setOpen(false);

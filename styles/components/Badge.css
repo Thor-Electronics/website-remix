@@ -20,6 +20,10 @@
     @apply !bg-amber-200 !text-amber-800 !border-amber-400;
   }
 
+  &.canary {
+    @apply !bg-fuchsia-200 !text-fuchsia-800 !border-fuchsia-400;
+  }
+
   &.dev {
     @apply !bg-rose-200 !text-rose-800 !border-rose-400;
   }

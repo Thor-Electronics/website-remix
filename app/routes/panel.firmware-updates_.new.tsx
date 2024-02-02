@@ -69,7 +69,7 @@ export const AdminOTAUpdatesNew = () => {
           return setError(
             `Error uploading firmware to core(${res.status} ${res.statusText}): ${body.message}`
           );
-        window.location.href = `${PANEL_PREFIX}/ota-updates`;
+        window.location.href = `${PANEL_PREFIX}/firmware-updates`;
         setIsSubmitting(false);
       })
       .catch(err => {
