@@ -64,8 +64,6 @@ export const ManageDevices = () => {
   const [logsId, setLogsId] = useState<string>("");
   const [logsContent, setLogsContent] = useState<string[]>([]);
 
-  console.log("DEVICES: ", devices);
-
   const openEditDialog = (dId: string) => {
     setEditOpen(true);
     setEditId(dId);
@@ -98,7 +96,7 @@ export const ManageDevices = () => {
       .delete(`${ENV.CORE_URL}/api/v1/devices/${deleteId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then((res) => {
+      .then(res => {
         console.log("Device was deleted");
         alert(`Device(${deleteId}) was deleted successfully`);
         closeDeleteDialog();
@@ -115,12 +113,12 @@ export const ManageDevices = () => {
         { message: JSON.parse(e.currentTarget.message.value) },
         { headers: { Authorization: `Bearer ${token}` } }
       )
-      .then((res) => {
+      .then(res => {
         console.log("Message Sent to Device: ", res);
         alert(`Server: ${JSON.stringify(res.data)}`);
         setMsgErr(JSON.stringify(res.data, null, 2));
       })
-      .catch((err) => {
+      .catch(err => {
         const errMsg =
           err.response?.data?.message ??
           err.response?.data ??
@@ -138,11 +136,11 @@ export const ManageDevices = () => {
       .get(`${ENV.CORE_URL}/api/v1/statistics/logs/${logsId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then((res) => {
+      .then(res => {
         console.log(`Got device(${logsId}) logs from the server`, res.data);
         setLogsContent(res.data);
       })
-      .catch((err) => {
+      .catch(err => {
         const errMsg =
           err.response?.data?.message ??
           err.response?.data ??
@@ -446,6 +444,12 @@ const generateGridColumns = (options: {
     width: 100,
     cellClassName: "text-xs font-mono font-semibold",
   },
+  {
+    field: "chip",
+    headerName: "Chip",
+    width: 100,
+    cellClassName: "text-xs font-mono font-semibold",
+  },
   { field: "type", headerName: "Type", width: 150 }, // todo: render icon instead!
   { field: "name", headerName: "Name", width: 200 },
   {
@@ -541,7 +545,7 @@ const generateGridColumns = (options: {
     field: "created_at",
     headerName: "Creation Date",
     width: 125,
-    valueGetter: (params) => timeAgo(new Date(params.value)),
+    valueGetter: params => timeAgo(new Date(params.value)),
   },
   {
     field: "updated_at",
@@ -549,7 +553,7 @@ const generateGridColumns = (options: {
     width: 125,
     // headerAlign: "center",
     // align: "center",
-    valueGetter: (params) => timeAgo(new Date(params.value)),
+    valueGetter: params => timeAgo(new Date(params.value)),
   },
 ];
 
@@ -592,7 +596,7 @@ export const OptionsMenu = ({ options }: DeviceOptionsMenuProps) => {
           "aria-labelledby": "basic-button",
         }}
       >
-        {options.map((o) => (
+        {options.map(o => (
           <MenuItem
             key={o.title}
             onClick={() => {
