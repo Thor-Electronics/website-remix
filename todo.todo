@@ -22,3 +22,4 @@
 - Admin Panel show user verification status(Phone & Email verified or not?)
 - Admin Panel hide object ID Hex because they're useless. Instead show a copy ID button(Maybe in options or actions elipsis menu)
 - Admin Panel network monitoring section use icons as much as possible to hide useless information like device ID take super less space via a device or user icon instead of text. Design could have 2 mods for super small and compact mode for super admin and a little bit comfortable mode for developers who want to debug
+- Route Logs ignore the ones that remix prefetches by filtering the ones that have ?_data=etc.

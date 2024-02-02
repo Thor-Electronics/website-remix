@@ -32,9 +32,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     throw new Response("Firmware Update Not Found", { status: 404 });
   return api
     .adminGetFirmwareUpdateDetail(params.firmwareId, token)
-    .then(data => {
-      return json<LoaderData>({ firmware: data as Firmware });
-    })
+    .then(data => json<LoaderData>({ firmware: data as Firmware }))
     .catch(err => {
       throw new Response(
         err.response?.data?.message ??

@@ -101,12 +101,12 @@ const gridColumns: GridColDef[] = [
       </div>
     ),
   },
-  {
-    field: "id",
-    headerName: "ID",
-    width: 210,
-    cellClassName: "text-xs font-mono",
-  },
+  // {
+  //   field: "id",
+  //   headerName: "ID",
+  //   width: 210,
+  //   cellClassName: "text-xs font-mono",
+  // },
   {
     field: "chip",
     headerName: "Chip",
