@@ -14,7 +14,7 @@ FROM base as deps
 
 WORKDIR /remix
 
-ADD package.json .npmrc ./
+ADD package.json ./
 RUN npm install --production=false
 
 # Setup production node_modules
@@ -23,7 +23,7 @@ FROM base as production-deps
 WORKDIR /remix
 
 COPY --from=deps /remix/node_modules /remix/node_modules
-ADD package.json .npmrc ./
+ADD package.json ./
 RUN npm prune --production
 
 # Build the app
