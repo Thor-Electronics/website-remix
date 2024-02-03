@@ -53,7 +53,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   const manufacturerId = form.get("manufacturerId");
   const cpuId = form.get("cpuId");
 
-  let errors = {
+  const errors = {
     name: typeof name !== "string" && "Name must be string!",
     type: typeof type !== "string" && "Type must be string!",
     manufacturerId:
@@ -81,6 +81,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     })
     .catch((err) => {
       const errMsg =
+        err.message ??
         err.response?.data?.message ??
         err.response?.data ??
         err.response ??

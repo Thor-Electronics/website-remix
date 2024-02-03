@@ -58,12 +58,13 @@ export const action: ActionFunction = async ({ request, params }) => {
   const group = await api.getGroupDetails(params.groupId, token);
   return api
     .deleteGroup(params.groupId, token)
-    .then(res => {
+    .then((res) => {
       console.log(`Deleted Group ${group.name}(${group.id})`, res.data);
       return redirect(DASHBOARD_PREFIX + "/groups");
     })
-    .catch(err => {
+    .catch((err) => {
       const errMsg =
+        err.message ??
         err.response?.data?.message ??
         err.response?.data ??
         err.response ??

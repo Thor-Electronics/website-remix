@@ -1,16 +1,22 @@
 {
+  "name": "iot-website",
   "private": true,
   "sideEffects": false,
+  "//type": "module",
   "scripts": {
-    "dev": "run-p dev:*",
-    "dev:remix": "remix dev",
-    "dev:css": "postcss styles --base styles --dir app/styles -w",
-    "build": "run-s build:*",
-    "build:css": "postcss styles --base styles --dir app/styles --env production",
-    "start": "remix-serve build",
-    "build:remix": "cross-env NODE_ENV=production remix build",
-    "_build-worker": "esbuild ./app/entry.workbox.ts --outfile=./public/entry.workbox.js --minify --bundle --platform=node --format=esm --define:process.env.NODE_ENV='\"production\"'",
-    "_dev:worker": "esbuild ./app/entry.workbox.ts --outfile=./public/entry.workbox.js --bundle --platform=node --format=esm --define:process.env.NODE_ENV='\"development\"' --watch",
+    "build": "remix build",
+    "dev": "remix dev --manual",
+    "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
+    "start": "remix-serve ./build/index.js",
+    "//dev": "run-p dev:*",
+    "//dev:remix": "remix dev",
+    "//dev:css": "postcss styles --base styles --dir app/styles -w",
+    "//build": "run-s build:*",
+    "//build:css": "postcss styles --base styles --dir app/styles --env production",
+    "//start": "remix-serve build",
+    "//build:remix": "cross-env NODE_ENV=production remix build",
+    "//build-worker": "esbuild ./app/entry.workbox.ts --outfile=./public/entry.workbox.js --minify --bundle --platform=node --format=esm --define:process.env.NODE_ENV='\"production\"'",
+    "//dev:worker": "esbuild ./app/entry.workbox.ts --outfile=./public/entry.workbox.js --bundle --platform=node --format=esm --define:process.env.NODE_ENV='\"development\"' --watch",
     "typecheck": "tsc"
   },
   "dependencies": {
@@ -20,9 +26,11 @@
     "@mui/material": "^5.15.7",
     "@mui/x-data-grid": "^6.19.3",
     "@prisma/client": "^5.9.1",
+    "@remix-run/css-bundle": "2.6.0",
     "@remix-run/node": "2.6.0",
     "@remix-run/react": "2.6.0",
     "@remix-run/serve": "2.6.0",
+    "isbot": "^4.1.0",
     "@sentry/remix": "^7.99.0",
     "axios": "^1.6.7",
     "cross-env": "^7.0.3",
@@ -46,8 +54,15 @@
     "@remix-run/eslint-config": "2.6.0",
     "@types/react": "^18.2.51",
     "@types/react-dom": "^18.2.18",
+    "@typescript-eslint/eslint-plugin": "^6.7.4",
     "autoprefixer": "^10.4.17",
     "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.4.33",
     "postcss-cli": "^11.0.0",
@@ -59,6 +74,6 @@
     "typescript": "^5.3.3"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   }
 }

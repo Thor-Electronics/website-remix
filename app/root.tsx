@@ -29,8 +29,8 @@ import Document from "./Document";
 // TODO: MetaFunction after upgrade to v2
 export const meta: MetaFunction = () => [
   { title: "Thor Electronics" },
-  { charSet: "utf-8" },
-  { name: "viewport", content: "width=device-width,initial-scale=1" },
+  // { charSet: "utf-8" },
+  // { name: "viewport", content: "width=device-width,initial-scale=1" },
   { name: "theme-color", content: "#3b82f6" },
 ];
 
@@ -161,9 +161,9 @@ export const ErrorBoundary: ErrorBoundaryComponent = () => {
 
   let errMsg = "Unknown Error";
   // TODO: detect error type check
-  // if (error && error.message && error.message !== undefined) {
-  //   errMsg = error.message
-  // }
+  if (error && error.message && error.message !== undefined) {
+    errMsg = error.message;
+  }
   return (
     <Document title="Error!">
       <div

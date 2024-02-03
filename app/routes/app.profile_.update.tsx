@@ -70,6 +70,7 @@ export const action: ActionFunction = async ({ request }) => {
     })
     .catch((err) => {
       const msg =
+        err.message ??
         err.response?.data?.message ??
         err.response?.data ??
         err.response ??

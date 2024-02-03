@@ -45,7 +45,9 @@ export const action: ActionFunction = async ({ request }) => {
         err.response?.data
       );
       return json<ActionData>({
-        error: "Failed to move device to group: " + err.response?.data?.message,
+        error:
+          "Failed to move device to group: " + err.message ||
+          err.response?.data?.message,
       });
     });
 };

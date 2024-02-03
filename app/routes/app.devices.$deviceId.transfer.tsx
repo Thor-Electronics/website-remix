@@ -47,7 +47,10 @@ export const action: ActionFunction = async ({ request, params }) => {
     })
     .catch((err) => {
       const message =
-        err.response?.data?.message || err.response?.data || err.response;
+        err.message ||
+        err.response?.data?.message ||
+        err.response?.data ||
+        err.response;
       !err.response?.data?.message &&
         console.error("Error transferring device: ", message, err);
       return json<ActionData>({

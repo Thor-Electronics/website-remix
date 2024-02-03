@@ -59,6 +59,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     })
     .catch((err) => {
       const errMsg =
+        err.message ||
         err.response?.data?.message ||
         err.response?.data ||
         err.response ||

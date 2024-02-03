@@ -26,7 +26,7 @@ export const action: ActionFunction = async ({ request }) => {
         err
       );
       return json<ActionData>(
-        { error: err.response?.data?.message },
+        { error: err.message || err.response?.data?.message },
         err.response?.status
       );
     });

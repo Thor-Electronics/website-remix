@@ -39,7 +39,7 @@ export const action: ActionFunction = async ({ request }) => {
   // call the core service api
   return api
     .signup({ phone, name, password })
-    .then(async res => {
+    .then(async (res) => {
       const { user, token, message } = res.data;
       const { cookieSession, redirect } = await createCookieSession(
         user.id,
@@ -51,8 +51,9 @@ export const action: ActionFunction = async ({ request }) => {
       console.log(message, cookieSession); // todo: set in cookie and show a snack bar message
       return redirect;
     })
-    .catch(err => {
+    .catch((err) => {
       const errMsg =
+        err.message ||
         err.response?.data?.message ||
         err.response?.data ||
         err.response ||

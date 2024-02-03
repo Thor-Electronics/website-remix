@@ -29,7 +29,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     })
     .catch((err) => {
       throw new Response(
-        err.response?.data?.message ??
+        err.message ??
+          err.response?.data?.message ??
           err.response?.data ??
           err.response ??
           err,
@@ -54,7 +55,8 @@ export const action: ActionFunction = async ({ request, params }) => {
       })
       .catch((err) => {
         throw new Response(
-          "Error deleting the device: " + err.response?.data?.message ??
+          "Error deleting the device: " + err.message ??
+            err.response?.data?.message ??
             err.response?.data ??
             err.response ??
             err,
@@ -72,7 +74,7 @@ export const action: ActionFunction = async ({ request, params }) => {
     })
     .catch((err) => {
       throw new Response(
-        "Error detaching device from the group: " +
+        "Error detaching device from the group: " + err.message ??
           err.response?.data?.message ??
           err.response?.data ??
           err.response ??

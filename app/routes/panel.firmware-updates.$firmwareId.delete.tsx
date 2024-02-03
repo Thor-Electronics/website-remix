@@ -32,10 +32,11 @@ export const loader: LoaderFunction = async ({ request, params }) => {
     throw new Response("Firmware Update Not Found", { status: 404 });
   return api
     .adminGetFirmwareUpdateDetail(params.firmwareId, token)
-    .then(data => json<LoaderData>({ firmware: data as Firmware }))
-    .catch(err => {
+    .then((data) => json<LoaderData>({ firmware: data as Firmware }))
+    .catch((err) => {
       throw new Response(
-        err.response?.data?.message ??
+        err.message ??
+          err.response?.data?.message ??
           err.response?.data ??
           err.response ??
           err,
@@ -57,9 +58,10 @@ export const action: ActionFunction = async ({ request, params }) => {
     .then(() => {
       return redirect(`${PANEL_PREFIX}/firmware-updates`);
     })
-    .catch(err => {
+    .catch((err) => {
       throw new Response(
-        "Error deleting the firmware update: " + err.response?.data?.message ??
+        "Error deleting the firmware update: " + err.message ??
+          err.response?.data?.message ??
           err.response?.data ??
           err.response ??
           err,

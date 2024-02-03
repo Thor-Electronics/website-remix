@@ -2,7 +2,7 @@
 import { RemixBrowser, useLocation, useMatches } from "@remix-run/react";
 import { hydrateRoot } from "react-dom/client";
 import * as Sentry from "@sentry/remix";
-import { useEffect } from "react";
+import { useEffect, startTransition, StrictMode } from "react";
 
 if (process.env.NODE_ENV === "production") {
   Sentry.init({
@@ -25,6 +25,12 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-hydrateRoot(document, <RemixBrowser />);
-
+startTransition(() => {
+  hydrateRoot(
+    document,
+    <StrictMode>
+      <RemixBrowser />
+    </StrictMode>
+  );
+});
 // loadServiceWorker({ serviceWorkerUrl: "/entry.workbox.js" });

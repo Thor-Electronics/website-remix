@@ -53,7 +53,7 @@ export const action: ActionFunction = async ({ request }) => {
   const identifier = form.get("identifier");
   const password = form.get("password");
 
-  let errors = {
+  const errors = {
     identifier: typeof identifier !== "string" && "Identifier must be string!",
     password: typeof password !== "string" && "Password must be string!",
   };
@@ -65,7 +65,7 @@ export const action: ActionFunction = async ({ request }) => {
   // call the core service api
   return api
     .login({ identifier, password })
-    .then(async res => {
+    .then(async (res) => {
       const { user: u, token, message } = res.data;
       const user: User = u;
       let redirectTo = !user.roles ? "/app" : "/panel";
@@ -90,8 +90,9 @@ export const action: ActionFunction = async ({ request }) => {
       // todo: set message on snackbar
       return redirect;
     })
-    .catch(err => {
+    .catch((err) => {
       const errMsg =
+        err.message ||
         err.response?.data?.message ||
         err.response?.data ||
         err.response ||
