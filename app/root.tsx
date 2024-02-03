@@ -12,7 +12,7 @@ import {
   useRouteError,
 } from "@remix-run/react";
 // import NavigatingScreen from "./components/NavigatingScreen"
-import styles from "~styles/root.css";
+import styles from "../styles/root.css";
 import { LogoIcon } from "./components/atoms/LogoIcon";
 import { getEnv } from "./env.server";
 import type { ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
