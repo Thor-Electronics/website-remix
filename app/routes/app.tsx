@@ -20,7 +20,7 @@ import { LogoIcon } from "~/components/atoms/LogoIcon";
 import type { FixedNavItem } from "~/components/organisms/FixedNav";
 import { DashboardNav } from "~/components/organisms/DashboardNav";
 import { requireSessionToken, requireUser } from "~/models/session.server";
-import dashboardStyles from "~/styles/dashboard.css";
+import dashboardStyles from "~styles/dashboard.css";
 import type { User } from "~/types/User";
 import type { ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
 import { IoCarSport } from "react-icons/io5";
@@ -41,8 +41,8 @@ export const loader: LoaderFunction = async ({ request }) => {
   // console.log(`app.tsx -- ${user.name}(${user.id}) is using the app`)
   const orphanDevices = await api
     .getOrphanDevices(token)
-    .then(data => data)
-    .catch(err => {
+    .then((data) => data)
+    .catch((err) => {
       console.error("Error fetching orphan devices: ", err);
       return [];
     });

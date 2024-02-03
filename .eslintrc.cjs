@@ -50,7 +50,7 @@ module.exports = {
       plugins: ["@typescript-eslint", "import"],
       parser: "@typescript-eslint/parser",
       settings: {
-        "import/internal-regex": "^~/",
+        "import/internal-regex": ["^~/", "^~styles/"],
         "import/resolver": {
           node: {
             extensions: [".ts", ".tsx"],

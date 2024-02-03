@@ -1,7 +1,7 @@
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import darkStyles from "~/styles/dark.css";
+import darkStyles from "~styles/dark.css";
 import { getOptionalUser, getSessionData } from "~/models/session.server";
 import Hero from "~/components/organisms/Hero";
 import Footer from "~/components/organisms/Footer";

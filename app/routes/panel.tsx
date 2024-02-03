@@ -25,7 +25,7 @@ import {
   type User,
   type Permission,
 } from "~/types/User";
-import adminStyles from "~/styles/admin.css";
+import adminStyles from "~styles/admin.css";
 import { requireUser } from "~/models/session.server";
 import type { ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
 
@@ -50,11 +50,11 @@ export const links: LinksFunction = () => [
 export const generateNavItemsBasedOnUserPermission = (
   permissions: Permission[]
 ): FixedNavItem[] => {
-  return initialAdminNavItems.map(i => {
+  return initialAdminNavItems.map((i) => {
     if (!i.permission) return i;
     let isAllowed = false;
     const allow = () => (isAllowed = true);
-    permissions.forEach(p =>
+    permissions.forEach((p) =>
       p.context === i.permission?.context ? allow() : null
     );
     return isAllowed ? i : ({} as FixedNavItem);
