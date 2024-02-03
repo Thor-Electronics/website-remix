@@ -25,7 +25,7 @@ import {
   type User,
   type Permission,
 } from "~/types/User";
-import adminStyles from "~styles/admin.css";
+import adminStyles from "../../styles/admin.css";
 import { requireUser } from "~/models/session.server";
 import type { ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
 

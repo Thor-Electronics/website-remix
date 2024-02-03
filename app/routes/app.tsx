@@ -20,7 +20,7 @@ import { LogoIcon } from "~/components/atoms/LogoIcon";
 import type { FixedNavItem } from "~/components/organisms/FixedNav";
 import { DashboardNav } from "~/components/organisms/DashboardNav";
 import { requireSessionToken, requireUser } from "~/models/session.server";
-import dashboardStyles from "~styles/dashboard.css";
+import dashboardStyles from "../../styles/dashboard.css";
 import type { User } from "~/types/User";
 import type { ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
 import { IoCarSport } from "react-icons/io5";
