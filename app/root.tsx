@@ -44,8 +44,8 @@ type LoaderData = {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const url = new URL(request.url);
-  console.log("root.tsx: ", url.pathname);
+  // const url = new URL(request.url);
+  // console.log("root.tsx: ", url.pathname);
 
   // const cookieSession = await cookieSessionStorage.getSession(
   //   request.headers.get("Cookie")
