@@ -109,13 +109,14 @@ export const AdminNetwork = () => {
             {connected && <OnlinePulse />}
           </h4>
           <div
-            className="logs flex flex-col gap-1 font-mono
-              bg-slate-300 dark:bg-slate-700 text-slate-600
-              dark:text-slate-400 p-3 rounded-lg"
+            className="logs flex flex-col gap-1 font-mono text-xs
+              bg-slate-700 dark:bg-slate-900 text-slate-500
+              dark:text-slate-700 p-3 rounded-lg"
           >
             {logs.map(l => (
-              <div>{l.text}</div>
+              <div key={l.time?.toUTCString()}>{l.text}</div>
             ))}
+            Some text
           </div>
           <div className="flex gap-2 flex-wrap">
             {h.deviceHubs.map(dh => (
