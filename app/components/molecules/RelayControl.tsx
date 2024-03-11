@@ -6,7 +6,7 @@ import { Switch } from "../atoms/Switch";
 export default function Relay12({
   type: t,
   state,
-  onUpdate: updateHandler,
+  updateHandler,
 }: DeviceControlProps): ReactNode {
   console.log("RELAY!!!", t, state);
 

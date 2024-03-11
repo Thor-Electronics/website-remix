@@ -92,7 +92,7 @@ export type DeviceActionGenerator = (
   id: string,
   type: DeviceType,
   state: DeviceState,
-  onUpdate: Function
+  updateHandler: Function
 ) => ReactNode;
 
 // Genertes device actions for
@@ -100,13 +100,13 @@ export type DeviceStateEntryActionGenerator = (
   id: string,
   key: string,
   value: any,
-  onUpdate: Function
+  updateHandler: Function
 ) => DeviceAction;
 
-export type DeviceControlProps = {
+export type DeviceControlProps<State> = {
   type: DeviceType;
-  state: DeviceState;
-  onUpdate: DeviceControlPanelStateUpdateHandler;
+  state: State;
+  updateHandler: DeviceControlPanelStateUpdateHandler;
 };
 
 const cn = "w-7 h-7";

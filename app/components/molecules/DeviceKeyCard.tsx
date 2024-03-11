@@ -1,9 +1,9 @@
-import type { ISimpleDeviceCardProps } from "./SimpleDeviceCard"
+import type { ISimpleDeviceCardProps } from "./SimpleDeviceCard";
 
 export const DeviceKeyCard = ({
   data: d,
-  onUpdate: DeviceStateUpdater,
+  updateHandler: DeviceStateUpdater,
   ...props
 }: ISimpleDeviceCardProps) => {
-  return ""
-}
+  return "";
+};

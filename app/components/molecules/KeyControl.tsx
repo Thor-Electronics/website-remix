@@ -1,14 +1,14 @@
 import type { FC } from "react";
-import type { DeviceControlProps } from "~/types/Device";
+import type { DeviceControlProps, DeviceState } from "~/types/Device";
 import { DeviceType } from "~/types/DeviceType";
 import { Switch } from "../atoms/Switch";
 // import { Switch } from "@mui/material";
 
-export const Key4: FC<DeviceControlProps> = ({
+export const Key4: FC<DeviceControlProps<DeviceState>> = ({
   type: t,
   state,
-  onUpdate: updateHandler,
-}: DeviceControlProps) => {
+  updateHandler: updateHandler,
+}: DeviceControlProps<DeviceState>) => {
   const handleUpdate = (k: string, v: number | boolean) => {
     if (!handleUpdate)
       return console.warn("Update handler is not configured for this key!");

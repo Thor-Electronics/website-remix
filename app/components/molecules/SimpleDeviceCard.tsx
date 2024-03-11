@@ -33,16 +33,16 @@ import { PiFanFill } from "react-icons/pi";
 
 export interface ISimpleDeviceCardProps extends HTMLAttributes<HTMLElement> {
   data: Device;
-  onUpdate?: DeviceStateUpdateSender;
+  updateHandlerndler?: DeviceStateUpdateSender;
 }
 
 export const SimpleDeviceCard = ({
   data: d,
   className,
-  onUpdate: updateHandler,
+  updateHandler: updateHandler,
   ...props
 }: ISimpleDeviceCardProps) => {
-  const handleControlUpdate: DeviceControlPanelStateUpdateHandler = cmd => {
+  const handleControlUpdate: DeviceControlPanelStateUpdateHandler = (cmd) => {
     if (!updateHandler) return false;
     // Attach ID to the command before sending it to the server
     return updateHandler({ ...cmd, id: d.id });
@@ -89,7 +89,7 @@ export const SimpleDeviceCard = ({
         <ControlPanel
           type={d.type}
           state={d.state}
-          onUpdate={handleControlUpdate}
+          updateHandler={handleControlUpdate}
         />
       </div>
 

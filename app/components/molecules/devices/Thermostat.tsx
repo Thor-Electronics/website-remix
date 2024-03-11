@@ -1,19 +1,30 @@
-import type { FC, HTMLAttributes } from "react";
-import { iconClassNames, iconContainerClassNames } from "./SolarPanel";
+import { useState, type FC, type HTMLAttributes, useEffect } from "react";
+import { iconContainerClassNames } from "./SolarPanel";
 import { BsMoisture, BsThermometerHalf } from "react-icons/bs";
 import { Slider } from "@mui/material";
+import { DeviceType } from "~/types/DeviceType";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
+  type: DeviceType;
   state: {
     battery?: number;
-    power?: 0 | 1; // ON / OFF
+    power?: 0 | 1 | number; // ON / OFF
     temperature?: number; // could be string
+    targetTemperature?: number;
+    minTargetTemperature?: number;
+    maxTargetTemperature?: number;
     humidity?: number; // Moisture // percents or ppm or what?
   };
+  updateHandler: Function;
 }
 
-export const Thermostat: FC<IProps> = ({ className, ...props }: IProps) => {
-  const state = {
+export const Thermostat: FC<IProps> = ({
+  className,
+  state: s,
+  updateHandler,
+  ...props
+}: IProps) => {
+  const defaultState = {
     battery: 34,
     power: 1, // ON
     temperature: 25,
@@ -22,9 +33,26 @@ export const Thermostat: FC<IProps> = ({ className, ...props }: IProps) => {
     maxTargetTemperature: 32,
     humidity: 4, // percents or ppm?
   };
+  if (!s) s = defaultState;
+  const [state, setState] = useState<IProps["state"]>(s);
+  const [isWaiting, setIsWaiting] = useState<boolean>(false);
+
+  const handleUpdate = (e: Event, value: number) => {
+    if (!handleUpdate)
+      return console.warn("Update handler is not configured for this key!");
+    setState((prev) => ({ ...prev, targetTemperature: value }));
+    updateHandler({
+      command: {
+        targetTemperature: value,
+      },
+    });
+    setIsWaiting(true);
+  };
 
   const minTemp = state.minTargetTemperature ?? 14;
   const maxTemp = state.maxTargetTemperature ?? 32;
+
+  useEffect(() => setIsWaiting(false), [s]);
 
   return (
     <div className={`Thermostat ${className}`} {...props}>
@@ -50,7 +78,8 @@ export const Thermostat: FC<IProps> = ({ className, ...props }: IProps) => {
       <div className="slider-container">
         {state.targetTemperature && (
           <Slider
-            defaultValue={state.targetTemperature}
+            value={state.targetTemperature}
+            disabled={isWaiting}
             getAriaValueText={(v) => `${v}℃`}
             valueLabelDisplay="auto"
             step={1}
@@ -60,6 +89,8 @@ export const Thermostat: FC<IProps> = ({ className, ...props }: IProps) => {
             ]}
             min={minTemp}
             max={maxTemp}
+            onChangeCommitted={handleUpdate}
+            // onChange={handleUpdate}
             // showLabel
           />
         )}

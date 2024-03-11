@@ -1,31 +1,31 @@
-import { Switch } from "@mui/material"
-import type { HTMLAttributes } from "react"
+import { Switch } from "@mui/material";
+import type { HTMLAttributes } from "react";
 import type {
   DeviceState,
   DeviceStateUpdater,
   DeviceStateUpdateSender,
   DeviceStateEntryActionGenerator,
   DeviceActionGenerator,
-} from "~/types/Device"
-import type { DeviceType } from "~/types/DeviceType"
-import type { Message } from "~/types/Message"
+} from "~/types/Device";
+import type { DeviceType } from "~/types/DeviceType";
+import type { Message } from "~/types/Message";
 
 interface IProps extends HTMLAttributes<HTMLElement> {
-  deviceId: string
-  type: DeviceType
-  state: DeviceState
-  onUpdate?: DeviceStateUpdateSender
+  deviceId: string;
+  type: DeviceType;
+  state: DeviceState;
+  updateHandler?: DeviceStateUpdateSender;
 }
 
 export const DeviceControl = ({
   deviceId: id,
   type,
   state,
-  onUpdate: updateHandler,
+  updateHandler,
   className,
   ...props
 }: IProps) => {
-  console.log("Device Control: ", id, type, state)
+  console.log("Device Control: ", id, type, state);
   // console.log("")
   // state = {
   //   power: {
@@ -79,65 +79,71 @@ export const DeviceControl = ({
         }
       })} */}
     </div>
-  )
-}
+  );
+};
 
 export const GenerateDeviceAction: DeviceActionGenerator = (
   id,
   type,
   state,
-  onUpdate
+  updateHandler
 ) => {
   return Object.entries(state).map(([k, v]) => {
-    console.log("Entry: ", k, v)
+    console.log("Entry: ", k, v);
     switch (k) {
       case "power":
         if (typeof v === "boolean")
-          return <Switch checked={v} onChange={() => onUpdate(!v)} />
+          return <Switch checked={v} onChange={() => updateHandler(!v)} />;
         if (typeof v === "object") {
           return Object.entries(v).map(([pk, pv]) => {
             return (
-              <Switch key={pk} checked={pv} onChange={() => onUpdate(!pv)} />
-            )
-          })
+              <Switch
+                key={pk}
+                checked={pv}
+                onChange={() => updateHandler(!pv)}
+              />
+            );
+          });
         }
 
       default:
-        break
+        break;
     }
-  })
-}
+  });
+};
 
 export const GenerateDeviceActionForStateEntry: DeviceStateEntryActionGenerator =
-  (id, key, value, onUpdate) => {
+  (id, key, value, updateHandler) => {
     // "0": true
-    console.log("Generating Device Action For State Entry: ", id, key, value)
+    console.log("Generating Device Action For State Entry: ", id, key, value);
     switch (typeof value) {
       case "boolean":
-        console.log("Boolean")
-        return <Switch checked={value} onChange={() => onUpdate(!value)} />
+        console.log("Boolean");
+        return (
+          <Switch checked={value} onChange={() => updateHandler(!value)} />
+        );
 
       case "number":
-        console.log("It's a fucking number")
+        console.log("It's a fucking number");
         if (value === 0 || value === 1) {
           return (
             <Switch
               checked={!!value}
-              onChange={() => onUpdate(value ? 0 : 1)}
+              onChange={() => updateHandler(value ? 0 : 1)}
             />
-          )
+          );
         }
       // Number input with plus and minus buttons (+ , -)
 
       case "string":
         // if starts with #, then consider it a color!
-        break
+        break;
 
       default:
-        console.log("Unsupported entry")
-        break
+        console.log("Unsupported entry");
+        break;
     }
-  }
+  };
 
 // {power: [ "0":1, "roof":0, "2":0, "3":1 ]} // returns an array or object of StateUpdaters
 export const generateControlOptionsForThisSingleDevice = (
@@ -145,10 +151,10 @@ export const generateControlOptionsForThisSingleDevice = (
   updateHandler?: DeviceStateUpdater
 ) => {
   // console.log("Generating controllers for state: ", state)
-  let options: { [k: string]: any }
+  let options: { [k: string]: any };
   Object.entries(state).map(([k, v]) => {
-    console.log("Entry: ", k, v)
-    let controller: DeviceStateUpdater
+    console.log("Entry: ", k, v);
+    let controller: DeviceStateUpdater;
     switch (typeof v) {
       case "boolean":
         // options[k] = (
@@ -158,27 +164,27 @@ export const generateControlOptionsForThisSingleDevice = (
         //   />
         // )
         // Generate Switch
-        break
+        break;
       case "number":
         // Number Input? IDK
-        break
+        break;
       case "string":
         // Generate Input?
-        break
+        break;
       case "object":
-        console.log("Recursively generating for object: ", v)
-        const childOptions = generateControlOptionsForThisSingleDevice(v)
-        break
+        console.log("Recursively generating for object: ", v);
+        const childOptions = generateControlOptionsForThisSingleDevice(v);
+        break;
 
       default:
         // Unsupported type
-        break
+        break;
     }
     if (typeof v === "boolean") {
       // Generate switch
     }
     // "0": true
-  })
-}
+  });
+};
 
-export default DeviceControl
+export default DeviceControl;
