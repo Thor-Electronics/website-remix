@@ -1,5 +1,6 @@
 @import "./components/Badge.css";
 @import "./components/Switch.css";
+@import "./components/CurvedSlider.css";
 
 @tailwind base;
 @tailwind components;

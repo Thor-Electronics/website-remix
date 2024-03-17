@@ -1,8 +1,10 @@
 import { useState, type FC, type HTMLAttributes, useEffect } from "react";
 import { iconContainerClassNames } from "./SolarPanel";
 import { BsMoisture, BsThermometerHalf } from "react-icons/bs";
-import { Slider } from "@mui/material";
 import { DeviceType } from "~/types/DeviceType";
+// import { CurvedSlider } from "~/components/atoms/CurvedSlider";
+// import CircularSlider from "@fseehawer/react-circular-slider";
+// import CurvedSlider from "react-curved-input";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
   type: DeviceType;
@@ -38,9 +40,10 @@ export const Thermostat: FC<IProps> = ({
   const [isWaiting, setIsWaiting] = useState<boolean>(false);
 
   const handleUpdate = (e: Event, value: number) => {
+    console.log(`UPDATING: `, value);
     if (!handleUpdate)
       return console.warn("Update handler is not configured for this key!");
-    setState((prev) => ({ ...prev, targetTemperature: value }));
+    setState(prev => ({ ...prev, targetTemperature: value }));
     updateHandler({
       command: {
         targetTemperature: value,
@@ -77,22 +80,47 @@ export const Thermostat: FC<IProps> = ({
       </div>
       <div className="slider-container">
         {state.targetTemperature && (
-          <Slider
-            value={state.targetTemperature}
-            disabled={isWaiting}
-            getAriaValueText={(v) => `${v}℃`}
-            valueLabelDisplay="auto"
-            step={1}
-            marks={[
-              { value: minTemp, label: `${minTemp}℃` },
-              { value: maxTemp, label: `${maxTemp}℃` },
-            ]}
-            min={minTemp}
-            max={maxTemp}
-            onChangeCommitted={handleUpdate}
-            // onChange={handleUpdate}
-            // showLabel
-          />
+          <div>NOTHING!</div>
+          // https://github.com/akx/react-curved-input/blob/master/src/components/Demo.tsx
+          // <CurvedSlider
+          //   path="M 50,100 A 50,50 0 1,1 100,50"
+          //   onChange={handleUpdate}
+          //   className="text-gray-800 dark:text-gray-200"
+          // />
+          // <CircularSlider
+          //   // width={280}
+          //   direction={1} // Clockwise
+          //   min={minTemp}
+          //   max={maxTemp}
+          //   initialValue={state.targetTemperature}
+          //   knobColor="#3b82f6"
+          //   progressColorFrom="#38bdf8"
+          //   progressColorTo="#1d4ed8"
+          //   trackColor="#cbd5e1"
+          //   trackSize={8}
+          //   // data={[...Array(21).keys()].map(i => i + 10)} // Data array from 10 to 30
+          //   dataIndex={10} // Initial knob position
+          //   label="℃"
+          //   onChange={value => handleUpdate(new MouseEvent("idk"), value)}
+          //   // onChangeCommitted={}
+          // />
+          // <CurvedSlider />
+          // <Slider
+          //   value={state.targetTemperature}
+          //   disabled={isWaiting}
+          //   getAriaValueText={(v) => `${v}℃`}
+          //   valueLabelDisplay="auto"
+          //   step={1}
+          //   marks={[
+          //     { value: minTemp, label: `${minTemp}℃` },
+          //     { value: maxTemp, label: `${maxTemp}℃` },
+          //   ]}
+          //   min={minTemp}
+          //   max={maxTemp}
+          //   onChangeCommitted={handleUpdate}
+          //   // onChange={handleUpdate}
+          //   // showLabel
+          // />
         )}
       </div>
     </div>

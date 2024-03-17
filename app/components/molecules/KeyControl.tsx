@@ -7,7 +7,7 @@ import { Switch } from "../atoms/Switch";
 export const Key4: FC<DeviceControlProps<DeviceState>> = ({
   type: t,
   state,
-  updateHandler: updateHandler,
+  updateHandler,
 }: DeviceControlProps<DeviceState>) => {
   const handleUpdate = (k: string, v: number | boolean) => {
     if (!handleUpdate)

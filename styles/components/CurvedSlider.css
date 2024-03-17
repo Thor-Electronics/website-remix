@@ -1,0 +1,49 @@
+.curved-slider-container {
+  position: relative;
+  width: 300px;
+  height: 300px;
+}
+
+.slider-curve {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Add your SVG styling here */
+}
+
+/* Input range for temperature */
+.slider {
+  position: absolute;
+  bottom: 20px; /* Adjust the position of the slider handle */
+  left: 0;
+  width: 100%;
+  /* Customize the appearance of the slider track and handle */
+  background-color: #e0e0e0;
+  border: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background-color: #007bff; /* Customize the handle color */
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* Display the current temperature */
+.value {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+  color: #333;
+}
