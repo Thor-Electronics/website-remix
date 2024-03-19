@@ -32,14 +32,14 @@ export default function DashboardProfile() {
   const u: User = user;
   const navigation = useNavigation();
 
-  const isEmailVerified: Boolean =
+  const isEmailVerified: boolean =
     Date.parse(
       typeof u.emailVerifiedAt === "string"
         ? u.emailVerifiedAt
         : u.emailVerifiedAt!.toString()
     ) > 0;
 
-  const isPhoneVerified: Boolean =
+  const isPhoneVerified: boolean =
     Date.parse(
       typeof u.phoneVerifiedAt === "string"
         ? u.phoneVerifiedAt
@@ -55,7 +55,7 @@ export default function DashboardProfile() {
         {u.roles && (
           <div
             className="roles bg-teal-500 dark:bg-teal-600 text-white p-0.5 rounded-full"
-            title={u.roles.map((r) => r.name).join(", ")}
+            title={u.roles.map(r => r.name).join(", ")}
           >
             <UserCircleIcon className="w-6" />
           </div>
@@ -137,7 +137,7 @@ export default function DashboardProfile() {
       </div>
       {u.roles && (
         <div className="roles text-xs">
-          {u.roles.map((r) => (
+          {u.roles.map(r => (
             <span
               key={r.name}
               className="role bg-teal-500 dark:bg-teal-600 text-white rounded-md py-0.5 px-2 flex items-center gap-1"

@@ -34,12 +34,12 @@ export const action: ActionFunction = async ({ request }) => {
 
   return await api
     .verifyPhone(await requireSessionToken(request), { code })
-    .then(async (res) => {
+    .then(async res => {
       const { message } = res.data;
       console.log("Success fully verified user's phone!: ", message);
-      return redirect(DASHBOARD_PREFIX + "/profile");
+      return redirect(DASHBOARD_PREFIX + "/");
     })
-    .catch((err) => {
+    .catch(err => {
       console.error(
         "Failed to verify phone number: ",
         err.response?.data,

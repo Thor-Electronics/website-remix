@@ -7,7 +7,7 @@ import {
   MoonIcon,
 } from "@heroicons/react/24/solid";
 import type { LoaderFunction, LinksFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import {
   Link,
   Outlet,
@@ -38,11 +38,54 @@ type LoaderData = {
 export const loader: LoaderFunction = async ({ request }) => {
   const token = await requireSessionToken(request);
   const user = await requireUser(request); // todo: optimize it by getting the token once? or getAuth to get both token and user?
+
+  // if the user needs to verify their phone number
+  if (
+    user.phone &&
+    Date.parse(
+      typeof user.phoneVerifiedAt === "string"
+        ? user.phoneVerifiedAt
+        : user.phoneVerifiedAt!.toString()
+    ) <= 0
+  ) {
+    console.log(
+      `User ${user.phone}(${user.name}) need to verify their phone. Redirecting them...`
+    );
+    console.log(
+      `Sending phone verification ${user.name}(${user.phone}) ${user.phone}...`
+    );
+    return await api
+      .sendPhoneVerification(token)
+      .then(async res => {
+        const { message } = res.data;
+        console.log(`Sent phone verification code: `, message);
+        return redirect("/verify-phone");
+      })
+      .catch(err => {
+        console.error(
+          "Failed to send verification code: ",
+          err.response?.data,
+          err.response,
+          err
+        );
+        return json(
+          { error: err.message || err.response?.data?.message },
+          err.response?.status
+        );
+      });
+    // POST /send-phone-verification
+    // const url = new URL(request.url);
+    // return fetch(`${url.origin}/send-phone-verification`, {
+    //   method: "POST",
+    //   headers: { Authorization: `Bearer ${token}` },
+    // });
+  }
+
   // console.log(`app.tsx -- ${user.name}(${user.id}) is using the app`)
   const orphanDevices = await api
     .getOrphanDevices(token)
-    .then((data) => data)
-    .catch((err) => {
+    .then(data => data)
+    .catch(err => {
       console.error("Error fetching orphan devices: ", err);
       return [];
     });
