@@ -23,12 +23,13 @@ interface IProps extends HTMLAttributes<HTMLDivElement> {
 
 export const Thermostat: FC<IProps> = ({
   className,
-  state: s,
+  state: passedState,
   updateHandler,
   ...props
 }: IProps) => {
+  // console.log("STATE: ", passedState, !passedState);
   const defaultState = {
-    battery: 34,
+    battery: 83,
     power: 1, // ON
     temperature: 25,
     targetTemperature: 23,
@@ -36,13 +37,16 @@ export const Thermostat: FC<IProps> = ({
     maxTargetTemperature: 32,
     humidity: 4, // percents or ppm?
   };
-  if (!s) s = defaultState;
-  const [state, setState] = useState<IProps["state"]>(s);
+  const initialState = { ...defaultState, ...passedState };
+  const [state, setState] = useState<IProps["state"]>(initialState);
   const [isWaiting, setIsWaiting] = useState<boolean>(false);
-  const [debouncedState, setDebouncedState] = useDebouncedState(s, 500);
+  const [debouncedState, setDebouncedState] = useDebouncedState(
+    initialState,
+    500
+  );
   const [isFirstTime, setIsFirstTime] = useState<boolean>(true);
 
-  const handleUpdate = (e: Event, value: number) => {
+  const handleUpdate = (value: number) => {
     console.log(`UPDATING: `, value);
     setState(prev => ({ ...prev, targetTemperature: value }));
     setDebouncedState({ ...state, targetTemperature: value });
@@ -51,7 +55,10 @@ export const Thermostat: FC<IProps> = ({
   const minTemp = state.minTargetTemperature ?? 14;
   const maxTemp = state.maxTargetTemperature ?? 32;
 
-  useEffect(() => setIsWaiting(false), [s]);
+  useEffect(() => {
+    console.log("Resetting isWaiting flag...");
+    setIsWaiting(false);
+  }, [passedState]);
 
   useEffect(() => {
     console.log("Debounced State has been effected: ", debouncedState, state);
@@ -75,7 +82,7 @@ export const Thermostat: FC<IProps> = ({
   }, [debouncedState]);
 
   return (
-    <div className={`Thermostat ${className}`} {...props}>
+    <div className={`Thermostat mt-3 ${className}`} {...props}>
       <div className="stats flex items-center justify-evenly">
         {/* {state.battery && (
         <span className="battery">Battery: {state.battery}</span>
@@ -95,7 +102,7 @@ export const Thermostat: FC<IProps> = ({
           </span>
         )}
       </div>
-      <div className="slider-container">
+      <div className="slider-container mt-4">
         {state.targetTemperature && (
           // <div>NOTHING!</div>
           // https://github.com/akx/react-curved-input/blob/master/src/components/Demo.tsx
@@ -105,39 +112,22 @@ export const Thermostat: FC<IProps> = ({
           //   className="text-gray-800 dark:text-gray-200"
           // />
           <CircularSlider
-            // width={200}
+            width={200}
             direction={1} // Clockwise
             min={minTemp}
             max={maxTemp}
-            initialValue={state.targetTemperature}
+            // initialValue={state.targetTemperature}
             knobColor="#3b82f6"
             progressColorFrom="#38bdf8"
             progressColorTo="#1d4ed8"
             trackColor="#cbd5e1"
             trackSize={8}
-            // data={[...Array(21).keys()].map(i => i + 10)} // Data array from 10 to 30
-            dataIndex={10} // Initial knob position
+            data={[...Array(maxTemp - minTemp).keys()].map(i => i + minTemp)} // Data array from 10 to 30
+            dataIndex={state.targetTemperature - minTemp} // Initial knob position
             label="℃"
-            onChange={value => handleUpdate(new MouseEvent("idk"), value)}
-            // onChangeCommitted={}
+            onChange={handleUpdate}
           />
           // <CurvedSlider />
-          // <Slider
-          //   value={state.targetTemperature}
-          //   disabled={isWaiting}
-          //   getAriaValueText={(v) => `${v}℃`}
-          //   valueLabelDisplay="auto"
-          //   step={1}
-          //   marks={[
-          //     { value: minTemp, label: `${minTemp}℃` },
-          //     { value: maxTemp, label: `${maxTemp}℃` },
-          //   ]}
-          //   min={minTemp}
-          //   max={maxTemp}
-          //   onChangeCommitted={handleUpdate}
-          //   // onChange={handleUpdate}
-          //   // showLabel
-          // />
         )}
       </div>
     </div>

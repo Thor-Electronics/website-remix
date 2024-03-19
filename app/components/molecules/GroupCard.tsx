@@ -100,7 +100,7 @@ export const GroupCard = ({
         }
         if (msg.signal) {
           console.log("📡 Signal: ", msg.signal);
-          if (!msg.payload) console.warn("Signal with empty payload!");
+          if (!msg.payload) console.warn("Signal with empty payload!", msg);
 
           /* Initial Data */
           if (msg.signal === Signal.INITIAL_DATA) {
