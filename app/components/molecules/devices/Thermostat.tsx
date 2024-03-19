@@ -3,7 +3,8 @@ import { iconContainerClassNames } from "./SolarPanel";
 import { BsMoisture, BsThermometerHalf } from "react-icons/bs";
 import { DeviceType } from "~/types/DeviceType";
 // import { CurvedSlider } from "~/components/atoms/CurvedSlider";
-// import CircularSlider from "@fseehawer/react-circular-slider";
+import CircularSlider from "@fseehawer/react-circular-slider";
+import { useDebouncedState } from "~/utils/hooks/useDebouncedState";
 // import CurvedSlider from "react-curved-input";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
@@ -38,24 +39,40 @@ export const Thermostat: FC<IProps> = ({
   if (!s) s = defaultState;
   const [state, setState] = useState<IProps["state"]>(s);
   const [isWaiting, setIsWaiting] = useState<boolean>(false);
+  const [debouncedState, setDebouncedState] = useDebouncedState(s, 500);
+  const [isFirstTime, setIsFirstTime] = useState<boolean>(true);
 
   const handleUpdate = (e: Event, value: number) => {
     console.log(`UPDATING: `, value);
-    if (!handleUpdate)
-      return console.warn("Update handler is not configured for this key!");
     setState(prev => ({ ...prev, targetTemperature: value }));
-    updateHandler({
-      command: {
-        targetTemperature: value,
-      },
-    });
-    setIsWaiting(true);
+    setDebouncedState({ ...state, targetTemperature: value });
   };
 
   const minTemp = state.minTargetTemperature ?? 14;
   const maxTemp = state.maxTargetTemperature ?? 32;
 
   useEffect(() => setIsWaiting(false), [s]);
+
+  useEffect(() => {
+    console.log("Debounced State has been effected: ", debouncedState, state);
+
+    if (isFirstTime) {
+      setIsFirstTime(false);
+      return console.log("It's the first time!");
+    }
+
+    // if (debouncedState === state) return console.log("States are identical!");
+
+    if (!updateHandler)
+      return console.warn(
+        "Update handler is not configured for this thermostat!"
+      );
+
+    updateHandler({
+      command: debouncedState,
+    });
+    setIsWaiting(true);
+  }, [debouncedState]);
 
   return (
     <div className={`Thermostat ${className}`} {...props}>
@@ -80,30 +97,30 @@ export const Thermostat: FC<IProps> = ({
       </div>
       <div className="slider-container">
         {state.targetTemperature && (
-          <div>NOTHING!</div>
+          // <div>NOTHING!</div>
           // https://github.com/akx/react-curved-input/blob/master/src/components/Demo.tsx
           // <CurvedSlider
           //   path="M 50,100 A 50,50 0 1,1 100,50"
           //   onChange={handleUpdate}
           //   className="text-gray-800 dark:text-gray-200"
           // />
-          // <CircularSlider
-          //   // width={280}
-          //   direction={1} // Clockwise
-          //   min={minTemp}
-          //   max={maxTemp}
-          //   initialValue={state.targetTemperature}
-          //   knobColor="#3b82f6"
-          //   progressColorFrom="#38bdf8"
-          //   progressColorTo="#1d4ed8"
-          //   trackColor="#cbd5e1"
-          //   trackSize={8}
-          //   // data={[...Array(21).keys()].map(i => i + 10)} // Data array from 10 to 30
-          //   dataIndex={10} // Initial knob position
-          //   label="℃"
-          //   onChange={value => handleUpdate(new MouseEvent("idk"), value)}
-          //   // onChangeCommitted={}
-          // />
+          <CircularSlider
+            // width={200}
+            direction={1} // Clockwise
+            min={minTemp}
+            max={maxTemp}
+            initialValue={state.targetTemperature}
+            knobColor="#3b82f6"
+            progressColorFrom="#38bdf8"
+            progressColorTo="#1d4ed8"
+            trackColor="#cbd5e1"
+            trackSize={8}
+            // data={[...Array(21).keys()].map(i => i + 10)} // Data array from 10 to 30
+            dataIndex={10} // Initial knob position
+            label="℃"
+            onChange={value => handleUpdate(new MouseEvent("idk"), value)}
+            // onChangeCommitted={}
+          />
           // <CurvedSlider />
           // <Slider
           //   value={state.targetTemperature}
