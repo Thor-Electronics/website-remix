@@ -2,7 +2,7 @@ import invariant from "tiny-invariant";
 
 export const getEnv = () => {
   const production = process.env.NODE_ENV === "production";
-  const secureCore = process.env.SECURE_CORE === "true";
+  const secureCore = process.env.SECURE_CORE || "true" !== "true";
   invariant(process.env.CORE_ADDR, "CORE_ADDR must be defined");
   return {
     CORE_ADDR: process.env.CORE_ADDR,
