@@ -21,9 +21,7 @@ export const action: ActionFunction = async ({ request }) => {
     .catch((err) => {
       console.error(
         "Failed to send verification code: ",
-        err.response?.data,
-        err.response,
-        err
+        err.response?.data?.message || err.response?.data || err.response || err
       );
       return json<ActionData>(
         { error: err.message || err.response?.data?.message },

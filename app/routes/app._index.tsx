@@ -2,7 +2,7 @@ import type { LoaderFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { GroupCard } from "~/components/molecules/GroupCard";
-import { requireSessionToken } from "~/models/session.server";
+import { requireSessionToken, requireUser } from "~/models/session.server";
 import type { Group } from "~/types/Group";
 import { getGroupDetails, getUserGroups } from "~/utils/core.server";
 import { DASHBOARD_PREFIX, useAppLoaderData } from "./app";
@@ -19,12 +19,19 @@ type LoaderData = {
 export const loader: LoaderFunction = async ({ request }) => {
   // console.log("app._index.tsx -- SessionToken, UserGroups, GroupDetails")
   const token = await requireSessionToken(request);
+  const user = await requireUser(request);
   const groups = await getUserGroups(token);
-  if (groups.length === 0) {
+  if ((user.phoneVerifiedAt?.getTime() || 0) <= 1) {
+    console.log(`Redirecting user ${user.id}(${user.phone}) to /verify-phone`);
+    return redirect("/verify-phone");
+  }
+  if (groups?.length === 0) {
     console.log("User has no groups, redirecting to create page");
     return redirect(DASHBOARD_PREFIX + "/groups/new");
   }
-  const group = await getGroupDetails((groups[0] as Group).id, token);
+  console.log("HERE!");
+  const group = await getGroupDetails((groups[0] as Group)?.id, token);
+  console.log("HERE!2");
   return json<LoaderData>({
     groups,
     socketToken: token,

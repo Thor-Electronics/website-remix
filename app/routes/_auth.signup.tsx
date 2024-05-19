@@ -26,7 +26,7 @@ export const action: ActionFunction = async ({ request }) => {
   const name = form.get("name");
   const password = form.get("password");
 
-  let errors = {
+  const errors = {
     phone: typeof phone !== "string" && "Phone must be string!",
     // email: typeof email !== "string" && "Email must be string!",
     // username: typeof username !== "string" && "Username must be string!",
@@ -48,15 +48,15 @@ export const action: ActionFunction = async ({ request }) => {
         request,
         "/app"
       );
-      console.log(message, cookieSession); // todo: set in cookie and show a snack bar message
+      console.log(message, cookieSession.data.userId); // todo: set in cookie and show a snack bar message
       return redirect;
     })
     .catch((err) => {
       const errMsg =
-        err.message ||
         err.response?.data?.message ||
         err.response?.data ||
         err.response ||
+        err.message ||
         err ||
         "Unknown error";
       console.error("ERROR signing up: ", errMsg);

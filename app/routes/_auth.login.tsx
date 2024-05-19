@@ -65,7 +65,7 @@ export const action: ActionFunction = async ({ request }) => {
   // call the core service api
   return api
     .login({ identifier, password })
-    .then(async res => {
+    .then(async (res) => {
       const { user: u, token, message } = res.data;
       const user: User = u;
       let redirectTo = !user.roles ? "/app" : "/panel";
@@ -90,12 +90,12 @@ export const action: ActionFunction = async ({ request }) => {
       // todo: set message on snackbar
       return redirect;
     })
-    .catch(err => {
+    .catch((err) => {
       const errMsg =
-        err.message ||
         err.response?.data?.message ||
         err.response?.data ||
         err.response ||
+        err.message ||
         err ||
         "Unknown error";
       console.error("ERROR Logging in: ", errMsg);

@@ -2,8 +2,11 @@ import invariant from "tiny-invariant";
 
 export const getEnv = () => {
   const production = process.env.NODE_ENV === "production";
-  const secureCore = process.env.SECURE_CORE || "true" === "true";
+  const secureCore = process.env.SECURE_CORE === "false" ? false : true;
   invariant(process.env.CORE_ADDR, "CORE_ADDR must be defined");
+  // console.log(
+  //   `ENV: Using ${secureCore ? "" : "un"}secure core ${process.env.CORE_ADDR}`
+  // );
   return {
     CORE_ADDR: process.env.CORE_ADDR,
     CORE_URL: `${secureCore ? "https" : "http"}://${process.env.CORE_ADDR}`,

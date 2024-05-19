@@ -40,14 +40,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   const user = await requireUser(request); // todo: optimize it by getting the token once? or getAuth to get both token and user?
 
   // if the user needs to verify their phone number
-  if (
-    user.phone &&
-    Date.parse(
-      typeof user.phoneVerifiedAt === "string"
-        ? user.phoneVerifiedAt
-        : user.phoneVerifiedAt!.toString()
-    ) <= 0
-  ) {
+  if (user.phone && (user.phoneVerifiedAt?.getTime() || 0) <= 1) {
     console.log(
       `User ${user.phone}(${user.name}) need to verify their phone. Redirecting them...`
     );
@@ -56,17 +49,18 @@ export const loader: LoaderFunction = async ({ request }) => {
     );
     return await api
       .sendPhoneVerification(token)
-      .then(async res => {
+      .then(async (res) => {
         const { message } = res.data;
         console.log(`Sent phone verification code: `, message);
         return redirect("/verify-phone");
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(
           "Failed to send verification code: ",
-          err.response?.data,
-          err.response,
-          err
+          err.response?.data?.message ||
+            err.response?.data ||
+            err.response ||
+            err
         );
         return json(
           { error: err.message || err.response?.data?.message },
@@ -84,8 +78,8 @@ export const loader: LoaderFunction = async ({ request }) => {
   // console.log(`app.tsx -- ${user.name}(${user.id}) is using the app`)
   const orphanDevices = await api
     .getOrphanDevices(token)
-    .then(data => data)
-    .catch(err => {
+    .then((data) => data)
+    .catch((err) => {
       console.error("Error fetching orphan devices: ", err);
       return [];
     });
