@@ -29,9 +29,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     console.log("User has no groups, redirecting to create page");
     return redirect(DASHBOARD_PREFIX + "/groups/new");
   }
-  console.log("HERE!");
   const group = await getGroupDetails((groups[0] as Group)?.id, token);
-  console.log("HERE!2");
   return json<LoaderData>({
     groups,
     socketToken: token,

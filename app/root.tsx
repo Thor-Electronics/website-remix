@@ -133,54 +133,79 @@ export default function App() {
 }
 
 export const ErrorBoundary: ErrorBoundaryComponent = () => {
-  const error = useRouteError();
-  console.error("root.tsx ERROR: ", error);
+  const err = useRouteError();
+  // console.error("root.tsx ERROR: ", error);
 
-  if (isRouteErrorResponse(error)) {
-    // console.log("Is Route Error Response: ", error)
-    return (
-      <Document title="Oops!">
-        <div
-          className="error-container h-screen error bg-rose-100
-          dark:bg-stone-900 text-rose-600 dark:text-rose-400
-          flex flex-col gap-6 items-center justify-center text-center"
-        >
-          <LogoIcon className="w-32" />
-          <h2 className="text-2xl font-bold">Something Went Wrong!</h2>
-          <p className="font-lg font-semibold">
-            {error.status} | {error.statusText}
-          </p>
-          <p className="text-sm">
-            There was an error loading this page!{" "}
-            {error.data?.message ?? error.data}
-          </p>
-        </div>
-      </Document>
+  let title: string = "Oops!";
+  let heading: string = "Something Went Wrong!";
+  let msg: string = "";
+  const isErrResponse = isRouteErrorResponse(err);
+  const isRuntimeError = err instanceof Error;
+  // console.warn(`[ERROR-${isErrResponse ? 'RESPONSE' : isRuntimeError ? 'RUNTIME' : 'UNKNOWN'}] root.tsx(${isErrResponse ? err.status : err.message}): ${isErrResponse ? JSON.stringify(err.data) : undefined}`, (!isErrResponse && isRuntimeError) ? err.stack : err);
+  if (isErrResponse) {
+    console.warn(
+      `[ERROR-RESPONSE] root.tsx(${err.status}): ${JSON.stringify(err.data)}`
     );
-  }
-
-  let errMsg = "Unknown Error";
-  // TODO: detect error type check
-  if (error && error.message && error.message !== undefined) {
-    errMsg = error.message;
+    title = "Oops!";
+    heading = "Something Failed!";
+    msg = `${err.status} | ${err.statusText}`;
+  } else if (isRuntimeError) {
+    console.warn(`[ERROR-RUNTIME] root.tsx(${err.message}): `, err.stack);
+    title = "Runtime Error!";
+    heading = "Something Went Wrong!";
+    msg = err.message;
+  } else {
+    console.warn(`[ERROR-UNKNOWN] root.tsx: `, err);
+    title = "Unknown Error!";
+    heading = "Some Unknown Error Happened!";
+    msg = "There was an unknown error happened during client-side operations!";
   }
   return (
-    <Document title="Error!">
+    <Document title={title}>
       <div
-        className="error-container h-screen bg-rose-200 dark:bg-slate-900
-        text-rose-600 dark:text-rose-400 flex flex-col gap-6
-        items-center justify-center text-center"
+        className="error-container h-screen error bg-rose-100
+          dark:bg-stone-900 text-rose-600 dark:text-rose-400
+          flex flex-col gap-6 items-center justify-center text-center"
       >
         <LogoIcon className="w-32" />
-        <h1 className="status flex items-center justify-center gap-2 text-3xl font-bold">
-          App Error
-        </h1>
-        <div className="error text-xl font-bold">{errMsg}</div>
-        {/* <pre>{error.message}</pre> */}
-        <Link to="/" className="font-semibold !underline" prefetch="render">
-          Back to home
-        </Link>
+        <h2 className="text-2xl font-bold">{heading}</h2>
+        <p className="font-lg font-semibold">{msg}</p>
+        {isErrResponse && (
+          <p className="text-sm">
+            There was an error loading this page!{" "}
+            {err.data?.message || err.data}
+          </p>
+        )}
+        {isRuntimeError && <pre className="text-sm">{err.stack}</pre>}
       </div>
+      <Link to="/" className="font-semibold !underline" prefetch="render">
+        Back to home
+      </Link>
     </Document>
   );
+
+  // let errMsg = "Unknown Error";
+  // // TODO: detect error type check
+  // if (err && err.message && err.message !== undefined) {
+  //   errMsg = err.message;
+  // }
+  // return (
+  //   <Document title="Unknown Error!">
+  //     <div
+  //       className="error-container h-screen bg-rose-200 dark:bg-slate-900
+  //       text-rose-600 dark:text-rose-400 flex flex-col gap-6
+  //       items-center justify-center text-center"
+  //     >
+  //       <LogoIcon className="w-32" />
+  //       <h1 className="status flex items-center justify-center gap-2 text-3xl font-bold">
+  //         App Error
+  //       </h1>
+  //       <div className="error text-xl font-bold">{errMsg}</div>
+  //       {/* <pre>{error.message}</pre> */}
+  //       <Link to="/" className="font-semibold !underline" prefetch="render">
+  //         Back to home
+  //       </Link>
+  //     </div>
+  //   </Document>
+  // );
 };
