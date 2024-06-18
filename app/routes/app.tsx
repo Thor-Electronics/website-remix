@@ -39,40 +39,40 @@ export const loader: LoaderFunction = async ({ request }) => {
   const user = await requireUser(request); // todo: optimize it by getting the token once? or getAuth to get both token and user?
 
   // if the user needs to verify their phone number
-  if (user.phone && (user.phoneVerifiedAt?.getTime() || 0) <= 1) {
-    console.log(
-      `User ${user.phone}(${user.name}) need to verify their phone. Redirecting them...`
-    );
-    console.log(
-      `Sending phone verification ${user.name}(${user.phone}) ${user.phone}...`
-    );
-    return await api
-      .sendPhoneVerification(token)
-      .then(async (res) => {
-        const { message } = res.data;
-        console.log(`Sent phone verification code: `, message);
-        return redirect("/verify-phone");
-      })
-      .catch((err) => {
-        console.error(
-          "Failed to send verification code: ",
-          err.response?.data?.message ||
-            err.response?.data ||
-            err.response ||
-            err
-        );
-        return json(
-          { error: err.message || err.response?.data?.message },
-          err.response?.status
-        );
-      });
-    // POST /send-phone-verification
-    // const url = new URL(request.url);
-    // return fetch(`${url.origin}/send-phone-verification`, {
-    //   method: "POST",
-    //   headers: { Authorization: `Bearer ${token}` },
-    // });
-  }
+  // if (user.phone && (user.phoneVerifiedAt?.getTime() || 0) <= 1) {
+  //   console.log(
+  //     `User ${user.phone}(${user.name}) need to verify their phone. Redirecting them...`
+  //   );
+  //   console.log(
+  //     `Sending phone verification ${user.name}(${user.phone}) ${user.phone}...`
+  //   );
+  //   return await api
+  //     .sendPhoneVerification(token)
+  //     .then(async (res) => {
+  //       const { message } = res.data;
+  //       console.log(`Sent phone verification code: `, message);
+  //       return redirect("/verify-phone");
+  //     })
+  //     .catch((err) => {
+  //       console.error(
+  //         "Failed to send verification code: ",
+  //         err.response?.data?.message ||
+  //           err.response?.data ||
+  //           err.response ||
+  //           err
+  //       );
+  //       return json(
+  //         { error: err.message || err.response?.data?.message },
+  //         err.response?.status
+  //       );
+  //     });
+  //   // POST /send-phone-verification
+  //   // const url = new URL(request.url);
+  //   // return fetch(`${url.origin}/send-phone-verification`, {
+  //   //   method: "POST",
+  //   //   headers: { Authorization: `Bearer ${token}` },
+  //   // });
+  // }
 
   // console.log(`app.tsx -- ${user.name}(${user.id}) is using the app`)
   const orphanDevices = await api
