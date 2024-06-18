@@ -19,12 +19,12 @@ type LoaderData = {
 export const loader: LoaderFunction = async ({ request }) => {
   // console.log("app._index.tsx -- SessionToken, UserGroups, GroupDetails")
   const token = await requireSessionToken(request);
-  const user = await requireUser(request);
+  // const user = await requireUser(request);
   const groups = await api.getUserGroups(token);
-  if ((user.phoneVerifiedAt?.getTime() || 0) <= 1) {
-    console.log(`Redirecting user ${user.id}(${user.phone}) to /verify-phone`);
-    return redirect("/verify-phone");
-  }
+  // if ((user.phoneVerifiedAt?.getTime() || 0) <= 1) {
+  //   console.log(`Redirecting user ${user.id}(${user.phone}) to /verify-phone`);
+  //   return redirect("/verify-phone");
+  // }
   if (groups?.length === 0) {
     console.log("User has no groups, redirecting to create page");
     return redirect(DASHBOARD_PREFIX + "/groups/new");
