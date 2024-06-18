@@ -4,7 +4,7 @@ import { Link, useLoaderData } from "@remix-run/react";
 import { GroupCard } from "~/components/molecules/GroupCard";
 import { requireSessionToken, requireUser } from "~/models/session.server";
 import type { Group } from "~/types/Group";
-import { getGroupDetails, getUserGroups } from "~/utils/core.server";
+import api from "~/utils/core.server";
 import { DASHBOARD_PREFIX, useAppLoaderData } from "./app";
 import { Alert } from "@mui/material";
 import { TextButton } from "~/components/atoms/Button";
@@ -20,7 +20,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   // console.log("app._index.tsx -- SessionToken, UserGroups, GroupDetails")
   const token = await requireSessionToken(request);
   const user = await requireUser(request);
-  const groups = await getUserGroups(token);
+  const groups = await api.getUserGroups(token);
   if ((user.phoneVerifiedAt?.getTime() || 0) <= 1) {
     console.log(`Redirecting user ${user.id}(${user.phone}) to /verify-phone`);
     return redirect("/verify-phone");
@@ -29,7 +29,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     console.log("User has no groups, redirecting to create page");
     return redirect(DASHBOARD_PREFIX + "/groups/new");
   }
-  const group = await getGroupDetails((groups[0] as Group)?.id, token);
+  const group = await api.getGroupDetails((groups[0] as Group)?.id, token);
   return json<LoaderData>({
     groups,
     socketToken: token,
@@ -47,7 +47,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 export const DashboardIndexRoute = () => {
   const { group, socketToken /*, group: b*/ } = useLoaderData<LoaderData>();
   // todo: Default group from user settings
-  const { orphanDevices, token, user } = useAppLoaderData();
+  const { orphanDevices } = useAppLoaderData();
 
   return (
     <div className="DashboardIndex text-center">

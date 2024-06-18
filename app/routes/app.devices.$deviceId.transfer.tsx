@@ -11,7 +11,7 @@ import type { ActionFunction } from "react-router";
 import invariant from "tiny-invariant";
 import { requireSessionToken } from "~/models/session.server";
 import type { Device } from "~/types/Device";
-import api, { getDeviceDetails } from "~/utils/core.server";
+import api from "~/utils/core.server";
 import { DASHBOARD_PREFIX } from "./app";
 import { TextButton } from "~/components/atoms/Button";
 import { Alert } from "@mui/material";
@@ -23,7 +23,7 @@ type LoaderData = {
 export const loader: LoaderFunction = async ({ request, params }) => {
   const token = await requireSessionToken(request);
   invariant(params.deviceId, "Device ID is required");
-  const device = await getDeviceDetails(params.deviceId, token);
+  const device = await api.getDeviceDetails(params.deviceId, token);
   return json<LoaderData>({ device });
 };
 

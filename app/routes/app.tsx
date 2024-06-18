@@ -4,13 +4,13 @@ import {
   ArrowRightOnRectangleIcon,
   UserCircleIcon,
   CpuChipIcon,
-  MoonIcon,
 } from "@heroicons/react/24/solid";
 import type { LoaderFunction, LinksFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import {
   Link,
   Outlet,
+  isRouteErrorResponse,
   useLoaderData,
   useRouteError,
   useRouteLoaderData,
@@ -23,7 +23,6 @@ import { requireSessionToken, requireUser } from "~/models/session.server";
 import dashboardStyles from "../../styles/dashboard.css";
 import type { User } from "~/types/User";
 import type { ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
-import { IoCarSport } from "react-icons/io5";
 import api from "~/utils/core.server";
 import type { Device } from "~/types/Device";
 
@@ -115,8 +114,29 @@ export const Dashboard = () => {
 };
 
 export const ErrorBoundary: ErrorBoundaryComponent = () => {
-  const error = useRouteError();
-  console.error("Error in dashboard: ", error);
+  const err = useRouteError();
+  // console.warn("app.tsx error in dashboard: ", err);
+
+  let title: string = "Oops!";
+  let msg: string = "Something went wrong!";
+  const isErrResponse = isRouteErrorResponse(err);
+  const isRuntimeError = err instanceof Error;
+
+  if (isErrResponse) {
+    console.warn(
+      `[ERROR-RESPONSE] app.tsx(${err.status}): ${JSON.stringify(err.data)}`
+    );
+    title = "Oops!";
+    msg = `${err.status} | ${err.statusText} | ${err.data.text}`;
+  } else if (isRuntimeError) {
+    console.warn(`[ERROR-RUNTIME] app.tsx(${err.message}): `, err.stack);
+    title = "Runtime Error!";
+    msg = err.message;
+  } else {
+    console.warn(`[ERROR-UNKNOWN] app.tsx: `, err);
+    title = "Unknown Error!";
+    msg = "There was an unknown error happened during client-side operations!";
+  }
 
   return (
     <div
@@ -126,12 +146,9 @@ export const ErrorBoundary: ErrorBoundaryComponent = () => {
     >
       <LogoIcon className="w-24" />
       <h1 className="text-lg font-bold mb-4">Error Loading Dashboard!</h1>
-      <p className="font-lg font-semibold">
-        {error.status} | {error.statusText}
-      </p>
+      <p className="font-lg font-semibold">{title}</p>
       <p className="error">
-        Something happened when we tried to show your dashboard.{" "}
-        {error.data?.message ?? error.data}
+        Something happened when we tried to show your dashboard. {msg}
       </p>
       <Link
         to={DASHBOARD_PREFIX}

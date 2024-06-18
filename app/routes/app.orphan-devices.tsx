@@ -3,7 +3,7 @@ import { DASHBOARD_PREFIX, useAppLoaderData } from "./app";
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { requireSessionToken } from "~/models/session.server";
-import api, { getUserGroups } from "~/utils/core.server";
+import api from "~/utils/core.server";
 import { Form, Link, useActionData, useLoaderData } from "@remix-run/react";
 import { TextButton } from "~/components/atoms/Button";
 import invariant from "tiny-invariant";
@@ -16,7 +16,7 @@ type LoaderData = {
 
 export const loader: LoaderFunction = async ({ request }) => {
   const token = await requireSessionToken(request);
-  const groups = await getUserGroups(token);
+  const groups = await api.getUserGroups(token);
   return json<LoaderData>({ token, groups });
 };
 

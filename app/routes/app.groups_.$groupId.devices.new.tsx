@@ -13,7 +13,7 @@ import type { ServerDeviceTypes } from "~/types/DeviceType";
 import { DeviceType } from "~/types/DeviceType";
 import type { Group } from "~/types/Group";
 import type { User } from "~/types/User";
-import api, { getDeviceTypes, getGroupDetails } from "~/utils/core.server";
+import api from "~/utils/core.server";
 import { DASHBOARD_PREFIX } from "./app";
 import Button from "~/components/atoms/Button";
 
@@ -37,15 +37,15 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const user = await requireUser(request);
   const token = await requireSessionToken(request);
   invariant(params.groupId, "Invalid Group ID");
-  const group = await getGroupDetails(params.groupId, token);
-  const deviceTypes = await getDeviceTypes(token);
+  const group = await api.getGroupDetails(params.groupId, token);
+  const deviceTypes = await api.getDeviceTypes(token);
   return json<LoaderData>({ user, group, deviceTypes });
 };
 
 export const action: ActionFunction = async ({ request, params }) => {
   const token = await requireSessionToken(request);
   invariant(params.groupId, "Invalid Group ID");
-  const group = (await getGroupDetails(params.groupId, token)) as Group;
+  const group = (await api.getGroupDetails(params.groupId, token)) as Group;
 
   const form = await request.formData();
   const name = form.get("name");

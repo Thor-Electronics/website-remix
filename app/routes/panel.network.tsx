@@ -10,7 +10,7 @@ import { EventLog, parseEventLog } from "~/types/EventLog";
 import { parseHubContainer, parseClient } from "~/types/Hub";
 import type { Client, HubContainer } from "~/types/Hub";
 import { Message, Signal } from "~/types/Message";
-import { adminGetNetwork } from "~/utils/core.server";
+import api from "~/utils/core.server";
 
 type LoaderData = {
   hubs: HubContainer[];
@@ -19,7 +19,7 @@ type LoaderData = {
 
 export const loader: LoaderFunction = async ({ request }) => {
   const token = await requireSessionToken(request);
-  const { hubs } = await adminGetNetwork(token);
+  const { hubs } = await api.adminGetNetwork(token);
   return json<LoaderData>({
     hubs: hubs.map((h: any) => parseHubContainer(h)),
     socketToken: token,
@@ -34,7 +34,7 @@ export const AdminNetwork = () => {
       ENV.CORE_ADDR
     }/api/v1/admin/network/logs`,
     {
-      onOpen: e => {
+      onOpen: (e) => {
         console.log(`Supervision WS Connected: `, e);
         const authSignal: Message = {
           signal: Signal.AUTHENTICATE,
@@ -46,9 +46,9 @@ export const AdminNetwork = () => {
         sendMessage(JSON.stringify(authSignal));
         console.log(`Sent the authentication signal with payload`);
       },
-      onClose: e => console.warn("Supervision WS Closed: ", e),
-      onError: e => console.warn("Supervision WS Error: ", e),
-      onMessage: e => {
+      onClose: (e) => console.warn("Supervision WS Closed: ", e),
+      onError: (e) => console.warn("Supervision WS Error: ", e),
+      onMessage: (e) => {
         const msg = JSON.parse(e.data) as Message;
         if (msg.message) {
           console.log(`🔽 MESSAGE: `, msg.message);
@@ -84,7 +84,7 @@ export const AdminNetwork = () => {
         }
       },
       share: true,
-      shouldReconnect: e => true,
+      shouldReconnect: (e) => true,
     }
   );
 
@@ -93,7 +93,7 @@ export const AdminNetwork = () => {
 
   return (
     <div className="hubs">
-      {hubs.map(h => (
+      {hubs.map((h) => (
         <div
           className="HubContainer card font-mono text-xs flex flex-col gap-2"
           key={h.name}
@@ -113,13 +113,13 @@ export const AdminNetwork = () => {
               bg-slate-700 dark:bg-slate-900 text-slate-500
               dark:text-slate-700 p-3 rounded-lg"
           >
-            {logs.map(l => (
+            {logs.map((l) => (
               <div key={l.time?.toUTCString()}>{l.text}</div>
             ))}
             Some text
           </div>
           <div className="flex gap-2 flex-wrap">
-            {h.deviceHubs.map(dh => (
+            {h.deviceHubs.map((dh) => (
               <Tooltip
                 title={<div>Group ID: {dh.groupId}</div>}
                 key={dh.groupId}
@@ -127,13 +127,13 @@ export const AdminNetwork = () => {
                 <div className="DeviceHub card !p-3 !bg-slate-300 dark:!bg-slate-700 flex flex-col gap-1">
                   {dh.name}
                   <div className="clients flex gap-1">
-                    {dh.userClients.map(uc => (
+                    {dh.userClients.map((uc) => (
                       <ClientComponent
                         data={parseClient(uc)}
                         key={uc.groupId}
                       />
                     ))}
-                    {dh.deviceClients.map(dc => (
+                    {dh.deviceClients.map((dc) => (
                       <ClientComponent
                         data={parseClient(dc)}
                         key={dc.groupId}

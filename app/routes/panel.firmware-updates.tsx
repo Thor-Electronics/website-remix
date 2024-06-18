@@ -14,7 +14,7 @@ import { getSessionToken } from "~/models/session.server";
 import type { Firmware } from "~/types/Firmware";
 import { refineFirmware } from "~/types/Firmware";
 import readableFileSize from "~/utils/bytes";
-import { adminGetFirmwareUpdates } from "~/utils/core.server";
+import api from "~/utils/core.server";
 import { timeAgo } from "~/utils/time";
 import { PANEL_PREFIX } from "./panel";
 
@@ -26,14 +26,16 @@ export const FIRMWARE_DOWNLOAD_BASE_URL =
   "https://thor-firmwares.s3.ir-thr-at1.arvanstorage.ir";
 
 export const loader: LoaderFunction = async ({ request }) => {
-  const fws = await adminGetFirmwareUpdates((await getSessionToken(request))!);
+  const fws = await api.adminGetFirmwareUpdates(
+    (await getSessionToken(request))!
+  );
   return json<LoaderData>({ firmwareUpdates: fws });
 };
 
 export const AdminOTAUpdates = () => {
   const { firmwareUpdates: fws } = useLoaderData<LoaderData>();
 
-  const refinedFws = fws.map(f => refineFirmware(f));
+  const refinedFws = fws.map((f) => refineFirmware(f));
   // console.log("REFINED FIRMWARE: ", refinedFws);
 
   return (
@@ -65,7 +67,7 @@ const gridColumns: GridColDef[] = [
   {
     field: "actions",
     headerName: "Actions",
-    renderCell: params => (
+    renderCell: (params) => (
       <div className="actions flex gap-1">
         <Link to={`${PANEL_PREFIX}/firmware-updates/${params.row.id}/delete`}>
           <IconButton
@@ -122,7 +124,7 @@ const gridColumns: GridColDef[] = [
     headerName: "Version",
     align: "center",
     width: 125,
-    renderCell: params => {
+    renderCell: (params) => {
       const { dist, str } = params.value;
       return (
         <VersionBadge className={dist} title={dist || "stable"}>
@@ -136,7 +138,7 @@ const gridColumns: GridColDef[] = [
     headerName: "Size",
     align: "center",
     width: 125,
-    renderCell: params => (
+    renderCell: (params) => (
       <span
         className="px-1 rounded-md font-mono border bg-slate-200
           dark:bg-slate-700 text-slate-500 border-slate-400
@@ -151,13 +153,13 @@ const gridColumns: GridColDef[] = [
     field: "created_at",
     headerName: "Release Date",
     width: 150,
-    valueGetter: params => timeAgo(new Date(params.value)),
+    valueGetter: (params) => timeAgo(new Date(params.value)),
   },
   {
     field: "updated_at",
     headerName: "Modification Date",
     width: 200,
-    valueGetter: params => timeAgo(new Date(params.value)),
+    valueGetter: (params) => timeAgo(new Date(params.value)),
   },
   {
     field: "description",
