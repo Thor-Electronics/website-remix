@@ -65,7 +65,7 @@ export const GroupCard = ({
       ENV.CORE_ADDR
     }/api/v1/control/manage/${b.id}`,
     {
-      onOpen: e => {
+      onOpen: (e) => {
         console.log("WS Connected: ", e);
         const authSignal: Message = {
           signal: Signal.AUTHENTICATE,
@@ -77,15 +77,16 @@ export const GroupCard = ({
         sendMessage(JSON.stringify(authSignal));
         console.log("Sent the authentication signal with payload");
       },
-      onClose: e => console.warn("WS Closed: ", e),
-      onError: e => console.warn("WS ERROR: ", e),
-      onMessage: e => {
+      onClose: (e) => console.warn("WS Closed: ", e),
+      onError: (e) => console.warn("WS ERROR: ", e),
+      onMessage: (e) => {
         const msg = JSON.parse(e.data) as Message;
         if (msg.message) console.log("🔽 MESSAGE: ", msg.message);
         if (msg.update && msg.update !== undefined) {
-          setGroup(prev => ({
+          console.log("Has update", msg);
+          setGroup((prev) => ({
             ...prev,
-            devices: prev.devices?.map(d =>
+            devices: prev.devices?.map((d) =>
               d.id === msg.id
                 ? {
                     ...d,
@@ -104,9 +105,9 @@ export const GroupCard = ({
 
           /* Initial Data */
           if (msg.signal === Signal.INITIAL_DATA) {
-            setGroup(prev => ({
+            setGroup((prev) => ({
               ...prev,
-              devices: prev.devices?.map(d =>
+              devices: prev.devices?.map((d) =>
                 msg.payload?.onlineDevices?.includes(d.id)
                   ? { ...d, isOnline: true }
                   : d
@@ -119,9 +120,9 @@ export const GroupCard = ({
             msg.signal === Signal.DEVICE_CONNECTED ||
             msg.signal === Signal.DEVICE_DISCONNECTED
           ) {
-            setGroup(prev => ({
+            setGroup((prev) => ({
               ...prev,
-              devices: prev.devices?.map(d =>
+              devices: prev.devices?.map((d) =>
                 d.id === msg.id
                   ? {
                       ...d,
@@ -137,9 +138,9 @@ export const GroupCard = ({
           if (msg.signal === Signal.REFRESH_LATENCIES) {
             if (!msg.payload) return;
             if (msg.payload.devices) {
-              setGroup(prev => ({
+              setGroup((prev) => ({
                 ...prev,
-                devices: prev.devices?.map(d =>
+                devices: prev.devices?.map((d) =>
                   d.id in msg.payload?.devices!
                     ? { ...d, latency: msg.payload?.devices![d.id] }
                     : d
@@ -150,7 +151,7 @@ export const GroupCard = ({
         }
       },
       share: true,
-      shouldReconnect: e => true,
+      shouldReconnect: (e) => true,
     }
   );
 
@@ -203,7 +204,7 @@ export const GroupCard = ({
       <div className="body flex flex-col gap-2 text-sm">
         {group.devices && (
           <div className="devices">
-            {group.devices?.map(d => {
+            {group.devices?.map((d) => {
               switch (d.type) {
                 case DeviceType.Key1:
                   // return

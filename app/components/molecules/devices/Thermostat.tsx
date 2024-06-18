@@ -27,7 +27,6 @@ export const Thermostat: FC<IProps> = ({
   updateHandler,
   ...props
 }: IProps) => {
-  // console.log("STATE: ", passedState, !passedState);
   const defaultState = {
     battery: 83,
     power: 1, // ON
@@ -46,9 +45,11 @@ export const Thermostat: FC<IProps> = ({
   );
   const [isFirstTime, setIsFirstTime] = useState<boolean>(true);
 
+  // console.log("STATE: ", passedState.temperature, state.temperature);
+
   const handleUpdate = (value: number) => {
     console.log(`UPDATING: `, value);
-    setState(prev => ({ ...prev, targetTemperature: value }));
+    setState((prev) => ({ ...prev, targetTemperature: value }));
     setDebouncedState({ ...state, targetTemperature: value });
   };
 
@@ -92,17 +93,17 @@ export const Thermostat: FC<IProps> = ({
             className={`temperature text-xl ${iconContainerClassNames} gap-3`}
           >
             <BsThermometerHalf className={`w-8 h-8`} />
-            {state.temperature}℃
+            {passedState.temperature}℃
           </span>
         )}
-        {state.humidity && (
+        {passedState.humidity && (
           <span className={`humidity text-xl ${iconContainerClassNames} gap-3`}>
             <BsMoisture className={`w-8 h-8`} />
-            {state.humidity}%
+            {passedState.humidity}%
           </span>
         )}
       </div>
-      <div className="slider-container mt-4">
+      <div className="slider-container mt-4 mx-auto flex justify-center">
         {state.targetTemperature && (
           // <div>NOTHING!</div>
           // https://github.com/akx/react-curved-input/blob/master/src/components/Demo.tsx
@@ -122,7 +123,7 @@ export const Thermostat: FC<IProps> = ({
             progressColorTo="#1d4ed8"
             trackColor="#cbd5e1"
             trackSize={8}
-            data={[...Array(maxTemp - minTemp).keys()].map(i => i + minTemp)} // Data array from 10 to 30
+            data={[...Array(maxTemp - minTemp).keys()].map((i) => i + minTemp)} // Data array from 10 to 30
             dataIndex={state.targetTemperature - minTemp} // Initial knob position
             label="℃"
             onChange={handleUpdate}
