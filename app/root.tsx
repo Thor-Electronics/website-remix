@@ -18,6 +18,7 @@ import { getEnv } from "./env.server";
 import type { ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
 import { useEffect, useState } from "react";
 import Document from "./Document";
+import Maintenance from "./components/organisms/Maintenance";
 // import { useSWEffect } from "@remix-pwa/sw";
 
 // TODO: https://www.wking.dev/library/remix-route-helpers-a-better-way-to-use-parent-data
@@ -122,6 +123,7 @@ export default function App() {
 
   return (
     <Document className={theme}>
+      <Maintenance />
       <Outlet />
       <script
         dangerouslySetInnerHTML={{
