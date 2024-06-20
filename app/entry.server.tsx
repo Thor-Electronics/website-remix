@@ -5,7 +5,13 @@ import { RemixServer } from "@remix-run/react";
 import { renderToPipeableStream } from "react-dom/server";
 import { getEnv } from "./env.server";
 import * as Sentry from "@sentry/remix";
+import packageJson from "../package.json";
 // import { db } from "~/utils/db.server";
+
+console.log(
+  `[SERVER] Initializing entry server(remix:${packageJson.dependencies["@remix-run/node"]}, core:${process.env.CORE_ADDR})...`
+);
+// console.log(`[SERVER] `)
 
 const ABORT_DELAY = 5000;
 global.ENV = getEnv();
