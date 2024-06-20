@@ -28,6 +28,7 @@ import {
 import adminStyles from "../../styles/admin.css";
 import { requireUser } from "~/models/session.server";
 import type { ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
+import Maintenance from "~/components/organisms/Maintenance";
 
 type LoaderData = {
   user: User;
@@ -76,6 +77,7 @@ export const Admin = () => {
       xl:pl-36"
     >
       <FixedNav items={userNavItems} darkModeToggle />
+      <Maintenance />
       <Outlet />
       <Copyright />
     </div>

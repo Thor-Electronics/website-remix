@@ -4,6 +4,7 @@ import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useNavigation } from "@remix-run/react";
 // import { getClientIPAddress } from "remix-utils"
 import { TextButton } from "~/components/atoms/Button";
+import Maintenance from "~/components/organisms/Maintenance";
 import { createCookieSession, getUserId } from "~/models/session.server";
 import api from "~/utils/core.server";
 
@@ -83,6 +84,7 @@ export const Signup = () => {
       method="POST"
       // reloadDocument
     >
+      <Maintenance />
       <h1 className="title font-bold text-2xl text-center">SIGNUP</h1>
       {actionData?.errors?.message && (
         <Alert severity="error">{actionData.errors.message}</Alert>

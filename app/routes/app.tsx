@@ -25,6 +25,7 @@ import type { User } from "~/types/User";
 import type { ErrorBoundaryComponent } from "@remix-run/react/dist/routeModules";
 import api from "~/utils/core.server";
 import type { Device } from "~/types/Device";
+import Maintenance from "~/components/organisms/Maintenance";
 
 export const DASHBOARD_PREFIX = "/app";
 
@@ -107,6 +108,7 @@ export const Dashboard = () => {
       xl:pl-36"
     >
       <DashboardNav user={user as User} items={navItems} />
+      <Maintenance />
       <Outlet />
       <Copyright />
     </div>

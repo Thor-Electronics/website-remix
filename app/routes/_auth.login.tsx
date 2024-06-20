@@ -2,6 +2,7 @@ import type { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useNavigation } from "@remix-run/react";
 import { TextButton } from "~/components/atoms/Button";
+import Maintenance from "~/components/organisms/Maintenance";
 import { createCookieSession, getUserId } from "~/models/session.server";
 import cookieSessionStorage from "~/session/cookie.session.server";
 import type { User } from "~/types/User";
@@ -116,6 +117,7 @@ export const Login = () => {
       method="POST"
       // reloadDocument
     >
+      <Maintenance />
       <h1 className="title font-bold text-2xl text-center">LOGIN</h1>
       <div className="inputs flex flex-col gap-4">
         <label className="label">

@@ -21,7 +21,7 @@ const Maintenance = () => {
         ((totalDuration - timeDiff) / totalDuration) * 100
       );
       setPercentage(newPercentage);
-      console.log("Percentage: ", newPercentage);
+      // console.log("Percentage: ", newPercentage);
     }, 1000);
 
     return () => clearInterval(interval);
@@ -30,8 +30,9 @@ const Maintenance = () => {
   return (
     <div className="" dir="rtl">
       {/* flex flex-col items-center justify-center h-screen bg-gray-100 */}
-      <div className="p-2 border-2 border-yellow-500 border-dashed rounded-lg moving-border">
-        <h3 className="text-lg flex flex-row justify-center text-center gap-2 animate-pulse">
+      {/* <div className="h-4 bg-zebra animate-move-zebra"></div> */}
+      <div className="p-2 bg-zebra animate-move-zebra flex items-center justify-center rounded-xl shadow-md">
+        <h3 className="flex flex-row justify-center items-center text-center gap-2 /animate-pulse bg-white dark:bg-slate-800 rounded-lg p-1">
           🚀{percentage.toFixed(2)}% | درحال ارتقاء زیرساخت هستیم! از شکیبایی
           شما سپاسگزاریم!🙏🏻
           {/* پوزش ما را بابت اختلال به وجود آمده به خاطر سیل استقبال انبوه شما
@@ -54,7 +55,7 @@ const Maintenance = () => {
             جزئیات فرایند
           </Dialog.Title>
           <Dialog.Description className="mb-4">
-            شبکه ابری اینترنت اشیاء ثور، اخیرا با هجوم انبوه کاربران جدید مواجه
+            شبکه ابری اینترنت اشیاء THOR، اخیرا با هجوم انبوه کاربران جدید مواجه
             شده و ما درحال توسعه و ارتقاء زیرساخت های شبکه سراسری هستیم تا
             بتوانیم پاسخگوی این حجم از دستگاه های جدید باشیم. پیشاپیش قدردان
             بردباری شما هستیم.
