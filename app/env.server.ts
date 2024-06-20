@@ -8,7 +8,7 @@ export const getEnv = () => {
   const secureCore = process.env.SECURE_CORE === "false" ? false : true;
   invariant(process.env.CORE_ADDR, "CORE_ADDR must be defined");
   console.log(
-    `ENV: Using ${secureCore ? "" : "un"}secure core ${process.env.CORE_ADDR}`
+    `[ENV] Using ${secureCore ? "" : "un"}secure core ${process.env.CORE_ADDR}`
   );
   return {
     CORE_ADDR: process.env.CORE_ADDR,
