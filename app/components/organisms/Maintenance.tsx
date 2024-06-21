@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Dialog } from "@headlessui/react";
-import { format } from "date-fns";
 import { TextButton } from "../atoms/Button";
 
 // Pass props: Target Time, Message, Description Children
 const Maintenance = () => {
-  // : React.FC
   const [percentage, setPercentage] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
 

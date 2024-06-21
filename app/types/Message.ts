@@ -1,20 +1,21 @@
 export type Message = {
-  ok?: boolean
-  update?: object
-  command?: object
-  signal?: Signal
-  message?: string
+  ok?: boolean;
+  update?: object;
+  command?: object;
+  signal?: Signal;
+  message?: string;
   payload?: {
-    onlineDevices?: string[] // initial client data
-    token?: string // authentication signal message
-    devices?: { [key: string]: number } // pings?
-    users?: { [key: string]: number } // pings?
-  }
-  id: string
-}
+    onlineDevices?: string[]; // initial client data
+    token?: string; // authentication signal message
+    devices?: { [key: string]: number }; // pings?
+    users?: { [key: string]: number }; // pings?
+    logs?: { data: []; capacity: number; head: number };
+  };
+  id: string;
+};
 
 // Contains a command or signal
-export type CommandMessage = Pick<Message, "command" | "signal" | "payload">
+export type CommandMessage = Pick<Message, "command" | "signal" | "payload">;
 
 export enum Signal {
   DEVICE_CONNECTED = "DEVICE_CONNECTED",
@@ -27,4 +28,9 @@ export enum Signal {
   AUTHENTICATE = "AUTHENTICATE",
   REFRESH_LATENCIES = "REFRESH_LATENCIES",
   LOGOUT = "LOGOUT",
+
+  // Supervision
+  HUB_CREATED = "HUB_CREATED",
+  HUB_TERMINATED = "HUB_TERMINATED",
+  HUB_ACTIVITY = "HUB_ACTIVITY",
 }
