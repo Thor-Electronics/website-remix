@@ -13,7 +13,7 @@ import {
   UsersIcon,
 } from "@heroicons/react/24/solid";
 import type { LinksFunction, LoaderFunction } from "@remix-run/node";
-import { json, Response } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { Link, Outlet, useLoaderData, useRouteError } from "@remix-run/react";
 import { Copyright } from "~/components/atoms/Copyright";
 import { LogoIcon } from "~/components/atoms/LogoIcon";
@@ -78,6 +78,7 @@ export const Admin = () => {
     >
       <FixedNav items={userNavItems} darkModeToggle />
       <Maintenance />
+      <div className="h-2"></div>
       <Outlet />
       <Copyright />
     </div>

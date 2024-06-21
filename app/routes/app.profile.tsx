@@ -7,10 +7,10 @@ import {
   UserCircleIcon,
 } from "@heroicons/react/24/solid";
 import type { ActionFunction, LoaderFunction } from "@remix-run/node";
-import { Response, json } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { Form, Link, useLoaderData, useNavigation } from "@remix-run/react";
 import Badge from "~/components/atoms/Badge";
-import { IconButton, TextButton } from "~/components/atoms/Button";
+import { TextButton } from "~/components/atoms/Button"; // IconButton
 import { requireUser } from "~/models/session.server";
 import type { User } from "~/types/User";
 
@@ -55,7 +55,7 @@ export default function DashboardProfile() {
         {u.roles && (
           <div
             className="roles bg-teal-500 dark:bg-teal-600 text-white p-0.5 rounded-full"
-            title={u.roles.map(r => r.name).join(", ")}
+            title={u.roles.map((r) => r.name).join(", ")}
           >
             <UserCircleIcon className="w-6" />
           </div>
@@ -137,7 +137,7 @@ export default function DashboardProfile() {
       </div>
       {u.roles && (
         <div className="roles text-xs">
-          {u.roles.map(r => (
+          {u.roles.map((r) => (
             <span
               key={r.name}
               className="role bg-teal-500 dark:bg-teal-600 text-white rounded-md py-0.5 px-2 flex items-center gap-1"
