@@ -108,7 +108,7 @@ export const Dashboard = () => {
       xl:pl-36"
     >
       <DashboardNav user={user as User} items={navItems} />
-      <Maintenance />
+      {/* <Maintenance /> */}
       <Outlet />
       <Copyright />
     </div>

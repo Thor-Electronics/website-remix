@@ -51,11 +51,11 @@ export const links: LinksFunction = () => [
 export const generateNavItemsBasedOnUserPermission = (
   permissions: Permission[]
 ): FixedNavItem[] => {
-  return initialAdminNavItems.map((i) => {
+  return initialAdminNavItems.map(i => {
     if (!i.permission) return i;
     let isAllowed = false;
     const allow = () => (isAllowed = true);
-    permissions.forEach((p) =>
+    permissions.forEach(p =>
       p.context === i.permission?.context ? allow() : null
     );
     return isAllowed ? i : ({} as FixedNavItem);
@@ -77,7 +77,7 @@ export const Admin = () => {
       xl:pl-36"
     >
       <FixedNav items={userNavItems} darkModeToggle />
-      <Maintenance />
+      {/* <Maintenance /> */}
       <div className="h-2"></div>
       <Outlet />
       <Copyright />

@@ -84,7 +84,7 @@ export const Signup = () => {
       method="POST"
       // reloadDocument
     >
-      <Maintenance />
+      {/* <Maintenance /> */}
       <h1 className="title font-bold text-2xl text-center">SIGNUP</h1>
       {actionData?.errors?.message && (
         <Alert severity="error">{actionData.errors.message}</Alert>

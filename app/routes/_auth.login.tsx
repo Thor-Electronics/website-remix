@@ -117,7 +117,7 @@ export const Login = () => {
       method="POST"
       // reloadDocument
     >
-      <Maintenance />
+      {/* <Maintenance /> */}
       <h1 className="title font-bold text-2xl text-center">LOGIN</h1>
       <div className="inputs flex flex-col gap-4">
         <label className="label">
