@@ -42,14 +42,14 @@ export const SimpleDeviceCard = ({
   updateHandler: updateHandler,
   ...props
 }: ISimpleDeviceCardProps) => {
-  const handleControlUpdate: DeviceControlPanelStateUpdateHandler = (cmd) => {
+  const handleControlUpdate: DeviceControlPanelStateUpdateHandler = cmd => {
     if (!updateHandler) return false;
     // Attach ID to the command before sending it to the server
     return updateHandler({ ...cmd, id: d.id });
   };
 
   const details = deviceDetails[d.type];
-  const ControlPanel = details.controller;
+  const ControlPanel = details?.controller;
 
   if (d.latency) d.latency = Math.floor(d.latency / 20);
 
@@ -86,11 +86,13 @@ export const SimpleDeviceCard = ({
       </div>
 
       <div className="controller-container flex-grow">
-        <ControlPanel
-          type={d.type}
-          state={d.state}
-          updateHandler={handleControlUpdate}
-        />
+        {!!ControlPanel && (
+          <ControlPanel
+            type={d.type}
+            state={d.state}
+            updateHandler={handleControlUpdate}
+          />
+        )}
       </div>
 
       <div className="details //auto-hide">
