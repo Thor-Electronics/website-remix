@@ -26,7 +26,6 @@ import {
   Tooltip,
 } from "@mui/material";
 import type { GridColDef } from "@mui/x-data-grid";
-import { DataGrid } from "@mui/x-data-grid";
 import { json, type LoaderFunction } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import axios from "axios";
@@ -37,6 +36,9 @@ import type { Device } from "~/types/Device";
 import { type User } from "~/types/User";
 import api from "~/utils/core.server";
 import { timeAgo } from "~/utils/time";
+
+import { AgGridReact } from "ag-grid-react"; // React Data Grid Component
+import { ColDef } from "ag-grid-community";
 
 type LoaderData = {
   user: User;
@@ -96,7 +98,7 @@ export const ManageDevices = () => {
       .delete(`${ENV.CORE_URL}/api/v1/devices/${deleteId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then((res) => {
+      .then(res => {
         console.log("Device was deleted");
         alert(`Device(${deleteId}) was deleted successfully`);
         closeDeleteDialog();
@@ -113,12 +115,12 @@ export const ManageDevices = () => {
         { message: JSON.parse(e.currentTarget.message.value) },
         { headers: { Authorization: `Bearer ${token}` } }
       )
-      .then((res) => {
+      .then(res => {
         console.log("Message Sent to Device: ", res);
         alert(`Server: ${JSON.stringify(res.data)}`);
         setMsgErr(JSON.stringify(res.data, null, 2));
       })
-      .catch((err) => {
+      .catch(err => {
         const errMsg =
           err.message ??
           err.response?.data?.message ??
@@ -137,11 +139,11 @@ export const ManageDevices = () => {
       .get(`${ENV.CORE_URL}/api/v1/statistics/logs/${logsId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then((res) => {
+      .then(res => {
         console.log(`Got device(${logsId}) logs from the server`, res.data);
         setLogsContent(res.data);
       })
-      .catch((err) => {
+      .catch(err => {
         const errMsg =
           err.message ??
           err.response?.data?.message ??
@@ -170,17 +172,26 @@ export const ManageDevices = () => {
     onLogsClose: closeLogsDialog,
   };
 
+  const [rowData, setRowData] = useState<Device[]>(devices);
+  const [colDefs, setColDefs] = useState<ColDef[]>(
+    generateAGGridColumns(deviceOptions)
+  );
+
   return (
     <div className="ManageDevices admin-page">
       <h2 className="page-title">Device Management</h2>
-      <div className="data-container">
-        <DataGrid
+      <div
+        className="data-container ag-theme-quartz-dark"
+        style={{ height: "calc(100vh - 120px)" }}
+      >
+        <AgGridReact rowData={rowData} columnDefs={colDefs} />
+        {/* <DataGrid
           rows={devices}
           columns={generateGridColumns(deviceOptions)}
           autoHeight
           // checkboxSelection={isUserAllowedToMutate}
           // isRowSelectable={() => true}
-        />
+        /> */}
       </div>
 
       {/* Edit Device Dialog */}
@@ -370,7 +381,187 @@ export const ManageDevices = () => {
   );
 };
 
-const generateGridColumns = (options: {
+const generateAGGridColumns = (options: {
+  // todo: create a type for it!
+  edit: boolean;
+  onEdit: (dId: string) => any;
+  onEditClose: () => any;
+  delete: boolean;
+  onDelete: (dId: string) => any;
+  onDeleteClose: () => any;
+  message: boolean;
+  onMessage: (dId: string) => any;
+  onMessageClose: () => any;
+  logs: boolean;
+  onLogs: (dId: string) => any;
+  onLogsClose: () => any;
+}): ColDef[] => [
+  {
+    field: "action",
+    headerName: "",
+    width: 60,
+    cellRenderer: "optionsMenuRenderer",
+    cellRendererParams: {
+      options: [
+        {
+          title: "Edit",
+          icon: <PencilIcon className="h-4 w-4" />,
+          onClick: (dId: string) => {
+            console.log("Editing: ", dId);
+            options.onEdit(dId);
+          },
+        },
+        {
+          title: "Delete",
+          icon: <TrashIcon className="h-4 w-4" />,
+          onClick: (dId: string) => {
+            console.log("Deleting: ", dId);
+            options.onDelete(dId);
+          },
+        },
+        {
+          title: "Send Message",
+          icon: <PaperAirplaneIcon className="h-4 w-4" />,
+          onClick: (dId: string) => {
+            console.log("Preparing to send message to: ", dId);
+            options.onMessage(dId);
+          },
+        },
+        {
+          title: "View Logs",
+          icon: <DocumentTextIcon className="h-4 w-4" />,
+          onClick: (dId: string) => {
+            console.log("Preparing to get logs of device: ", dId);
+            options.onLogs(dId);
+          },
+        },
+      ],
+    },
+  },
+  {
+    field: "id",
+    headerName: "ID",
+    width: 215,
+    cellClass: "text-xs font-mono",
+  },
+  {
+    field: "cpuId",
+    headerName: "CPU ID",
+    width: 100,
+    cellClass: "text-xs font-mono font-semibold",
+  },
+  {
+    field: "chip",
+    headerName: "Chip",
+    width: 100,
+    cellClass: "text-xs font-mono font-semibold",
+  },
+  { field: "type", headerName: "Type", width: 150 },
+  { field: "name", headerName: "Name", width: 200 },
+  {
+    field: "user",
+    headerName: "User",
+    width: 125,
+    cellRenderer: ({ data }: { data: RowData }) => {
+      const row = data;
+      return row.user ? (
+        <Tooltip
+          title={
+            <div className="font-mono">
+              <div>ID: {row.user._id}</div>
+              <div>Name: {row.user.name}</div>
+              <div>
+                Phone: {row.user.phone}(
+                {Date.parse(row.user.phoneVerifiedAt) > 0 ? "" : "not "}
+                verified)
+              </div>
+              <div>
+                Email: {row.user.email}(
+                {Date.parse(row.user.emailVerifiedAt) > 0 ? "" : "not "}
+                verified)
+              </div>
+              <div>Username: {row.user.username}</div>
+              {row.user.roleIds && <div>role IDs: {row.user.roleIds}</div>}
+              {row.user.permissionIds && (
+                <div>permission IDs: {row.user.permissionIds}</div>
+              )}
+              <div>Created At: {timeAgo(new Date(row.user.created_at))}</div>
+              <div>Updated At: {timeAgo(new Date(row.user.created_at))}</div>
+            </div>
+          }
+        >
+          <div
+            className="text-xs flex flex-row items-center
+            justify-center gap-1 overflow-ellipsis text-sky-700
+            dark:text-sky-300"
+          >
+            <UserIcon className="w-4 h-4" />
+            {row.user.name || row.user.phone || row.user.email || row.user.id}
+          </div>
+        </Tooltip>
+      ) : (
+        <div>
+          <Tooltip title="No User Found">
+            <NoSymbolIcon
+              className="w-6 h-6 text-slate-400
+              dark:text-slate-600"
+            />
+          </Tooltip>
+        </div>
+      );
+    },
+  },
+  {
+    field: "group",
+    headerName: "Group",
+    width: 125,
+    cellRenderer: ({ data }: { data: RowData }) => {
+      const row = data;
+      return row.group ? (
+        <Tooltip
+          title={
+            <div className="font-mono">
+              <div>ID: {row.group._id}</div>
+              <div>Name: {row.group.name}</div>
+            </div>
+          }
+        >
+          <div
+            className="font-xs flex flex-row items-center
+            justify-center gap-1 overflow-ellipsis text-sky-700
+            dark:text-sky-300"
+          >
+            <BuildingOffice2Icon className="w-4 h-4" />
+            {row.group.name || row.group.id}
+          </div>
+        </Tooltip>
+      ) : (
+        <div>
+          <Tooltip title="No Group Found">
+            <NoSymbolIcon
+              className="w-6 h-6 text-slate-400
+              dark:text-slate-600"
+            />
+          </Tooltip>
+        </div>
+      );
+    },
+  },
+  {
+    field: "created_at",
+    headerName: "Creation Date",
+    width: 125,
+    valueGetter: params => timeAgo(new Date(params.data.created_at)),
+  },
+  {
+    field: "updated_at",
+    headerName: "Last Update",
+    width: 125,
+    valueGetter: params => timeAgo(new Date(params.data.updated_at)),
+  },
+];
+
+const generateMUIGridColumns = (options: {
   // todo: create a type for it!
   edit: boolean;
   onEdit: (dId: string) => any;
@@ -547,7 +738,7 @@ const generateGridColumns = (options: {
     field: "created_at",
     headerName: "Creation Date",
     width: 125,
-    valueGetter: (params) => timeAgo(new Date(params.value)),
+    valueGetter: params => timeAgo(new Date(params.value)),
   },
   {
     field: "updated_at",
@@ -555,7 +746,7 @@ const generateGridColumns = (options: {
     width: 125,
     // headerAlign: "center",
     // align: "center",
-    valueGetter: (params) => timeAgo(new Date(params.value)),
+    valueGetter: params => timeAgo(new Date(params.value)),
   },
 ];
 
@@ -598,7 +789,7 @@ export const OptionsMenu = ({ options }: DeviceOptionsMenuProps) => {
           "aria-labelledby": "basic-button",
         }}
       >
-        {options.map((o) => (
+        {options.map(o => (
           <MenuItem
             key={o.title}
             onClick={() => {

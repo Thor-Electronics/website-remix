@@ -35,6 +35,8 @@
     "@remix-run/react": "2.11.0",
     "@remix-run/serve": "2.11.0",
     "@sentry/remix": "^8.4.0",
+    "ag-grid-community": "^32.0.2",
+    "ag-grid-react": "^32.0.2",
     "axios": "^1.7.2",
     "cross-env": "^7.0.3",
     "date-fns": "^3.6.0",
