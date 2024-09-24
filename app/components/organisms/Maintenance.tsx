@@ -8,8 +8,8 @@ const Maintenance = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const beginDate = new Date("2024-06-15T08:32:51");
-    const targetDate = new Date("2024-07-12T08:32:51");
+    const beginDate = new Date("2024-08-15T08:32:51");
+    const targetDate = new Date("2024-09-12T08:32:51");
     const interval = setInterval(() => {
       const now = new Date();
       const timeDiff = targetDate.getTime() - now.getTime();
